@@ -1,8 +1,5 @@
 package model;
 
-/**
- * The type Utente.
- */
 public class Utente {
     private final String login;
     private String password;
