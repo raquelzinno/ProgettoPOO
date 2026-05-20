@@ -1,20 +1,28 @@
 package model;
 
 public class Cibo extends Item{
-    private String tipo;
+    private TipoCibo tipo;
     private int puntiFame;
 
-    public Cibo(String nome, int costo, String tipo, int puntiFame) {
-        super(nome, costo);
+    public Cibo(String nome, int costo, Negozio negozio, TipoCibo tipo, int puntiFame) {
+        super(nome, costo, negozio);
         this.tipo = tipo;
         this.puntiFame = puntiFame;
     }
 
-    public String getTipo() {
+    public TipoCibo getTipo() {
         return tipo;
+    }
+
+    public void setTipo(TipoCibo tipo) {
+        this.tipo = tipo;
     }
 
     public int getPuntiFame() {
         return puntiFame;
+    }
+
+    public void setPuntiFame(int puntiFame) {
+        this.puntiFame = puntiFame;
     }
 }

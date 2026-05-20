@@ -5,8 +5,8 @@ public class Vestito extends Item{
     private int boostEnergia;
     private  int boostFame;
 
-    public Vestito(String nome, int costo, boolean indossato, int boostEnergia, int boostFame) {
-        super(nome, costo);
+    public Vestito(String nome, int costo, Negozio negozio, boolean indossato, int boostEnergia, int boostFame) {
+        super(nome, costo, negozio);
         this.indossato = indossato;
         this.boostEnergia = boostEnergia;
         this.boostFame = boostFame;
@@ -16,11 +16,23 @@ public class Vestito extends Item{
         return indossato;
     }
 
+    public void setIndossato(boolean indossato) {
+        this.indossato = indossato;
+    }
+
     public int getBoostEnergia() {
         return boostEnergia;
     }
 
+    public void setBoostEnergia(int boostEnergia) {
+        this.boostEnergia = boostEnergia;
+    }
+
     public int getBoostFame() {
         return boostFame;
+    }
+
+    public void setBoostFame(int boostFame) {
+        this.boostFame = boostFame;
     }
 }
