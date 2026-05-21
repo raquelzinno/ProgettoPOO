@@ -1,10 +1,12 @@
 package gui;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Login {
+    private static JFrame loginFrame;
     private JTextField utenteTextField;
-    private JTextField passwordTextField;
     private JButton loginButton;
     private JButton creaAccountButton;
     private JPanel loginForm;
@@ -14,15 +16,26 @@ public class Login {
     private JLabel utenteLabel;
     private JLabel passwordLabel;
     private JLabel creaAccountLabel;
+    private JPasswordField passwordField;
 
     public static void main(String[] args) {
-        JFrame loginFrame = new JFrame("Login");
-        loginFrame.setContentPane(new Login().loginForm);
+        Login login = new Login();
+        loginFrame = new JFrame("Login");
+        loginFrame.setContentPane(login.loginForm);
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         loginFrame.pack();
         loginFrame.setSize(450, 350); //grandezza della finestra
         loginFrame.setLocationRelativeTo(null); //finestra si apre al centro
         loginFrame.setResizable(false); //non cambia dimensione
         loginFrame.setVisible(true);
+
+        // gestione pulsante crea account
+        login.creaAccountButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CreaAccount creaAccount = new CreaAccount(loginFrame);
+                loginFrame.setVisible(false);
+            }
+        });
     }
 }
