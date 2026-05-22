@@ -1,5 +1,7 @@
 package gui;
 
+import controller.Controller;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +21,7 @@ public class Login {
     private JPasswordField passwordField;
 
     public static void main(String[] args) {
+        Controller controller = new Controller();
         Login login = new Login();
         loginFrame = new JFrame("Login");
         loginFrame.setContentPane(login.loginForm);
@@ -33,8 +36,22 @@ public class Login {
         login.creaAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CreaAccount creaAccount = new CreaAccount(loginFrame);
+                CreaAccount creaAccount = new CreaAccount(loginFrame, controller);
                 loginFrame.setVisible(false);
+            }
+        });
+
+        //gestione pulsante login
+        login.loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nomeUtente = login.utenteTextField.getText();
+                String password = login.passwordField.getText();
+                if(controller.checkUtente(nomeUtente, password)){
+                    System.out.println("Accesso effettuato correttamente.");
+                } else{
+                    System.out.println("Account non esistente.");
+                }
             }
         });
     }
