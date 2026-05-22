@@ -56,12 +56,16 @@ public class Animale {
         this.nome = nome;
     }
 
-    public int getFameMax() {
-        return fameMax;
-    }
-
     public void setFameMax(int fameMax) {
         this.fameMax = fameMax;
+    }
+
+    public void setEnergiaMax(int energiaMax) {
+        this.energiaMax = energiaMax;
+    }
+
+    public int getFameMax() {
+        return fameMax;
     }
 
     public int getFame() {
@@ -74,10 +78,6 @@ public class Animale {
 
     public int getEnergiaMax() {
         return energiaMax;
-    }
-
-    public void setEnergiaMax(int energiaMax) {
-        this.energiaMax = energiaMax;
     }
 
     public int getEnergia() {

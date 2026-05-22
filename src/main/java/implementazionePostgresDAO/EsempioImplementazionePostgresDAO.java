@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class EsempioImplementazionePostgresDAO implements EsempioDAO {
+/*public class EsempioImplementazionePostgresDAO implements EsempioDAO {
 
 	private Connection connection;
 
@@ -24,4 +24,4 @@ public class EsempioImplementazionePostgresDAO implements EsempioDAO {
 
 	}
 
-}
+}*/
