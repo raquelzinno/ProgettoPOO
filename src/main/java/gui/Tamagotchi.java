@@ -2,6 +2,7 @@ package gui;
 
 import controller.Controller;
 import model.Animale;
+import model.Minigame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +25,7 @@ public class Tamagotchi {
     private JLabel goBack;
 
 
-    public Tamagotchi(  JFrame frameHome, Controller controller, Animale animale) {
+    public Tamagotchi(JFrame frameHome, Controller controller, Animale animale) {
         JFrame tamagotchiFrame = new JFrame(animale.getNome());
         tamagotchiFrame.setContentPane(tamagotchiPanel);
         tamagotchiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,11 +41,40 @@ public class Tamagotchi {
         labelFame.setText(String.valueOf(animale.getFame()) + "/" + String.valueOf(animale.getFameMax()));
         labelNomeAnimale.setText(animale.getNome());
 
+
+
+        //gestisce il pulsante negozio
         negozioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Negozio negozio = new Negozio(tamagotchiFrame, controller, animale);
                 tamagotchiFrame.setVisible(false);
+            }
+        });
+
+        //gestisce il pulsante minigame
+        minigameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Minigames minigames = new Minigames(tamagotchiFrame, controller, animale);
+                tamagotchiFrame.setVisible(false);
+            }
+        });
+
+        //gestisce il pulsante item
+        itemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Items items = new Items(tamagotchiFrame, controller, animale);
+                tamagotchiFrame.setVisible(false);
+            }
+        });
+
+        //gestisce il pulsante dormi
+        vaiADormireButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //dorme
             }
         });
 

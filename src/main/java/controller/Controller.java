@@ -17,7 +17,7 @@ import model.Negozio;
 import java.util.ArrayList;
 
 public class Controller {
-    ArrayList<Utente> listaUtenti;
+    private ArrayList<Utente> listaUtenti;
     private Utente utenteAttuale = null;
 
     public Controller(){
@@ -31,6 +31,13 @@ public class Controller {
     public void creaUtente(String login, String password) throws RuntimeException{
         if(login.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
         if(password.isBlank()) throw new ExceptionPassword("Il campo password è vuoto.");
+
+        for(Utente u : listaUtenti){ //controlla se il nome utente esiste già
+            if(u.getLogin().equals(login)){
+                throw new ExceptionUtente("Nome utente già esistente.");
+            }
+        }
+
         Utente utente = new Utente(login, password);
         aggiungiUtente(utente);
     }
@@ -43,15 +50,17 @@ public class Controller {
                 u.setAccessoEffettuato(true);
                 utenteAttuale = u;
                 return true;
-            } else {
-                throw new ExceptionUtente("Utente non trovato.");
             }
         }
-        return false;
+        throw new ExceptionUtente("Utente non trovato.");
+    }
+
+    public void checkAnimali(Utente utente){
+        if((utente.getAnimaliPosseduti()).size() >= 2) throw new ExceptionTroppiAnimali("Hai il massimo di animali consentiti!");
     }
 
     public void creaAnimale(Utente utente, String tipo, String nome) throws RuntimeException{
-        if((utente.getAnimaliPosseduti()).size() > 2) throw new ExceptionTroppiAnimali("Hai il massimo di animali consentiti!");
+        checkAnimali(utente);
         if(tipo.equals("Orso")){
             Orso animale = new Orso(nome,10,20,0, false);
             aggiungiAnimale(utente, animale);
@@ -69,6 +78,11 @@ public class Controller {
 
     public Utente getUtenteAttuale() {
         return utenteAttuale;
+    }
+
+    public void esciUtente() {
+        this.utenteAttuale.setAccessoEffettuato(false);
+        //this.utenteAttuale = null;
     }
 
     public ArrayList<Utente> getListaUtenti(){

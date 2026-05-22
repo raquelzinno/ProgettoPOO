@@ -8,12 +8,6 @@ public class Utente {
     private ArrayList<Animale> animaliPosseduti;
     private ArrayList<Item> itemPosseduti;
 
-    /**
-     * Instantiates a new Utente.
-     *
-     * @param login    the login
-     * @param password the password
-     */
     public Utente(String login, String password) {
         this.login = login;
         this.password = password;
@@ -21,11 +15,7 @@ public class Utente {
         itemPosseduti = new ArrayList<Item>();
         accessoEffettuato = false;
     }
-    /**
-     * Gets login.
-     *
-     * @return the login
-     */
+
     public String getLogin() {
         return login;
     }
@@ -64,7 +54,8 @@ public class Utente {
     }
 
     public void creaAnimale(Animale animale) {
-        if(accessoEffettuato) {
+        animaliPosseduti.add(animale);
+        /*if(accessoEffettuato) {
             if (animaliPosseduti.size() == 2) {
                 System.out.println("Hai già il massimo di animali consentiti"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
             } else {
@@ -74,7 +65,8 @@ public class Utente {
         }
         else {
             System.out.println("non hai ancora effettuato l'accesso");
-        }
+        }*/
+
     }    //in teoria per tutti i metodi successivi dovremmo aggiungere il controllo se l'accesso è stato effettuato, però mi scocciavo di aggiungerlo for now :)
 
     public void eliminaAnimale(Animale animale) {

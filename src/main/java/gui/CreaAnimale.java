@@ -58,7 +58,7 @@ public class CreaAnimale {
             }
         });
 
-        //gestone pulsante torna alla home
+        //gestione pulsante torna alla home
         goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
 
         goBack.addMouseListener(new MouseAdapter(){

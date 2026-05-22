@@ -6,8 +6,11 @@ import model.Animale;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Home {
     private JPanel mainPanel;
@@ -15,6 +18,7 @@ public class Home {
     private JPanel vuotoPanel;
     private JPanel creaAnimalePanel;
     private JList listaAnimali;
+    private JLabel exit;
     private JFrame frameHome;
     private Controller controller;
     public static DefaultListModel<Animale> modelloListaAnimali;
@@ -37,8 +41,6 @@ public class Home {
     }*/
 
     public Home(JFrame loginFrame, Controller controller) {
-        // controller = new Controller();
-        // Add action listeners or other initialization code here
         //Home home = new Home();
         frameHome = new JFrame("Home");
         //frameHome.setContentPane(new Home().mainPanel);
@@ -49,7 +51,13 @@ public class Home {
         frameHome.setLocationRelativeTo(null); //finestra si apre al centro
         frameHome.setVisible(true);
 
+        //lista dove sono riportati gli animali dell'utente
         modelloListaAnimali = new DefaultListModel<>();
+
+        for(Animale a : controller.getUtenteAttuale().getAnimaliPosseduti()){
+            modelloListaAnimali.addElement(a);
+        }
+
         listaAnimali.setModel(modelloListaAnimali);
 
         listaAnimali.addListSelectionListener(new ListSelectionListener() {
@@ -67,13 +75,18 @@ public class Home {
             }
         });
 
-
         //gestione pulsante crea animale
         creaAnimaleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CreaAnimale creaAnimale = new CreaAnimale(frameHome, controller);
-                frameHome.setVisible(false);
+                try{
+                    controller.checkAnimali(controller.getUtenteAttuale());
+                    CreaAnimale creaAnimale = new CreaAnimale(frameHome, controller);
+                    frameHome.setVisible(false);
+                }catch(RuntimeException ex){
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+
             }
         });
 
@@ -85,6 +98,18 @@ public class Home {
                     Tamagotchi tamagotchi = new Tamagotchi(frameHome, controller,animaleCliccato);
                     frameHome.setVisible(false);
                 }
+            }
+        });
+
+        //gestione pulsante esci dall'account
+        exit.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
+
+        exit.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                controller.esciUtente();
+                loginFrame.setVisible(true);
+                frameHome.setVisible(false);
             }
         });
 

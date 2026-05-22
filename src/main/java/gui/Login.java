@@ -52,9 +52,9 @@ public class Login {
                         JOptionPane.showMessageDialog(null, "Accesso effettuato correttamente.");
                         Home home = new Home(loginFrame, controller);
                         loginFrame.setVisible(false);
-                    } else{
+                    } /*else{
                         System.out.println("Account non esistente.");
-                    }
+                    }*/
                 }catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
