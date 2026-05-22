@@ -63,12 +63,11 @@ public class Utente {
         }
     }
 
-    public void creaAnimale(String nome,Animale animale) {
+    public void creaAnimale(Animale animale) {
         if(accessoEffettuato) {
             if (animaliPosseduti.size() == 2) {
                 System.out.println("Hai già il massimo di animali consentiti"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
             } else {
-                animale.setNome(nome);
                 animale.setUtente(this);
                 animaliPosseduti.add(animale);
             }

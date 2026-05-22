@@ -44,7 +44,7 @@ public class CreaAccount {
                 String nomeUtente = utenteTextField.getText();
                 String password = passwordField.getText();
                 controller.creaUtente(nomeUtente, password);
-                System.out.println("Account creato con successo!");
+                JOptionPane.showMessageDialog(null, "Account creato con successo!");
 
                 //torna alla pagina di login
                 loginFrame.setVisible(true);

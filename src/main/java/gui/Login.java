@@ -48,7 +48,9 @@ public class Login {
                 String nomeUtente = login.utenteTextField.getText();
                 String password = login.passwordField.getText();
                 if(controller.checkUtente(nomeUtente, password)){
-                    System.out.println("Accesso effettuato correttamente.");
+                    JOptionPane.showMessageDialog(null, "Accesso effettuato correttamente.");
+                    Home home = new Home(loginFrame, controller);
+                    loginFrame.setVisible(false);
                 } else{
                     System.out.println("Account non esistente.");
                 }
