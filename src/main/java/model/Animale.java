@@ -48,6 +48,11 @@ public class Animale {
     public void gioca() { //idk for now, bisogna vedere meglio la gestione con la classe minigame
     }
 
+    @Override
+    public String toString() {
+        return this.nome;
+    }
+
     public String getNome() {
         return nome;
     }

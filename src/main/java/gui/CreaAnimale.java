@@ -50,7 +50,7 @@ public class CreaAnimale {
                 }
                 JOptionPane.showMessageDialog(null, "Animale creato con successo.");
 
-                Home.modelloListaAnimali.addElement(controller.getListaAnimali().getLast());
+                Home.modelloListaAnimali.addElement(controller.getUtenteAttuale().getAnimaliPosseduti().getLast());
 
                 //torna alla home
                 frameHome.setVisible(true);

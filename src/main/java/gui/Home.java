@@ -77,6 +77,19 @@ public class Home {
             }
         });
 
+        //gestione selezione animale dalla lista
+        listaAnimali.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                Animale animaleCliccato = (Animale) listaAnimali.getSelectedValue();
+                if (animaleCliccato != null) {
+                    Tamagotchi tamagotchi = new Tamagotchi(frameHome, controller,animaleCliccato);
+                    frameHome.setVisible(false);
+                }
+            }
+        });
+
+
+
     }
 
 
