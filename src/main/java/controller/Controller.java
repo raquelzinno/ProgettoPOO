@@ -93,8 +93,11 @@ public class Controller {
         return listaUtenti;
     }
 
-    /*public ArrayList<Animale> getListaAnimali(){
-        return utente.
-    }*/
+    public void usaItem(Utente utente, Item item, Animale animale){
+        if(item instanceof Cibo)
+            utente.daiCibo((Cibo) item, animale);
+        else if(item instanceof Vestito)
+            utente.vesti((Vestito) item, animale);
+    }
 
 }

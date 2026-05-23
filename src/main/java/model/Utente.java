@@ -20,7 +20,7 @@ public class Utente {
         return login;
     }
 
-    public void disconnettiAccount() {
+    /*public void disconnettiAccount() {
         if(accessoEffettuato) {
             accessoEffettuato = false;
         }
@@ -51,7 +51,7 @@ public class Utente {
         else {
             System.out.println("non hai ancora effettuato l'accesso");
         }
-    }
+    }*/
 
     public void creaAnimale(Animale animale) {
         animaliPosseduti.add(animale);
@@ -77,8 +77,7 @@ public class Utente {
         animale.setNome(nome);
     }
 
-    public void compraItem(Item item,Animale animale)
-    {
+    public void compraItem(Item item,Animale animale) {
         if(animale.getPunti() < item.getCosto())
         {
             System.out.println("L'animale non ha abbastanza punti!"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
@@ -90,7 +89,7 @@ public class Utente {
         }
     }
 
-    public void daiCibo(Cibo cibo,Animale animale) {
+    public void daiCibo(Cibo cibo, Animale animale) {
         if(itemPosseduti.contains(cibo)) {  //vedo se il cibo è nell'inventario
             animale.setFame(animale.getFame() + cibo.getPuntiFame());   //ricalcolo il livello di fame
             if(animale.getFame() > animale.getFameMax()) //nel caso in cui il nuovo livello di fame eccede il massimo, viene ricalcolato per essere uguale al massimo
@@ -125,8 +124,6 @@ public class Utente {
             System.out.println("Non possiedi questo Item!"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
         }
     }
-
-    public void selezionaAnimale() {}  //idk what to do about this tbh
 
     public String getPassword() {
         return password;

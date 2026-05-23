@@ -77,6 +77,7 @@ public class NegozioPrincipale {
             LabelPunti.setText(String.valueOf(animale.getPunti()));
         });
 
+        //gestione pulsante indietro
         goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
 
         goBack.addMouseListener(new MouseAdapter() {
