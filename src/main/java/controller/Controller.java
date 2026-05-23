@@ -62,7 +62,7 @@ public class Controller {
     public void creaAnimale(Utente utente, String tipo, String nome) throws RuntimeException{
         checkAnimali(utente);
         if(tipo.equals("Orso")){
-            Orso animale = new Orso(nome,10,20,0, false);
+            Orso animale = new Orso(nome,10,20,20, false);
             aggiungiAnimale(utente, animale);
         }
         else if(tipo.equals("Pinguino")){
@@ -74,6 +74,10 @@ public class Controller {
 
     public void aggiungiAnimale(Utente utente, Animale animale){
         utente.creaAnimale(animale); //crea l'animale che è legato all'utente
+    }
+
+    public void compra(Utente utente, Item item, Animale animale) {
+        utente.compraItem(item,animale);
     }
 
     public Utente getUtenteAttuale() {

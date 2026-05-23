@@ -14,6 +14,7 @@ public class Item {
                                     // potremmo dover mettere un controllo in caso il negozio sia NULL
     }
 
+
     public String getNome() {
         return nome;
     }

@@ -12,6 +12,17 @@ public class Vestito extends Item{
         this.boostFame = boostFame;
     }
 
+    @Override
+    public String toString() {
+        return "<html>" +
+                "<b>" + this.getNome() + "</b>" +
+                "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prezzo: " +
+                this.getCosto() + " punti<br>" +
+                "<i>Boost Energia:</i> " + this.boostEnergia + "<br>" +
+                "<i>Boost Fame:</i> " + this.boostFame + "<br>" + "&nbsp;" +
+                "</html>";
+    }
+
     public boolean isIndossato() {
         return indossato;
     }

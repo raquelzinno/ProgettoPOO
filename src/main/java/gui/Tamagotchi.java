@@ -2,7 +2,6 @@ package gui;
 
 import controller.Controller;
 import model.Animale;
-import model.Minigame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,7 +46,7 @@ public class Tamagotchi {
         negozioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Negozio negozio = new Negozio(tamagotchiFrame, controller, animale);
+                NegozioPrincipale negozio = new NegozioPrincipale(tamagotchiFrame, controller, animale);
                 tamagotchiFrame.setVisible(false);
             }
         });
@@ -87,6 +86,5 @@ public class Tamagotchi {
                 tamagotchiFrame.setVisible(false);
             }
         });
-
     }
 }

@@ -10,6 +10,17 @@ public class Cibo extends Item{
         this.puntiFame = puntiFame;
     }
 
+    @Override
+    public String toString() {
+        return "<html>" +
+                "<b>" + this.getNome() + "</b>" +
+                "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prezzo: " +
+                this.getCosto() + " punti<br>" +
+                "<i>Tipo: " + this.tipo + "</i><br>" +
+                "<i>Punti fame: </i>" + this.puntiFame +"<br>" + "&nbsp;" +
+                "</html>";
+    }
+
     public TipoCibo getTipo() {
         return tipo;
     }

@@ -5,4 +5,8 @@ public class Orso extends Animale{
         super(nome, fame, energia, punti, dorme);
     }
 
+    @Override
+    public String toString() {
+        return "L'orso: " + this.getNome();
+    }
 }

@@ -1,0 +1,90 @@
+package gui;
+
+import controller.Controller;
+import model.*;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class NegozioPrincipale {
+    private JPanel negozioPanel;
+    private JLabel LabelPunti;
+    private JLabel goBack;
+    private JButton compraButton;
+    private JList listaItem;
+    public static DefaultListModel<Item> modelloListaItem;
+
+    public NegozioPrincipale(JFrame tamagotchiFrame, Controller controller, Animale animale) {
+        JFrame negozioFrame = new JFrame("Negozio");
+        negozioFrame.setContentPane(negozioPanel);
+        negozioFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        negozioFrame.pack();
+        negozioFrame.setSize(500, 300); //grandezza della finestra
+        negozioFrame.setLocationRelativeTo(null); //finestra si apre al centro
+        negozioFrame.setResizable(false); //non cambia dimensione
+        negozioFrame.setVisible(true);
+
+        //i valori dell'animale vengono resi visibili
+        LabelPunti.setText(String.valueOf(animale.getPunti()));
+
+        modelloListaItem = new DefaultListModel<>();
+
+        //item di default
+        Negozio negozioBase = new Negozio();
+        Cibo pizza = new Cibo("Pizza", 2, negozioBase, TipoCibo.salato, 4);
+        Vestito magliaEmo = new Vestito("Maglia emo", 4, negozioBase, false, 10,9);
+        modelloListaItem.addElement(pizza);
+        modelloListaItem.addElement(magliaEmo);
+        listaItem.setModel(modelloListaItem);
+
+        listaItem.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                //prende animale selezionato dalla lista
+                Item itemSelezionato = (Item) listaItem.getSelectedValue();
+
+                /*//get selectedValue può ritornare null, è necessario questo controllo
+                if (animaleSelezionato != null) {
+                    nomeCognome.setText(contattoSelezionato.getNome() + " " + contattoSelezionato.getCognome());
+                    numeroTelefono.setText(contattoSelezionato.getNumTelefono());
+                    email.setText(contattoSelezionato.getEmail());
+                }*/
+            }
+        });
+
+        //gestione bottone compra
+        compraButton.addActionListener(e -> {
+            Item oggettoSelezionato = (Item) listaItem.getSelectedValue();
+            if (oggettoSelezionato == null) {
+                JOptionPane.showMessageDialog(negozioFrame,
+                        "Seleziona un oggetto prima di acquistare!",
+                        "Nessuna selezione",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            controller.compra(controller.getUtenteAttuale(), oggettoSelezionato, animale);
+
+            JOptionPane.showMessageDialog(negozioFrame,
+                    "Hai acquistato: " + oggettoSelezionato.getNome() + "!\nL'oggetto è stato aggiunto al tuo inventario.",
+                    "Acquisto Completato",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            LabelPunti.setText(String.valueOf(animale.getPunti()));
+        });
+
+        goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
+
+        goBack.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                tamagotchiFrame.setVisible(true);
+                negozioFrame.setVisible(false);
+            }
+        });
+    }
+}
