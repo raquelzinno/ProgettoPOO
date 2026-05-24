@@ -2,6 +2,7 @@ package gui;
 
 import controller.Controller;
 import model.Animale;
+import model.Orso;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +17,7 @@ public class Tamagotchi {
     private JLabel labelFame;
     private JLabel labelPunti;
     private JLabel labelNomeAnimale;
-    private JLabel ImmagineAnimale;
+    private JLabel immagineAnimale;
     private JButton negozioButton;
     private JButton minigameButton;
     private JButton itemButton;
@@ -26,20 +27,10 @@ public class Tamagotchi {
     private Animale animale;
 
     public void aggiornaLabel(){
-
-        labelPunti.setText(
-                String.valueOf(animale.getPunti())
-        );
-
-        labelEnergia.setText(
-                animale.getEnergia() + "/" +
-                        animale.getEnergiaMax()
-        );
-
-        labelFame.setText(
-                animale.getFame() + "/" +
-                        animale.getFameMax()
-        );
+        labelPunti.setText(String.valueOf(animale.getPunti()));
+        labelEnergia.setText(animale.getEnergia() + "/" + animale.getEnergiaMax());
+        labelFame.setText(animale.getFame() + "/" + animale.getFameMax());
+        labelNomeAnimale.setText(animale.getNome());
     }
 
     public Tamagotchi(JFrame frameHome, Controller controller, Animale animale) {
@@ -47,7 +38,7 @@ public class Tamagotchi {
         tamagotchiFrame.setContentPane(tamagotchiPanel);
         tamagotchiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         tamagotchiFrame.pack();
-        tamagotchiFrame.setSize(500, 300); //grandezza della finestra
+        tamagotchiFrame.setSize(500, 350); //grandezza della finestra
         tamagotchiFrame.setLocationRelativeTo(null); //finestra si apre al centro
         tamagotchiFrame.setResizable(false); //non cambia dimensione
         tamagotchiFrame.setVisible(true);
@@ -56,11 +47,14 @@ public class Tamagotchi {
         //i valori dell'animale vengono resi visibili
         aggiornaLabel();
 
-        /*
-        labelPunti.setText(String.valueOf(animale.getPunti()));
-        labelEnergia.setText(String.valueOf(animale.getEnergia()) + "/" + String.valueOf(animale.getEnergiaMax()));
-        labelFame.setText(String.valueOf(animale.getFame()) + "/" + String.valueOf(animale.getFameMax()));
-        labelNomeAnimale.setText(animale.getNome());*/
+        //immagine dell'animale
+        if(animale instanceof Orso){
+            immagineAnimale.setIcon(new ImageIcon(
+                    new ImageIcon(
+                            getClass().getClassLoader().getResource("img/orsoProva.png")
+                    ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
+            ));
+        }
 
         //gestisce il pulsante negozio
         negozioButton.addActionListener(new ActionListener() {
