@@ -23,7 +23,7 @@ public class Items {
     private JScrollPane itemsScrollPane;
     public static DefaultListModel<Item> modelloListaItems;
 
-    public Items(JFrame tamagotchiFrame, Controller controller, Animale animale){
+    public Items(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi){
         JFrame itemsFrame = new JFrame("I tuoi items");
         itemsFrame.setContentPane(itemsPanel);
         itemsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -121,6 +121,7 @@ public class Items {
         goBack.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                tamagotchi.aggiornaLabel(); //aggiorna fame e energia
                 tamagotchiFrame.setVisible(true);
                 itemsFrame.setVisible(false);
             }

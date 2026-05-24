@@ -18,7 +18,7 @@ public class NegozioPrincipale {
     private JList listaItem;
     public static DefaultListModel<Item> modelloListaItem;
 
-    public NegozioPrincipale(JFrame tamagotchiFrame, Controller controller, Animale animale) {
+    public NegozioPrincipale(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi) {
         JFrame negozioFrame = new JFrame("Negozio");
         negozioFrame.setContentPane(negozioPanel);
         negozioFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,6 +83,7 @@ public class NegozioPrincipale {
         goBack.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                tamagotchi.aggiornaLabel(); //aggiorna i punti
                 tamagotchiFrame.setVisible(true);
                 negozioFrame.setVisible(false);
             }

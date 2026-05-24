@@ -13,7 +13,7 @@ public class Minigames {
     private JLabel goBack;
 
     public Minigames(JFrame tamagotchiFrame, Controller controller, Animale animale){
-        JFrame minigamesFrame = new JFrame("I tuoi items");
+        JFrame minigamesFrame = new JFrame("Minigames");
         minigamesFrame.setContentPane(minigamesPanel);
         minigamesFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         minigamesFrame.pack();

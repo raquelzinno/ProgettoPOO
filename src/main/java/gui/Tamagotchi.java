@@ -22,7 +22,25 @@ public class Tamagotchi {
     private JButton itemButton;
     private JButton vaiADormireButton;
     private JLabel goBack;
+    private JLabel test;
+    private Animale animale;
 
+    public void aggiornaLabel(){
+
+        labelPunti.setText(
+                String.valueOf(animale.getPunti())
+        );
+
+        labelEnergia.setText(
+                animale.getEnergia() + "/" +
+                        animale.getEnergiaMax()
+        );
+
+        labelFame.setText(
+                animale.getFame() + "/" +
+                        animale.getFameMax()
+        );
+    }
 
     public Tamagotchi(JFrame frameHome, Controller controller, Animale animale) {
         JFrame tamagotchiFrame = new JFrame(animale.getNome());
@@ -33,20 +51,22 @@ public class Tamagotchi {
         tamagotchiFrame.setLocationRelativeTo(null); //finestra si apre al centro
         tamagotchiFrame.setResizable(false); //non cambia dimensione
         tamagotchiFrame.setVisible(true);
+        this.animale = animale;
 
         //i valori dell'animale vengono resi visibili
+        aggiornaLabel();
+
+        /*
         labelPunti.setText(String.valueOf(animale.getPunti()));
         labelEnergia.setText(String.valueOf(animale.getEnergia()) + "/" + String.valueOf(animale.getEnergiaMax()));
         labelFame.setText(String.valueOf(animale.getFame()) + "/" + String.valueOf(animale.getFameMax()));
-        labelNomeAnimale.setText(animale.getNome());
-
-
+        labelNomeAnimale.setText(animale.getNome());*/
 
         //gestisce il pulsante negozio
         negozioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                NegozioPrincipale negozio = new NegozioPrincipale(tamagotchiFrame, controller, animale);
+                NegozioPrincipale negozio = new NegozioPrincipale(tamagotchiFrame, controller, animale, Tamagotchi.this);
                 tamagotchiFrame.setVisible(false);
             }
         });
@@ -64,7 +84,7 @@ public class Tamagotchi {
         itemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Items items = new Items(tamagotchiFrame, controller, animale);
+                Items items = new Items(tamagotchiFrame, controller, animale, Tamagotchi.this);
                 tamagotchiFrame.setVisible(false);
             }
         });
@@ -84,6 +104,16 @@ public class Tamagotchi {
             public void mouseClicked(MouseEvent e){
                 frameHome.setVisible(true);
                 tamagotchiFrame.setVisible(false);
+            }
+        });
+
+        //test
+        test.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                animale.setEnergia(5);
+                animale.setFame(5);
+                aggiornaLabel();
             }
         });
     }
