@@ -22,26 +22,21 @@ public class Animale {
         vestititIndossati = new ArrayList<Vestito>();
     }
 
-    public void addormenta() {
-        if(dorme) {      //se dorme è true, sta già dormendo e non lo puoi rimettere a dormire
-            System.out.println("Sta già dormendo! Devi prima svegliarlo."); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
-        }
-        else {
-            while(energia<energiaMax) {
-                energia++;   //se è sveglio allora viene messo a dormire e l'energia attuale aumenta fino al max
-            }
-            dorme = false;   //appena maxata l'energia, l'animale si sveglia
-        }
+    public void caricaEnergia() {
+        if(energia < energiaMax)
+        energia++;
     }
 
-    public void consumaFame(int puntiDaTogliere) {   //in beta
-        fame = fame - puntiDaTogliere;
+    public void consumaFame() {   //in beta
+        if(fame > 0)
+            fame--;
     }
 
     //sarebbe bello riuscire a consumare fame/energia nel tempo, oppure troviamo un altro sistema più preciso per il consumo dei valori
 
-    public void consumaEnergia(int puntiDaTogliere) {   //in beta
-        energia = energia - puntiDaTogliere;
+    public void consumaEnergia() {   //in beta
+        if(energia > 0)
+            energia--;
     }
 
 

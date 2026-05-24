@@ -3,6 +3,7 @@ package controller;
 import exceptions.ExceptionPassword;
 import exceptions.ExceptionTroppiAnimali;
 import exceptions.ExceptionUtente;
+import gui.Tamagotchi;
 import model.Animale;
 import model.Utente;
 import model.Vestito;
@@ -13,12 +14,16 @@ import model.Pinguino;
 import model.TipoCibo;
 import model.Minigame;
 import model.Negozio;
+import javax.swing.Timer;
 
 import java.util.ArrayList;
 
 public class Controller {
     private ArrayList<Utente> listaUtenti;
     private Utente utenteAttuale = null;
+    private Timer gameTimer;
+    private Timer sonnoTimer;
+    private Tamagotchi tamagotchiFrame;
 
     public Controller(){
         listaUtenti = new ArrayList<>();
@@ -62,11 +67,11 @@ public class Controller {
     public void creaAnimale(Utente utente, String tipo, String nome) throws RuntimeException{
         checkAnimali(utente);
         if(tipo.equals("Orso")){
-            Orso animale = new Orso(nome,10,20,20, false);
+            Orso animale = new Orso(nome,20,30,20, false);
             aggiungiAnimale(utente, animale);
         }
         else if(tipo.equals("Pinguino")){
-            Pinguino animale = new Pinguino(nome, 10, 30, 1, false);
+            Pinguino animale = new Pinguino(nome, 20, 10, 20, false);
             aggiungiAnimale(utente, animale);
         }
     }
@@ -101,6 +106,50 @@ public class Controller {
 
     public void rimuoviVestito(Vestito vestito, Animale animale){
         utenteAttuale.rimuoviVestito(vestito, animale);
+    }
+
+    public void setHomeFrame(Tamagotchi tamagotchiFrame) {
+        this.tamagotchiFrame = tamagotchiFrame;
+    }
+
+    public void iniziaTimer(Animale animale) {
+        if (gameTimer != null && gameTimer.isRunning())  //gestione di possibili timer attivi o nulli
+            gameTimer.stop();
+        gameTimer = new Timer(60000, e -> {
+            animale.consumaEnergia();
+            animale.consumaFame();
+            tamagotchiFrame.aggiornaLabel();
+        });
+        gameTimer.start();
+    }
+
+    public void fermaTimer() {
+        gameTimer.stop();
+    }
+
+    public void addormenta(Animale animale) {
+        animale.setDorme(true);
+        sonnoTimer = new Timer(1000, e -> {
+            animale.caricaEnergia();
+            tamagotchiFrame.aggiornaLabel();
+        });
+        sonnoTimer.start();
+    }
+
+    public void sveglia(Animale animale)
+    {
+        animale.setDorme(false);
+        if(sonnoTimer != null && sonnoTimer.isRunning())
+        sonnoTimer.stop();
+    }
+
+    public void eliminaAnimale(Animale animale)
+    {
+        if (gameTimer != null && gameTimer.isRunning())  //gestione di possibili timer attivi o nulli
+            gameTimer.stop();
+        if(sonnoTimer != null && sonnoTimer.isRunning())
+            sonnoTimer.stop();
+        utenteAttuale.eliminaAnimale(animale);
     }
 
 }

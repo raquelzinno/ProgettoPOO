@@ -137,6 +137,10 @@ public class Utente {
                 animale.setEnergiaMax(animale.getEnergiaMax() - vestito.getBoostEnergia());  //vengono settati i nuovi livelli max in base ai valori boost
                 animale.setFameMax(animale.getFameMax() - vestito.getBoostFame());
                 vestito.setIndossato(false);
+                if (animale.getFame() > animale.getFameMax()) //se il livello di fame supera il nuovo max, viene settato al max
+                    animale.setFame(animale.getFameMax());
+                if (animale.getEnergia() > animale.getEnergiaMax())
+                    animale.setEnergia(animale.getEnergiaMax()); //se il livello di energia supera il nuovo max, viene settato al max
             }
         }
     }

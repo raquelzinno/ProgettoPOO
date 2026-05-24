@@ -68,12 +68,20 @@ public class Items {
                 if(itemCliccato instanceof Vestito) { //funziona solo se l'item cliccato è un vestito
                     Vestito vestito = (Vestito) itemCliccato;
 
-                    if (vestito != null && vestito.isIndossato()) { //se il vestito è attualmente indossato lo rimuove
-                        controller.rimuoviVestito(vestito, animale);
-                        JOptionPane.showMessageDialog(itemsFrame,
-                                "Hai rimosso: " + itemCliccato.getNome() + "!\nL'oggetto è stato rimosso.",
-                                "Vestito rimosso",
-                                JOptionPane.INFORMATION_MESSAGE);
+                    if (vestito != null && vestito.isIndossato()) {
+                        if((animale.getVestititIndossati()).contains(itemCliccato)) { //se il vestito è attualmente indossato lo rimuove
+                            controller.rimuoviVestito(vestito, animale);
+                            JOptionPane.showMessageDialog(itemsFrame,
+                                    "Hai rimosso: " + itemCliccato.getNome() + "!\nL'oggetto è stato rimosso",
+                                    "Vestito rimosso",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        else { //se il vestito è indossato ma da un altro animale dà un avviso
+                            JOptionPane.showMessageDialog(itemsFrame,
+                                    itemCliccato.getNome() + " è già indossato da un altro animale!",
+                                    "Già indossato",
+                                    JOptionPane.WARNING_MESSAGE);
+                        }
                     }
                 }
             }
@@ -89,6 +97,13 @@ public class Items {
                         JOptionPane.showMessageDialog(itemsFrame,
                                 "Devi prima selezionare un oggetto!",
                                 "Nessuna selezione",
+                                JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    if(animale.isDorme()) {
+                        JOptionPane.showMessageDialog(itemsFrame,
+                                animale.getNome() + " sta ancora dormendo!\nSveglialo per usare gli item",
+                                "Buonanotte",
                                 JOptionPane.WARNING_MESSAGE);
                         return;
                     }

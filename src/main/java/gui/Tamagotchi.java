@@ -24,7 +24,9 @@ public class Tamagotchi {
     private JButton vaiADormireButton;
     private JLabel goBack;
     private JLabel test;
+    private JButton impostazioniButton;
     private Animale animale;
+    private Timer gameTime;
 
     public void aggiornaLabel(){
         labelPunti.setText(String.valueOf(animale.getPunti()));
@@ -34,7 +36,7 @@ public class Tamagotchi {
     }
 
     public Tamagotchi(JFrame frameHome, Controller controller, Animale animale) {
-        JFrame tamagotchiFrame = new JFrame(animale.getNome());
+        JFrame tamagotchiFrame = new JFrame("Tamagotchi");
         tamagotchiFrame.setContentPane(tamagotchiPanel);
         tamagotchiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         tamagotchiFrame.pack();
@@ -46,6 +48,9 @@ public class Tamagotchi {
 
         //i valori dell'animale vengono resi visibili
         aggiornaLabel();
+        //passo al controller la home e inizio il timer
+        controller.setHomeFrame(this);
+        controller.iniziaTimer(animale);
 
         //immagine dell'animale
         if(animale instanceof Orso){
@@ -69,6 +74,13 @@ public class Tamagotchi {
         minigameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(animale.isDorme()) {
+                    JOptionPane.showMessageDialog(tamagotchiFrame,
+                            animale.getNome() + " sta ancora dormendo!\nSveglialo per usare gli item",
+                            "Buonanotte",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 Minigames minigames = new Minigames(tamagotchiFrame, controller, animale);
                 tamagotchiFrame.setVisible(false);
             }
@@ -87,7 +99,24 @@ public class Tamagotchi {
         vaiADormireButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //dorme
+                if(animale.isDorme()) {
+                    controller.sveglia(animale);
+                    vaiADormireButton.setText("Vai a dormire");
+                }
+                else {
+                    controller.addormenta(animale);
+                    vaiADormireButton.setText("Svegliati");
+
+                }
+            }
+        });
+
+        //gestione pulsante impostazioni
+        impostazioniButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Impostazioni impostazioni = new Impostazioni(tamagotchiFrame, controller, animale, Tamagotchi.this, frameHome);
+                tamagotchiFrame.setVisible(false);
             }
         });
 
@@ -96,6 +125,9 @@ public class Tamagotchi {
         goBack.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e){
+                if(animale.isDorme())
+                controller.sveglia(animale);
+                controller.fermaTimer();
                 frameHome.setVisible(true);
                 tamagotchiFrame.setVisible(false);
             }
