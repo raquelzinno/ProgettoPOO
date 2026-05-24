@@ -1,4 +1,6 @@
 package model;
+import exceptions.ExceptionVestiti;
+
 import java.util.ArrayList;
 
 public class Utente {
@@ -103,14 +105,16 @@ public class Utente {
         }
     }
 
-    public void vesti(Vestito vestito,Animale animale) {
+    public void vesti(Vestito vestito,Animale animale) throws RuntimeException {
         if(itemPosseduti.contains(vestito)) {  //prima controllo se possiedo i vestiti nei miei item
             if(vestito.isIndossato()) {  //controllo se già lo sto indossando
-                System.out.println("Già stai indossando questo vestito!"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
+                throw new ExceptionVestiti("Stai già indossando questo vestito!");
+                //System.out.println("Già stai indossando questo vestito!"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
             }
             else {
                 if((animale.getVestititIndossati()).size() == 2) { //controllo se sto indossando il massimo di vestiti consentiti
-                    System.out.println("Non puoi indossare più di due vestiti!"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
+                    throw new ExceptionVestiti("Non puoi indossare più di due vestiti!");
+                    //System.out.println("Non puoi indossare più di due vestiti!"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
                 }
                 else {
                     (animale.getVestititIndossati()).add(vestito);  //il vestito viene aggiunto all'animale
@@ -121,7 +125,19 @@ public class Utente {
             }
         }
         else {
-            System.out.println("Non possiedi questo Item!"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
+            throw new ExceptionVestiti("Non possiedi questo Item!");
+            //System.out.println("Non possiedi questo Item!"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
+        }
+    }
+
+    public void rimuoviVestito(Vestito vestito, Animale animale){
+        if(itemPosseduti.contains(vestito)) {  //prima controllo se possiedo i vestiti nei miei item
+            if (vestito.isIndossato()) {
+                (animale.getVestititIndossati()).remove(vestito);  //il vestito viene rimosso all'animale
+                animale.setEnergiaMax(animale.getEnergiaMax() - vestito.getBoostEnergia());  //vengono settati i nuovi livelli max in base ai valori boost
+                animale.setFameMax(animale.getFameMax() - vestito.getBoostFame());
+                vestito.setIndossato(false);
+            }
         }
     }
 

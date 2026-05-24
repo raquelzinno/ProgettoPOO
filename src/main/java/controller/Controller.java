@@ -69,7 +69,6 @@ public class Controller {
             Pinguino animale = new Pinguino(nome, 10, 30, 1, false);
             aggiungiAnimale(utente, animale);
         }
-        System.out.println("Animale creato con successo");
     }
 
     public void aggiungiAnimale(Utente utente, Animale animale){
@@ -98,6 +97,10 @@ public class Controller {
             utente.daiCibo((Cibo) item, animale);
         else if(item instanceof Vestito)
             utente.vesti((Vestito) item, animale);
+    }
+
+    public void rimuoviVestito(Vestito vestito, Animale animale){
+        utenteAttuale.rimuoviVestito(vestito, animale);
     }
 
 }

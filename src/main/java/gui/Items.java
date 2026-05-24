@@ -2,7 +2,9 @@ package gui;
 
 import controller.Controller;
 import model.Animale;
+import model.Cibo;
 import model.Item;
+import model.Vestito;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -58,27 +60,58 @@ public class Items {
             }
         });
 
+        //gestione rimozione vestito dall'animale
+        listaItem.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                Item itemCliccato = (Item) listaItem.getSelectedValue();
+
+                if(itemCliccato instanceof Vestito) { //funziona solo se l'item cliccato è un vestito
+                    Vestito vestito = (Vestito) itemCliccato;
+
+                    if (vestito != null && vestito.isIndossato()) { //se il vestito è attualmente indossato lo rimuove
+                        controller.rimuoviVestito(vestito, animale);
+                        JOptionPane.showMessageDialog(itemsFrame,
+                                "Hai rimosso: " + itemCliccato.getNome() + "!\nL'oggetto è stato rimosso.",
+                                "Vestito rimosso",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+        });
+
         //gestione pulsante usa
         usaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Item oggettoSelezionato = (Item) listaItem.getSelectedValue();
-                if (oggettoSelezionato == null) {
-                    JOptionPane.showMessageDialog(itemsFrame,
-                            "Devi prima selezionare un oggetto!",
-                            "Nessuna selezione",
-                            JOptionPane.WARNING_MESSAGE);
-                    return;
+                try {
+                    Item oggettoSelezionato = (Item) listaItem.getSelectedValue();
+                    if (oggettoSelezionato == null) {
+                        JOptionPane.showMessageDialog(itemsFrame,
+                                "Devi prima selezionare un oggetto!",
+                                "Nessuna selezione",
+                                JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+
+                    controller.usaItem(controller.getUtenteAttuale(), oggettoSelezionato, animale);
+
+                    if(oggettoSelezionato instanceof Cibo) { //se cibo
+                        modelloListaItems.removeElement(oggettoSelezionato); //elimina l'item dalla lista se è un cibo
+
+                        JOptionPane.showMessageDialog(itemsFrame,
+                                "Hai usato: " + oggettoSelezionato.getNome() + "!\nL'oggetto è stato rimosso dal tuo inventario.",
+                                "Oggetto utilizzato",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }else
+                        if(oggettoSelezionato instanceof Vestito){ //se vestito
+                        JOptionPane.showMessageDialog(itemsFrame,
+                                "Hai usato: " + oggettoSelezionato.getNome() + "!\nL'oggetto è stato indossato.",
+                                "Oggetto utilizzato",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }catch(RuntimeException ex){
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
-
-                controller.usaItem(controller.getUtenteAttuale(), oggettoSelezionato, animale);
-
-                modelloListaItems.removeElement(oggettoSelezionato); //elimina l'item dalla lista
-
-                JOptionPane.showMessageDialog(itemsFrame,
-                        "Hai usato: " + oggettoSelezionato.getNome() + "!\nL'oggetto è stato rimosso dal tuo inventario.",
-                        "Oggetto utilizzato",
-                        JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
