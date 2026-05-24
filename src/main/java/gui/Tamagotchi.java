@@ -76,7 +76,7 @@ public class Tamagotchi {
             public void actionPerformed(ActionEvent e) {
                 if(animale.isDorme()) {
                     JOptionPane.showMessageDialog(tamagotchiFrame,
-                            animale.getNome() + " sta ancora dormendo!\nSveglialo per usare gli item",
+                            animale.getNome() + " sta ancora dormendo!\nSveglialo per giocare ai minigames",
                             "Buonanotte",
                             JOptionPane.WARNING_MESSAGE);
                     return;
