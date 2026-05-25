@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Utente {
     private final String login;
     private String password;
-    private boolean accessoEffettuato;  //dovendo gestire gli account, penso sia necessaria questa variabile per stabilire che l'accesso è avvenuto
+    private boolean accessoEffettuato;
     private ArrayList<Animale> animaliPosseduti;
     private ArrayList<Item> itemPosseduti;
 
@@ -69,7 +69,7 @@ public class Utente {
             System.out.println("non hai ancora effettuato l'accesso");
         }*/
 
-    }    //in teoria per tutti i metodi successivi dovremmo aggiungere il controllo se l'accesso è stato effettuato, però mi scocciavo di aggiungerlo for now :)
+    }
 
     public void eliminaAnimale(Animale animale) {
         animaliPosseduti.remove(animale);
@@ -79,15 +79,15 @@ public class Utente {
         animale.setNome(nome);
     }
 
-    public void compraItem(Item item,Animale animale) {
-        if(animale.getPunti() < item.getCosto())
-        {
-            System.out.println("L'animale non ha abbastanza punti!"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
+    public void compraItem(Item item, Animale animale) {
+        if(animale.getPunti() < item.getCosto()) {  //posso comprare l'item solo se ho abbastanza punti
+            System.out.println("L'animale non ha abbastanza punti!");
         }
         else
         {
             animale.setPunti(animale.getPunti()- item.getCosto()); //ricalcolo dei punti dopo la spesa
-            itemPosseduti.add(item);  //aggiungo l'item alla lista dell'utente
+            Item copiaAcquistata = item.creaCopia();  //quando faccio un acquisto viene creata una copia dell'oggetto del negozio
+            itemPosseduti.add(copiaAcquistata);  //aggiungo la copia agli item posseduti
         }
     }
 
@@ -100,21 +100,16 @@ public class Utente {
             }
             itemPosseduti.remove(cibo);  //l'item viene rimosso dall'inventario
         }
-        else {
-            System.out.println("Non possiedi questo Item!"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
-        }
     }
 
     public void vesti(Vestito vestito,Animale animale) throws RuntimeException {
         if(itemPosseduti.contains(vestito)) {  //prima controllo se possiedo i vestiti nei miei item
             if(vestito.isIndossato()) {  //controllo se già lo sto indossando
                 throw new ExceptionVestiti("Stai già indossando questo vestito!");
-                //System.out.println("Già stai indossando questo vestito!"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
             }
             else {
                 if((animale.getVestititIndossati()).size() == 2) { //controllo se sto indossando il massimo di vestiti consentiti
                     throw new ExceptionVestiti("Non puoi indossare più di due vestiti!");
-                    //System.out.println("Non puoi indossare più di due vestiti!"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
                 }
                 else {
                     (animale.getVestititIndossati()).add(vestito);  //il vestito viene aggiunto all'animale

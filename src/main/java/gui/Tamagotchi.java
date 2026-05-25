@@ -1,9 +1,7 @@
 package gui;
 
 import controller.Controller;
-import model.Animale;
-import model.Orso;
-import model.Pinguino;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,8 +24,10 @@ public class Tamagotchi {
     private JLabel goBack;
     private JLabel test;
     private JButton impostazioniButton;
+    private JList listaVestitiIndossati;
     private Animale animale;
     private Timer gameTime;
+    public static DefaultListModel<String> modelloListaVestiti;
 
     public void aggiornaLabel(){
         labelPunti.setText(String.valueOf(animale.getPunti()));
@@ -41,7 +41,7 @@ public class Tamagotchi {
         tamagotchiFrame.setContentPane(tamagotchiPanel);
         tamagotchiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         tamagotchiFrame.pack();
-        tamagotchiFrame.setSize(500, 350); //grandezza della finestra
+        tamagotchiFrame.setSize(550, 350); //grandezza della finestra
         tamagotchiFrame.setLocationRelativeTo(null); //finestra si apre al centro
         tamagotchiFrame.setResizable(false); //non cambia dimensione
         tamagotchiFrame.setVisible(true);
@@ -53,14 +53,21 @@ public class Tamagotchi {
         controller.setHomeFrame(this);
         controller.iniziaTimer(animale);
 
+        modelloListaVestiti = new DefaultListModel<String>();
+        for(Vestito v : animale.getVestititIndossati()) {
+            modelloListaVestiti.addElement(v.getNome());
+        }
+
+        listaVestitiIndossati.setModel(modelloListaVestiti);
+
         //immagine dell'animale
-        if(animale instanceof Orso){
+        if(animale instanceof Orso) {
             immagineAnimale.setIcon(new ImageIcon(
                     new ImageIcon(
                             getClass().getClassLoader().getResource("img/orsoProva.png")
                     ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
             ));
-        }else if(animale instanceof Pinguino){
+        }else if(animale instanceof Pinguino) {
             immagineAnimale.setIcon(new ImageIcon(
                     new ImageIcon(
                             getClass().getClassLoader().getResource("img/pinguinoProva.png")
@@ -88,7 +95,7 @@ public class Tamagotchi {
                             JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-                Minigames minigames = new Minigames(tamagotchiFrame, controller, animale);
+                Minigames minigames = new Minigames(tamagotchiFrame, controller, animale, Tamagotchi.this);
                 tamagotchiFrame.setVisible(false);
             }
         });

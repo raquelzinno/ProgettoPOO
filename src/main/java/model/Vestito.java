@@ -5,15 +5,15 @@ public class Vestito extends Item{
     private int boostEnergia;
     private  int boostFame;
 
-    public Vestito(String nome, int costo, Negozio negozio, boolean indossato, int boostEnergia, int boostFame) {
+    public Vestito(String nome, int costo, Negozio negozio, int boostEnergia, int boostFame) {
         super(nome, costo, negozio);
-        this.indossato = indossato;
+        this.indossato = false; //di default un vestito non è indossato
         this.boostEnergia = boostEnergia;
         this.boostFame = boostFame;
     }
 
     @Override
-    public String toString() {
+    public String toString() {  //layout per la jlist
         return "<html>" +
                 "<b>" + this.getNome() + "</b>" +
                 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prezzo: " +
@@ -21,6 +21,11 @@ public class Vestito extends Item{
                 "<i>Boost Energia:</i> " + this.boostEnergia + "<br>" +
                 "<i>Boost Fame:</i> " + this.boostFame + "<br>" + "&nbsp;" +
                 "</html>";
+    }
+
+    @Override
+    public Item creaCopia() {  //crea una copia dell'oggetto Vestito
+        return new Vestito(this.getNome(), this.getCosto(), this.getNegozio(), this.getBoostEnergia(), this.getBoostFame());
     }
 
     public boolean isIndossato() {

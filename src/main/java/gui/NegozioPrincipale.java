@@ -18,6 +18,15 @@ public class NegozioPrincipale {
     private JList listaItem;
     public static DefaultListModel<Item> modelloListaItem;
 
+    private void popolaListaItem(Negozio negozio) {
+        modelloListaItem = new DefaultListModel<Item>();
+        for (Item item : negozio.getListaItem()) {
+            modelloListaItem.addElement(item);
+        }
+
+        listaItem.setModel(modelloListaItem);
+    }
+
     public NegozioPrincipale(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi) {
         JFrame negozioFrame = new JFrame("Negozio");
         negozioFrame.setContentPane(negozioPanel);
@@ -31,15 +40,45 @@ public class NegozioPrincipale {
         //i valori dell'animale vengono resi visibili
         LabelPunti.setText(String.valueOf(animale.getPunti()));
 
-        modelloListaItem = new DefaultListModel<>();
-
         //item di default
-        Negozio negozioBase = new Negozio();
-        Cibo pizza = new Cibo("Pizza", 2, negozioBase, TipoCibo.salato, 4);
-        Vestito magliaEmo = new Vestito("Maglia emo", 4, negozioBase, false, 10,9);
-        modelloListaItem.addElement(pizza);
-        modelloListaItem.addElement(magliaEmo);
-        listaItem.setModel(modelloListaItem);
+        popolaListaItem(controller.getNegozioBase());
+
+        //gestione icone
+        listaItem.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
+
+            JLabel label = new JLabel(value.toString());
+
+            Item item = (Item) value;
+
+            if(item instanceof Cibo){
+                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/pizza.png"));
+                Image img = icon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+                label.setIcon(new ImageIcon(img));
+            }
+
+            else if(item instanceof Vestito){
+                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/magliaEmo.png")
+                );
+
+                Image img = icon.getImage().getScaledInstance(
+                        24,
+                        24,
+                        Image.SCALE_SMOOTH
+                );
+
+                label.setIcon(new ImageIcon(img));
+            }
+
+            // mantiene i colori della selezione
+            if(isSelected){
+
+                label.setBackground(list.getSelectionBackground());
+                label.setForeground(list.getSelectionForeground());
+                label.setOpaque(true);
+            }
+
+            return label;
+        });
 
         listaItem.addListSelectionListener(new ListSelectionListener() {
             @Override

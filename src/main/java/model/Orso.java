@@ -1,13 +1,13 @@
 package model;
 
 public class Orso extends Animale{
-    public Orso(String nome, int fame, int energia, int punti, boolean dorme) {
-        super(nome, fame, energia, punti, dorme);
+    public Orso(String nome) {
+        super(nome, 20, 30, 0);  //valori di default dell'animale di tipo Orso
     }
 
     @Override
     public String toString() {
-        return "L'orso: " + this.getNome();
+        return "L'orso: " + this.getNome();  //layout per la jlist
     }
 
     @Override

@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Minigame {
     private String nome;
     private  int ricompensa;
@@ -11,7 +13,14 @@ public class Minigame {
         this.energiaConsumata = energiaConsumata;
     }
 
-    public String getNome() {
+    public static ArrayList<Minigame> getMinigamesDiDefault() { //permette di stabilire quali saranno i minigames di default
+        ArrayList<Minigame> listaMinigame = new ArrayList<>();
+        Minigame sassoCartaForbici = new Minigame("Sasso, Carta, Forbici!", 5, 2);
+        listaMinigame.add(sassoCartaForbici);
+        return listaMinigame;
+    }
+
+    public String getNomeGioco() {
         return nome;
     }
 

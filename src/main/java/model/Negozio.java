@@ -2,17 +2,26 @@ package model;
 import java.util.ArrayList;
 
 public class Negozio {
-    private int numeroItem; //usando l'arraylist numeroItem diventerebbe obsoleto, basterebbe usare .size
-    private ArrayList<Item> listaItem;  //gemini consiglia di inizializzarlo come List per qualche motivo?
+    private ArrayList<Item> listaItem;
 
-    public Negozio() {  //problema della molteplicità da riguardare possibilmente
-        listaItem = new ArrayList<Item>(); //potremmo dover mettere un controllo in caso l'item ritorni null
-        numeroItem = listaItem.size();
+    public Negozio() {
+        listaItem = new ArrayList<Item>();
+        aggiungiItemDefault(); //ogni volta che verrà istanziato il negozio avrà già degli item di default
     }
 
     public void aggiungiItem(Item item) {
         listaItem.add(item);
-        numeroItem = listaItem.size();
+    }
+
+    public void aggiungiItemDefault() { //permette di stabilire gli item di default
+        Cibo pizza = new Cibo("Pizza", 2, this, TipoCibo.salato, 4);
+        Vestito magliaEmo = new Vestito("Maglia emo", 4, this, 10,9);
+        this.aggiungiItem(pizza);
+        this.aggiungiItem(magliaEmo);
+    }
+
+    public ArrayList<Item> getListaItem() {
+        return listaItem;
     }
 
     public void rimuoviItem(Item item) {
@@ -22,7 +31,7 @@ public class Negozio {
     public String visualizzaItem() {
         String risultato = "";
         for(Item temp: listaItem) {
-            risultato += "Nome: " +  temp.getNome() + "     costo: " + temp.getCosto() + "\n"; //potremmo tranquillamente cambiare il format della stringa
+            risultato += "Nome: " +  temp.getNome() + "     costo: " + temp.getCosto() + "\n";
         }
         return risultato;
     }

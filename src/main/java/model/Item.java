@@ -1,6 +1,6 @@
 package model;
 
-public class Item {
+public abstract class Item {
     private String nome;
     private int costo;
     private Negozio negozio;
@@ -9,11 +9,9 @@ public class Item {
         this.nome = nome;
         this.costo = costo;
         this.negozio = negozio;
-
-        negozio.aggiungiItem(this); //aggiunge direttamente l'item all'array list del negozio
-                                    // potremmo dover mettere un controllo in caso il negozio sia NULL
     }
 
+    public abstract Item creaCopia(); //il creaCopia ha un comportamento concreto nelle classi che estendono Item
 
     public String getNome() {
         return nome;

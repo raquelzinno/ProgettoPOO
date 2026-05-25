@@ -15,37 +15,38 @@ public class Animale {
     private Utente utente;
     private ArrayList<Vestito> vestititIndossati;
 
-    public Animale(String nome, int fame, int energia, int punti, boolean dorme) {
+    public Animale(String nome, int fame, int energia, int punti) {
         this.nome = nome;
         this.fameMax = this.fame = fame;  //inizialmente l'animale verrà creato con i suoi valori al max
         this.energiaMax = this.energia = energia;
         this.punti = punti;
-        this.dorme = dorme;
+        this.dorme = false; //l'animale di default è sempre sveglio
         vestititIndossati = new ArrayList<Vestito>();
     }
 
-    public void caricaEnergia() {
+    public void caricaEnergia() {  //se l'energia è minore dell'energia massima,l'energia viene aumentata
         if(energia < energiaMax)
         energia++;
     }
 
-    public void consumaFame() {   //in beta
+    public void consumaFame() {  //se la fame non è arrivata a 0 può essere consumata
         if(fame > 0)
             fame--;
     }
 
-    //sarebbe bello riuscire a consumare fame/energia nel tempo, oppure troviamo un altro sistema più preciso per il consumo dei valori
-
-    public void consumaEnergia() {   //in beta
+    public void consumaEnergia() {  //se l'energia non è arrivata a 0 può essere consumata
         if(energia > 0)
             energia--;
     }
 
-
-    public void gioca() { //idk for now, bisogna vedere meglio la gestione con la classe minigame
+    public void gioca(Minigame minigame, boolean vittoria) {
+        if(energia > minigame.getEnergiaConsumata()) {   //posso giocare solo se ho abbastanza energia rispetto a quella richiesta dal minigame
+            energia = energia - minigame.getEnergiaConsumata(); //in ogni caso energia verrà consumata
+            if (vittoria) {
+                punti = punti + minigame.getRicompensa(); //in caso di vittoria ricalcolo la ricompensa
+            }
+        }
     }
-
-
 
     public String getNome() {
         return nome;

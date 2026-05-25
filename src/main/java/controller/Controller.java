@@ -18,6 +18,7 @@ import model.Negozio;
 import javax.swing.Timer;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Controller {
     private ArrayList<Utente> listaUtenti;
@@ -25,9 +26,21 @@ public class Controller {
     private Timer gameTimer;
     private Timer sonnoTimer;
     private Tamagotchi tamagotchiFrame;
+    private Negozio negozioBase;
+    private ArrayList<Minigame> minigamesDiDefault;
 
-    public Controller(){
+    public Controller() {
         listaUtenti = new ArrayList<>();
+        negozioBase = new Negozio(); //istanzio un oggetto negozio che avrà già tutti gli item di default
+        minigamesDiDefault = Minigame.getMinigamesDiDefault(); //grazie al metodo statico, stabilisco l'arrayList che conterrà tutti i minigames di default
+    }
+
+    public ArrayList<Minigame> getMinigamesDiDefault() {
+        return minigamesDiDefault;
+    }
+
+    public Negozio getNegozioBase() {
+        return negozioBase;
     }
 
     public void aggiungiUtente(Utente utente){
@@ -71,11 +84,11 @@ public class Controller {
         if(nome.isBlank()) throw new ExceptionAnimale("Nessun nome inserito.");
 
         if(tipo.equals("Orso")){
-            Orso animale = new Orso(nome,20,30,20, false);
+            Orso animale = new Orso(nome);
             aggiungiAnimale(utente, animale);
         }
         else if(tipo.equals("Pinguino")){
-            Pinguino animale = new Pinguino(nome, 20, 10, 20, false);
+            Pinguino animale = new Pinguino(nome);
             aggiungiAnimale(utente, animale);
         }
     }
@@ -85,7 +98,7 @@ public class Controller {
     }
 
     public void compra(Utente utente, Item item, Animale animale) {
-        utente.compraItem(item,animale);
+        utente.compraItem(item, animale);
     }
 
     public Utente getUtenteAttuale() {
@@ -117,9 +130,9 @@ public class Controller {
     }
 
     public void iniziaTimer(Animale animale) {
-        if (gameTimer != null && gameTimer.isRunning())  //gestione di possibili timer attivi o nulli
+        if (gameTimer != null && gameTimer.isRunning())  //gestione di possibili timer attivi
             gameTimer.stop();
-        gameTimer = new Timer(60000, e -> {
+        gameTimer = new Timer(60000, e -> {  //viene istanziato il timer di gioco, ogni minuto i valori vengono consumati
             animale.consumaEnergia();
             animale.consumaFame();
             tamagotchiFrame.aggiornaLabel();
@@ -131,7 +144,7 @@ public class Controller {
         gameTimer.stop();
     }
 
-    public void addormenta(Animale animale) {
+    public void addormenta(Animale animale) {  //istanzia il nuovo timer del sonno, l'energia aumenta ogni secondo
         animale.setDorme(true);
         sonnoTimer = new Timer(1000, e -> {
             animale.caricaEnergia();
@@ -143,13 +156,13 @@ public class Controller {
     public void sveglia(Animale animale)
     {
         animale.setDorme(false);
-        if(sonnoTimer != null && sonnoTimer.isRunning())
+        if(sonnoTimer != null && sonnoTimer.isRunning()) //se il timer del sonno è attivo, questo viene fermato
         sonnoTimer.stop();
     }
 
     public void eliminaAnimale(Animale animale)
     {
-        if (gameTimer != null && gameTimer.isRunning())  //gestione di possibili timer attivi o nulli
+        if (gameTimer != null && gameTimer.isRunning())  //gestione di possibili timer attivi che devono essere fermati
             gameTimer.stop();
         if(sonnoTimer != null && sonnoTimer.isRunning())
             sonnoTimer.stop();
@@ -161,6 +174,31 @@ public class Controller {
         if(utenteAttuale.getPassword().equals(vecchiaPass)){
             utenteAttuale.setPassword(nuovaPass);
         }else throw new ExceptionPassword("La password è errata.");
+    }
+
+    public String giocaSassoCartaForbici(Minigame minigame, String manoUtente, String manoAvversaria, Animale animale) {
+            if(manoAvversaria.equals(manoUtente)) {  //se le mani sono uguali è il caso del pareggio, non viene cambiato nessun valore
+                return "pareggiato";
+            }
+            else if ((manoAvversaria.equals("sasso") && manoUtente.equals("forbici")) || (manoAvversaria.equals("forbici") && manoUtente.equals("carta")) || (manoAvversaria.equals("carta") && manoUtente.equals("sasso"))) {
+                animale.gioca(minigame,false); //casi di sconfitta
+                return "perso";
+            }
+            else {
+                animale.gioca(minigame,true); //i restanti sono casi di vittoria
+                return "vinto";
+            }
+    }
+
+    public String casualeSassoCartaForbici() { //calcolo una stringa a caso fra sasso carta e forbici
+        String sasso = "sasso";
+        String carta = "carta";
+        String forbici = "forbici";
+        String[] opzioni = {sasso,carta,forbici};
+
+        Random random = new Random();
+        int indiceCasuale = random.nextInt(opzioni.length);
+        return opzioni[indiceCasuale];
     }
 
 }

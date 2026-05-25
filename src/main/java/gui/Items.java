@@ -71,6 +71,8 @@ public class Items {
                     if (vestito != null && vestito.isIndossato()) {
                         if((animale.getVestititIndossati()).contains(itemCliccato)) { //se il vestito è attualmente indossato lo rimuove
                             controller.rimuoviVestito(vestito, animale);
+                            Tamagotchi.modelloListaVestiti.removeElement(vestito.getNome());
+                            listaItem.clearSelection();
                             JOptionPane.showMessageDialog(itemsFrame,
                                     "Hai rimosso: " + itemCliccato.getNome() + "!\nL'oggetto è stato rimosso",
                                     "Vestito rimosso",
@@ -119,10 +121,13 @@ public class Items {
                                 JOptionPane.INFORMATION_MESSAGE);
                     }else
                         if(oggettoSelezionato instanceof Vestito){ //se vestito
-                        JOptionPane.showMessageDialog(itemsFrame,
+                            listaItem.clearSelection();
+                            JOptionPane.showMessageDialog(itemsFrame,
                                 "Hai usato: " + oggettoSelezionato.getNome() + "!\nL'oggetto è stato indossato.",
                                 "Oggetto utilizzato",
                                 JOptionPane.INFORMATION_MESSAGE);
+                            Tamagotchi.modelloListaVestiti.addElement(oggettoSelezionato.getNome());
+
                     }
                 }catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
