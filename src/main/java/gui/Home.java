@@ -2,6 +2,8 @@ package gui;
 
 import controller.Controller;
 import model.Animale;
+import model.Orso;
+import model.Pinguino;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -44,6 +46,30 @@ public class Home {
         }
 
         listaAnimali.setModel(modelloListaAnimali);
+
+        //icone animali
+        listaAnimali.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
+
+            JLabel label = new JLabel(); //crea un nuovo label
+            Animale animale = (Animale) value; //prende questo oggetto della lista e lo tratta come un Animale
+            //label.setText(animale.getNome()); //imposta il testo del label
+
+            if(animale instanceof Orso){ //se l'animale è un orso mette come icona l'orso
+                label.setText("L'orso: "+animale.getNome()); //imposta il testo del label
+                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/orsoProva.png"));
+                Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                label.setIcon(new ImageIcon(img));
+            }else
+                if(animale instanceof Pinguino){
+                    label.setText("Il pinguino: "+animale.getNome()); //imposta il testo del label
+                    ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/pinguinoProva.png"));
+                    Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                    label.setIcon(new ImageIcon(img));
+                }
+
+            return label; //usa questa label per disegnare l’elemento della lista
+        });
+
 
         listaAnimali.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -97,8 +123,6 @@ public class Home {
                 frameHome.setVisible(false);
             }
         });
-
-
 
     }
 

@@ -3,6 +3,7 @@ package gui;
 import controller.Controller;
 import model.Animale;
 import model.Orso;
+import model.Pinguino;
 
 import javax.swing.*;
 import java.awt.*;
@@ -57,6 +58,12 @@ public class Tamagotchi {
             immagineAnimale.setIcon(new ImageIcon(
                     new ImageIcon(
                             getClass().getClassLoader().getResource("img/orsoProva.png")
+                    ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
+            ));
+        }else if(animale instanceof Pinguino){
+            immagineAnimale.setIcon(new ImageIcon(
+                    new ImageIcon(
+                            getClass().getClassLoader().getResource("img/pinguinoProva.png")
                     ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
             ));
         }
