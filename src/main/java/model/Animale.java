@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.ExceptionAnimale;
+
 import java.util.ArrayList;
 
 public class Animale {
@@ -49,7 +51,8 @@ public class Animale {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(String nome) throws RuntimeException {
+        if(nome.isBlank()) throw new ExceptionAnimale("Nessun nome inserito.");
         this.nome = nome;
     }
 

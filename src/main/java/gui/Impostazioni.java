@@ -5,6 +5,8 @@ import model.Animale;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -14,14 +16,14 @@ public class Impostazioni {
     private JTabbedPane tabbedPane1;
     private JTextField inputNome;
     private JButton confermaCambioNomeButton;
-    private JPasswordField passwordField1;
-    private JTextField textField2;
-    private JButton confermaButton1;
+    private JPasswordField vecchiaPasswordField;
+    private JTextField nuovaPasswordTextField;
+    private JButton confermaCambioPasswordButton;
     private JCheckBox controlloEliminaCheckBox;
     private JButton eliminaButton;
     private JTextArea textArea1;
 
-    public Impostazioni(JFrame tamagotchiFrame, Controller controller, Animale animale,Tamagotchi tamagotchi, JFrame frameHome) {
+    public Impostazioni(JFrame tamagotchiFrame, Controller controller, Animale animale,Tamagotchi tamagotchi, JFrame frameHome, Home home) {
         JFrame impostazioniFrame = new JFrame("Impostazioni");
         impostazioniFrame.setContentPane(impostazioniPanel);
         impostazioniFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,23 +33,46 @@ public class Impostazioni {
         impostazioniFrame.setResizable(false); //non cambia dimensione
         impostazioniFrame.setVisible(true);
 
+        //gestione pulsante cambia nome animale
         confermaCambioNomeButton.addActionListener(e -> {
-            String nome = inputNome.getText();
-            animale.setNome(nome);
-            JOptionPane.showMessageDialog(impostazioniFrame,
-                    "Ora il tuo animale si chiama " + animale.getNome(),
-                    "Nome cambiato",
-                    JOptionPane.INFORMATION_MESSAGE);
-            inputNome.setText("");
+            try {
+                String nome = inputNome.getText();
+                animale.setNome(nome);
+                JOptionPane.showMessageDialog(impostazioniFrame,
+                        "Ora il tuo animale si chiama " + animale.getNome(),
+                        "Nome cambiato",
+                        JOptionPane.INFORMATION_MESSAGE);
+                inputNome.setText("");
+            } catch(RuntimeException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
+        //gestione pulsante cambia password
+        confermaCambioPasswordButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controller.cambiaPassword(vecchiaPasswordField.getText(), nuovaPasswordTextField.getText());
+                    JOptionPane.showMessageDialog(impostazioniFrame,
+                            "Password cambiata con successo.",
+                            "Password cambiata",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } catch(RuntimeException ex){
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        //gestione pulsante elimina animale
         eliminaButton.addActionListener(e -> {
             if (controlloEliminaCheckBox.isSelected()) {
                 JOptionPane.showMessageDialog(impostazioniFrame,
-                        "Hai rimosso" + animale.getNome() + ".\nVerrai rimandato alla home.",
-                        "Animale Eliminato",
+                        "Hai rimosso " + animale.getNome() + ".\nVerrai rimandato alla home.",
+                        "Animale eliminato",
                         JOptionPane.INFORMATION_MESSAGE);
                 controller.eliminaAnimale(animale);
+                home.rimuoviAnimale(animale);
                 frameHome.setVisible(true);
                 impostazioniFrame.setVisible(false);
             } else {
@@ -60,7 +85,7 @@ public class Impostazioni {
         });
 
 
-
+        //gestione pulsante indietro
         goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
 
         goBack.addMouseListener(new MouseAdapter(){

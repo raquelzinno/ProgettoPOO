@@ -1,5 +1,6 @@
 package controller;
 
+import exceptions.ExceptionAnimale;
 import exceptions.ExceptionPassword;
 import exceptions.ExceptionTroppiAnimali;
 import exceptions.ExceptionUtente;
@@ -60,12 +61,15 @@ public class Controller {
         throw new ExceptionUtente("Utente non trovato.");
     }
 
-    public void checkAnimali(Utente utente){
+    public void checkAnimali(Utente utente) throws RuntimeException{
         if((utente.getAnimaliPosseduti()).size() >= 2) throw new ExceptionTroppiAnimali("Hai il massimo di animali consentiti!");
     }
 
     public void creaAnimale(Utente utente, String tipo, String nome) throws RuntimeException{
-        checkAnimali(utente);
+        checkAnimali(utente); //controlli
+        if(tipo.isBlank()) throw new ExceptionAnimale("Nessun tipo selezionato.");
+        if(nome.isBlank()) throw new ExceptionAnimale("Nessun nome inserito.");
+
         if(tipo.equals("Orso")){
             Orso animale = new Orso(nome,20,30,20, false);
             aggiungiAnimale(utente, animale);
@@ -150,6 +154,13 @@ public class Controller {
         if(sonnoTimer != null && sonnoTimer.isRunning())
             sonnoTimer.stop();
         utenteAttuale.eliminaAnimale(animale);
+    }
+
+    public void cambiaPassword(String vecchiaPass, String nuovaPass) throws RuntimeException{
+        if(nuovaPass.isBlank()) throw new ExceptionPassword("Nessuna password inserita.");
+        if(utenteAttuale.getPassword().equals(vecchiaPass)){
+            utenteAttuale.setPassword(nuovaPass);
+        }else throw new ExceptionPassword("La password è errata.");
     }
 
 }

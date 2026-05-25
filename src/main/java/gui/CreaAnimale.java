@@ -28,6 +28,7 @@ public class CreaAnimale {
         creaAnimaleFrame.setResizable(false); //non cambia dimensione
         creaAnimaleFrame.setVisible(true);
 
+        //pulsanti del tipo
         ButtonGroup gruppoAnimali = new ButtonGroup();
         gruppoAnimali.add(orsoRadioButton);
         gruppoAnimali.add(pinguinoRadioButton);
@@ -36,25 +37,30 @@ public class CreaAnimale {
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String tipo = "";
-                if(orsoRadioButton.isSelected()){
-                    tipo = "Orso";
-                }else if (pinguinoRadioButton.isSelected()){
-                    tipo = "Pinguino";
+                try {
+                    String tipo = "";
+                    if (orsoRadioButton.isSelected()) {
+                        tipo = "Orso";
+                    } else if (pinguinoRadioButton.isSelected()) {
+                        tipo = "Pinguino";
+                    }
+                    String nome = nomeTextField.getText();
+
+                    for (Utente u : controller.getListaUtenti()) {
+                        if (u.isAccessoEffettuato())
+                            controller.creaAnimale(u, tipo, nome);
+                    }
+                    JOptionPane.showMessageDialog(null, "Animale creato con successo.");
+
+                    Home.modelloListaAnimali.addElement(controller.getUtenteAttuale().getAnimaliPosseduti().getLast());
+
+                    //torna alla home
+                    frameHome.setVisible(true);
+                    creaAnimaleFrame.setVisible(false);
                 }
-                String nome = nomeTextField.getText();
-
-                for(Utente u : controller.getListaUtenti()){
-                    if(u.isAccessoEffettuato())
-                        controller.creaAnimale(u, tipo, nome);
+                catch (RuntimeException ex){
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
-                JOptionPane.showMessageDialog(null, "Animale creato con successo.");
-
-                Home.modelloListaAnimali.addElement(controller.getUtenteAttuale().getAnimaliPosseduti().getLast());
-
-                //torna alla home
-                frameHome.setVisible(true);
-                creaAnimaleFrame.setVisible(false);
             }
         });
 

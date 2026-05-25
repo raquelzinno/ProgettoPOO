@@ -35,7 +35,7 @@ public class Tamagotchi {
         labelNomeAnimale.setText(animale.getNome());
     }
 
-    public Tamagotchi(JFrame frameHome, Controller controller, Animale animale) {
+    public Tamagotchi(JFrame frameHome, Controller controller, Animale animale, Home home) {
         JFrame tamagotchiFrame = new JFrame("Tamagotchi");
         tamagotchiFrame.setContentPane(tamagotchiPanel);
         tamagotchiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -115,7 +115,7 @@ public class Tamagotchi {
         impostazioniButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Impostazioni impostazioni = new Impostazioni(tamagotchiFrame, controller, animale, Tamagotchi.this, frameHome);
+                Impostazioni impostazioni = new Impostazioni(tamagotchiFrame, controller, animale, Tamagotchi.this, frameHome, home);
                 tamagotchiFrame.setVisible(false);
             }
         });

@@ -102,7 +102,7 @@ public class Items {
                     }
                     if(animale.isDorme()) {
                         JOptionPane.showMessageDialog(itemsFrame,
-                                animale.getNome() + " sta ancora dormendo!\nSveglialo per usare gli item",
+                                animale.getNome() + " sta ancora dormendo!\nSveglialo per usare gli item.",
                                 "Buonanotte",
                                 JOptionPane.WARNING_MESSAGE);
                         return;

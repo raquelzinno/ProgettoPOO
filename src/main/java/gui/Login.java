@@ -36,7 +36,9 @@ public class Login {
         login.creaAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CreaAccount creaAccount = new CreaAccount(loginFrame, controller);
+                login.utenteTextField.setText(""); //se l'utente ha scritto qualcosa in questi campi, vengono resettati
+                login.passwordField.setText("");
+                CreaAccount creaAccount = new CreaAccount(loginFrame, controller); //va alla pagina crea account
                 loginFrame.setVisible(false);
             }
         });
@@ -45,15 +47,15 @@ public class Login {
         login.loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{
-                    String nomeUtente = login.utenteTextField.getText();
-                    String password = login.passwordField.getText();
-                    if(controller.checkUtente(nomeUtente, password)){
+                try {
+                    if (controller.checkUtente(login.utenteTextField.getText(), login.passwordField.getText())) {
                         JOptionPane.showMessageDialog(null, "Accesso effettuato correttamente.");
-                        Home home = new Home(loginFrame, controller);
+                        login.utenteTextField.setText("");
+                        login.passwordField.setText("");
+                        Home home = new Home(loginFrame, controller); //va alla home
                         loginFrame.setVisible(false);
                     }
-                }catch(RuntimeException ex){
+                } catch (RuntimeException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }

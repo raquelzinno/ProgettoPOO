@@ -23,27 +23,12 @@ public class Home {
     private Controller controller;
     public static DefaultListModel<Animale> modelloListaAnimali;
 
-    /*public static void main(String[] args) {
-        Home home = new Home();
-        frameHome = new JFrame("Home");
-        frameHome.setContentPane(new Home().mainPanel);
-        frameHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frameHome.pack();
-        frameHome.setSize(450, 350); //grandezza della finestra
-        frameHome.setLocationRelativeTo(null); //finestra si apre al centro
-        frameHome.setVisible(true);
-
-
-        home.unAnimalePanel.setVisible(true);
-
-        home.mainPanel.revalidate();
-        home.mainPanel.repaint();
-    }*/
+    public void rimuoviAnimale(Animale animale){
+        modelloListaAnimali.removeElement(animale);
+    }
 
     public Home(JFrame loginFrame, Controller controller) {
-        //Home home = new Home();
         frameHome = new JFrame("Home");
-        //frameHome.setContentPane(new Home().mainPanel);
         frameHome.setContentPane(mainPanel);
         frameHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameHome.pack();
@@ -95,7 +80,7 @@ public class Home {
             if (!e.getValueIsAdjusting()) {
                 Animale animaleCliccato = (Animale) listaAnimali.getSelectedValue();
                 if (animaleCliccato != null) {
-                    Tamagotchi tamagotchi = new Tamagotchi(frameHome, controller,animaleCliccato);
+                    Tamagotchi tamagotchi = new Tamagotchi(frameHome, controller, animaleCliccato, Home.this);
                     frameHome.setVisible(false);
                 }
             }
