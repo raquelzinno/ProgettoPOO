@@ -34,18 +34,13 @@ public class Animale {
             fame--;
     }
 
-    //sarebbe bello riuscire a consumare fame/energia nel tempo, oppure troviamo un altro sistema più preciso per il consumo dei valori
-
     public void consumaEnergia() {   //in beta
         if(energia > 0)
             energia--;
     }
 
-
     public void gioca() { //idk for now, bisogna vedere meglio la gestione con la classe minigame
     }
-
-
 
     public String getNome() {
         return nome;

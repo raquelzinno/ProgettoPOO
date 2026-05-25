@@ -50,24 +50,42 @@ public class Home {
         //icone animali
         listaAnimali.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
 
-            JLabel label = new JLabel(); //crea un nuovo label
-            Animale animale = (Animale) value; //prende questo oggetto della lista e lo tratta come un Animale
-            //label.setText(animale.getNome()); //imposta il testo del label
+            JLabel label = new JLabel(value.toString());
 
-            if(animale instanceof Orso){ //se l'animale è un orso mette come icona l'orso
-                label.setText("L'orso: "+animale.getNome()); //imposta il testo del label
-                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/orsoProva.png"));
-                Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+            Animale animale = (Animale) value;
+
+            if(animale instanceof Orso){
+
+                ImageIcon icon = new ImageIcon(
+                        getClass().getClassLoader()
+                                .getResource("img/orsoProva.png")
+                );
+
+                Image img = icon.getImage().getScaledInstance(
+                        50,
+                        50,
+                        Image.SCALE_SMOOTH
+                );
+
                 label.setIcon(new ImageIcon(img));
-            }else
-                if(animale instanceof Pinguino){
-                    label.setText("Il pinguino: "+animale.getNome()); //imposta il testo del label
-                    ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/pinguinoProva.png"));
-                    Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-                    label.setIcon(new ImageIcon(img));
-                }
+            }
 
-            return label; //usa questa label per disegnare l’elemento della lista
+            else if(animale instanceof Pinguino){
+
+                ImageIcon icon = new ImageIcon(
+                        getClass().getClassLoader()
+                                .getResource("img/pinguinoProva.png")
+                );
+
+                Image img = icon.getImage().getScaledInstance(
+                        50,
+                        50,
+                        Image.SCALE_SMOOTH
+                );
+
+                label.setIcon(new ImageIcon(img));
+            }
+            return label;
         });
 
 

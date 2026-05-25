@@ -41,6 +41,42 @@ public class NegozioPrincipale {
         modelloListaItem.addElement(magliaEmo);
         listaItem.setModel(modelloListaItem);
 
+        listaItem.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
+
+            JLabel label = new JLabel(value.toString());
+
+            Item item = (Item) value;
+
+            if(item instanceof Cibo){
+                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/pizza.png"));
+                Image img = icon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+                label.setIcon(new ImageIcon(img));
+            }
+
+            else if(item instanceof Vestito){
+                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/magliaEmo.png")
+                );
+
+                Image img = icon.getImage().getScaledInstance(
+                        24,
+                        24,
+                        Image.SCALE_SMOOTH
+                );
+
+                label.setIcon(new ImageIcon(img));
+            }
+
+            // mantiene i colori della selezione
+            if(isSelected){
+
+                label.setBackground(list.getSelectionBackground());
+                label.setForeground(list.getSelectionForeground());
+                label.setOpaque(true);
+            }
+
+            return label;
+        });
+
         listaItem.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
