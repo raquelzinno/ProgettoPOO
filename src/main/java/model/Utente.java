@@ -125,6 +125,10 @@ public class Utente {
         }
     }
 
+    public void eliminaItem(Item item) {
+        itemPosseduti.remove(item);
+    }
+
     public void rimuoviVestito(Vestito vestito, Animale animale){
         if(itemPosseduti.contains(vestito)) {  //prima controllo se possiedo i vestiti nei miei item
             if (vestito.isIndossato()) {

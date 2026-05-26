@@ -30,7 +30,7 @@ public class Controller {
     private ArrayList<Minigame> minigamesDiDefault;
 
     public Controller() {
-        listaUtenti = new ArrayList<>();
+        listaUtenti = new ArrayList<Utente>();
         negozioBase = new Negozio(); //istanzio un oggetto negozio che avrà già tutti gli item di default
         minigamesDiDefault = Minigame.getMinigamesDiDefault(); //grazie al metodo statico, stabilisco l'arrayList che conterrà tutti i minigames di default
     }
@@ -199,6 +199,10 @@ public class Controller {
         Random random = new Random();
         int indiceCasuale = random.nextInt(opzioni.length);
         return opzioni[indiceCasuale];
+    }
+
+    public void elimina(Item item) {
+        utenteAttuale.eliminaItem(item);
     }
 
 }

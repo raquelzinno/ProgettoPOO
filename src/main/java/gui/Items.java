@@ -21,6 +21,7 @@ public class Items {
     private JButton usaButton;
     private JList listaItem;
     private JScrollPane itemsScrollPane;
+    private JButton eliminaButton;
     public static DefaultListModel<Item> modelloListaItems;
 
     public Items(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi){
@@ -113,6 +114,7 @@ public class Items {
                     controller.usaItem(controller.getUtenteAttuale(), oggettoSelezionato, animale);
 
                     if(oggettoSelezionato instanceof Cibo) { //se cibo
+                        controller.elimina(oggettoSelezionato);
                         modelloListaItems.removeElement(oggettoSelezionato); //elimina l'item dalla lista se è un cibo
 
                         JOptionPane.showMessageDialog(itemsFrame,
@@ -135,7 +137,30 @@ public class Items {
             }
         });
 
-        //gestione pulsante indietro
+        eliminaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Item oggettoSelezionato = (Item) listaItem.getSelectedValue();
+                if (oggettoSelezionato == null) {
+                    JOptionPane.showMessageDialog(itemsFrame,
+                            "Devi prima selezionare un oggetto!",
+                            "Nessuna selezione",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                controller.elimina(oggettoSelezionato);
+                modelloListaItems.removeElement(oggettoSelezionato);
+                JOptionPane.showMessageDialog(itemsFrame,
+                        "Hai eliminato " + oggettoSelezionato.getNome(),
+                        "Item eliminato",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+            }
+
+        });
+
+
+                    //gestione pulsante indietro
         goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
 
         goBack.addMouseListener(new MouseAdapter() {
