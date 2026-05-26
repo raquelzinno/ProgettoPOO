@@ -42,6 +42,14 @@ public class Minigames {
         //copio il riferimento ai minigame per rendere il codice più pulito
         minigame1 = (controller.getMinigamesDiDefault()).get(0);
 
+        //MINIGAME1 --------------------------------------------------------------------------------------------
+
+        //pulsanti minigame1
+        ButtonGroup gruppoMinigame1 = new ButtonGroup();
+        gruppoMinigame1.add(sassoRadioButton);
+        gruppoMinigame1.add(cartaRadioButton);
+        gruppoMinigame1.add(forbiciRadioButton);
+
         tabbedPane1.setTitleAt(tabbedPane1.indexOfComponent(minigame1Panel), minigame1.getNomeGioco());
 
         labelEnergia1.setText(String.valueOf(minigame1.getEnergiaConsumata()));
@@ -50,24 +58,28 @@ public class Minigames {
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String manoUtente = "";
-                if (sassoRadioButton.isSelected()) {
-                    manoUtente = "sasso";
-                } else if (cartaRadioButton.isSelected()) {
-                    manoUtente = "carta";
-                }
-                else if (forbiciRadioButton.isSelected()) {
-                    manoUtente = "forbici";
-                }
-                String manoAvversaria = controller.casualeSassoCartaForbici();
-                String esito = controller.giocaSassoCartaForbici(minigame1, manoUtente, manoAvversaria, animale);
+                try {
+                    String manoUtente = "";
+                    if (sassoRadioButton.isSelected()) {
+                        manoUtente = "sasso";
+                    } else if (cartaRadioButton.isSelected()) {
+                        manoUtente = "carta";
+                    } else if (forbiciRadioButton.isSelected()) {
+                        manoUtente = "forbici";
+                    }
+                    String manoAvversaria = controller.casualeSassoCartaForbici();
+                    String esito = controller.giocaSassoCartaForbici(minigame1, manoUtente, manoAvversaria, animale);
 
                     JOptionPane.showMessageDialog(null, "Hai usato " + manoUtente
-                            + "\nL'avversario ha usato " + manoAvversaria
+                            + "\nL'avversario ha usato " + manoAvversaria + "."
                             + "\nHai " + esito + " !");
+                }catch(RuntimeException ex){
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
+        //gestione pulsante indietro
         goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
 
         goBack.addMouseListener(new MouseAdapter(){

@@ -1,4 +1,6 @@
 package model;
+import exceptions.ExceptionFame;
+import exceptions.ExceptionPuntiNonSufficienti;
 import exceptions.ExceptionVestiti;
 
 import java.util.ArrayList;
@@ -79,9 +81,9 @@ public class Utente {
         animale.setNome(nome);
     }
 
-    public void compraItem(Item item, Animale animale) {
+    public void compraItem(Item item, Animale animale) throws RuntimeException {
         if(animale.getPunti() < item.getCosto()) {  //posso comprare l'item solo se ho abbastanza punti
-            System.out.println("L'animale non ha abbastanza punti!");
+            throw new ExceptionPuntiNonSufficienti("L'animale non ha abbastanza punti!");
         }
         else
         {
@@ -91,7 +93,9 @@ public class Utente {
         }
     }
 
-    public void daiCibo(Cibo cibo, Animale animale) {
+    public void daiCibo(Cibo cibo, Animale animale) throws RuntimeException{
+        if(animale.getFame() == animale.getFameMax()) throw new ExceptionFame(animale.getNome() + " non ha fame.");
+
         if(itemPosseduti.contains(cibo)) {  //vedo se il cibo è nell'inventario
             animale.setFame(animale.getFame() + cibo.getPuntiFame());   //ricalcolo il livello di fame
             if(animale.getFame() > animale.getFameMax()) //nel caso in cui il nuovo livello di fame eccede il massimo, viene ricalcolato per essere uguale al massimo

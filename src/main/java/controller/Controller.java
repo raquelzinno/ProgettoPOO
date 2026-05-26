@@ -1,9 +1,6 @@
 package controller;
 
-import exceptions.ExceptionAnimale;
-import exceptions.ExceptionPassword;
-import exceptions.ExceptionTroppiAnimali;
-import exceptions.ExceptionUtente;
+import exceptions.*;
 import gui.Tamagotchi;
 import model.Animale;
 import model.Utente;
@@ -97,7 +94,7 @@ public class Controller {
         utente.creaAnimale(animale); //crea l'animale che è legato all'utente
     }
 
-    public void compra(Utente utente, Item item, Animale animale) {
+    public void compra(Utente utente, Item item, Animale animale) throws RuntimeException{
         utente.compraItem(item, animale);
     }
 
@@ -114,7 +111,7 @@ public class Controller {
         return listaUtenti;
     }
 
-    public void usaItem(Utente utente, Item item, Animale animale){
+    public void usaItem(Utente utente, Item item, Animale animale) throws RuntimeException{
         if(item instanceof Cibo)
             utente.daiCibo((Cibo) item, animale);
         else if(item instanceof Vestito)
@@ -153,15 +150,13 @@ public class Controller {
         sonnoTimer.start();
     }
 
-    public void sveglia(Animale animale)
-    {
+    public void sveglia(Animale animale) {
         animale.setDorme(false);
         if(sonnoTimer != null && sonnoTimer.isRunning()) //se il timer del sonno è attivo, questo viene fermato
         sonnoTimer.stop();
     }
 
-    public void eliminaAnimale(Animale animale)
-    {
+    public void eliminaAnimale(Animale animale) {
         if (gameTimer != null && gameTimer.isRunning())  //gestione di possibili timer attivi che devono essere fermati
             gameTimer.stop();
         if(sonnoTimer != null && sonnoTimer.isRunning())
@@ -176,8 +171,12 @@ public class Controller {
         }else throw new ExceptionPassword("La password è errata.");
     }
 
-    public String giocaSassoCartaForbici(Minigame minigame, String manoUtente, String manoAvversaria, Animale animale) {
-            if(manoAvversaria.equals(manoUtente)) {  //se le mani sono uguali è il caso del pareggio, non viene cambiato nessun valore
+    public String giocaSassoCartaForbici(Minigame minigame, String manoUtente, String manoAvversaria, Animale animale) throws RuntimeException {
+        if(manoUtente.isBlank()) throw new ExceptionMinigame("Nessuna opzione selezionata.");
+        if(animale.getEnergia() < minigame.getEnergiaConsumata()) throw new ExceptionMinigame("Energia non sufficiente.");
+
+        if(manoAvversaria.equals(manoUtente)) {
+                animale.gioca(minigame,false); //casi di pareggio
                 return "pareggiato";
             }
             else if ((manoAvversaria.equals("sasso") && manoUtente.equals("forbici")) || (manoAvversaria.equals("forbici") && manoUtente.equals("carta")) || (manoAvversaria.equals("carta") && manoUtente.equals("sasso"))) {

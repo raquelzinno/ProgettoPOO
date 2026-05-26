@@ -57,25 +57,20 @@ public class NegozioPrincipale {
             }
 
             else if(item instanceof Vestito){
-                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/magliaEmo.png")
-                );
+                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/maglia.png"));
 
-                Image img = icon.getImage().getScaledInstance(
-                        24,
-                        24,
-                        Image.SCALE_SMOOTH
-                );
+                Image img = icon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 
                 label.setIcon(new ImageIcon(img));
             }
 
-            // mantiene i colori della selezione
+            /*// mantiene i colori della selezione
             if(isSelected){
 
                 label.setBackground(list.getSelectionBackground());
                 label.setForeground(list.getSelectionForeground());
                 label.setOpaque(true);
-            }
+            }*/
 
             return label;
         });
@@ -93,7 +88,7 @@ public class NegozioPrincipale {
             }
 
             else if(item instanceof Vestito){
-                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/magliaEmo.png")
+                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/maglia.png")
                 );
 
                 Image img = icon.getImage().getScaledInstance(
@@ -133,23 +128,28 @@ public class NegozioPrincipale {
 
         //gestione bottone compra
         compraButton.addActionListener(e -> {
-            Item oggettoSelezionato = (Item) listaItem.getSelectedValue();
-            if (oggettoSelezionato == null) {
+            try {
+                Item oggettoSelezionato = (Item) listaItem.getSelectedValue();
+                if (oggettoSelezionato == null) {
+                    JOptionPane.showMessageDialog(negozioFrame,
+                            "Seleziona un oggetto prima di acquistare!",
+                            "Nessuna selezione",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                controller.compra(controller.getUtenteAttuale(), oggettoSelezionato, animale);
+
                 JOptionPane.showMessageDialog(negozioFrame,
-                        "Seleziona un oggetto prima di acquistare!",
-                        "Nessuna selezione",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
+                        "Hai acquistato: " + oggettoSelezionato.getNome() + "!\nL'oggetto è stato aggiunto al tuo inventario.",
+                        "Acquisto Completato",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                LabelPunti.setText(String.valueOf(animale.getPunti()));
+            } catch(RuntimeException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+
             }
-
-            controller.compra(controller.getUtenteAttuale(), oggettoSelezionato, animale);
-
-            JOptionPane.showMessageDialog(negozioFrame,
-                    "Hai acquistato: " + oggettoSelezionato.getNome() + "!\nL'oggetto è stato aggiunto al tuo inventario.",
-                    "Acquisto Completato",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-            LabelPunti.setText(String.valueOf(animale.getPunti()));
         });
 
         //gestione pulsante indietro

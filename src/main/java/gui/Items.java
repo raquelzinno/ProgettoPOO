@@ -22,6 +22,7 @@ public class Items {
     private JList listaItem;
     private JScrollPane itemsScrollPane;
     private JButton eliminaButton;
+    private JLabel spazio;
     public static DefaultListModel<Item> modelloListaItems;
 
     public Items(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi){
