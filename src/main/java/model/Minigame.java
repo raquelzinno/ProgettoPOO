@@ -15,8 +15,12 @@ public class Minigame {
 
     public static ArrayList<Minigame> getMinigamesDiDefault() { //permette di stabilire quali saranno i minigames di default
         ArrayList<Minigame> listaMinigame = new ArrayList<>();
+
         Minigame sassoCartaForbici = new Minigame("Sasso, Carta, Forbici!", 5, 2);
+        Minigame lancioMoneta = new Minigame("Lancio della moneta", 5,5);
+
         listaMinigame.add(sassoCartaForbici);
+        listaMinigame.add(lancioMoneta);
         return listaMinigame;
     }
 

@@ -22,7 +22,6 @@ public class Tamagotchi {
     private JButton itemButton;
     private JButton vaiADormireButton;
     private JLabel goBack;
-    private JLabel test;
     private JButton impostazioniButton;
     private JList listaVestitiIndossati;
     private Animale animale;
@@ -147,14 +146,5 @@ public class Tamagotchi {
             }
         });
 
-        //test
-        test.addMouseListener(new MouseAdapter(){
-            @Override
-            public void mouseClicked(MouseEvent e){
-                animale.setEnergia(5);
-                animale.setFame(5);
-                aggiornaLabel();
-            }
-        });
     }
 }

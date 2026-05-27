@@ -17,13 +17,17 @@ public class Minigames {
     private JTabbedPane tabbedPane1;
     private JPanel minigame1Panel;
     private JPanel minigame2Panel;
-    private JPanel minigame3Panel;
     private JRadioButton sassoRadioButton;
     private JRadioButton cartaRadioButton;
     private JRadioButton forbiciRadioButton;
-    private JButton okButton;
+    private JButton okButton1;
     private JLabel labelEnergia1;
     private JLabel labelPunti1;
+    private JButton okButton2;
+    private JRadioButton testaRadioButton;
+    private JRadioButton croceRadioButton;
+    private JLabel labelEnergia2;
+    private JLabel labelPunti2;
     private Minigame minigame1;
     private Minigame minigame2;
     private Minigame minigame3;
@@ -41,6 +45,14 @@ public class Minigames {
 
         //copio il riferimento ai minigame per rendere il codice più pulito
         minigame1 = (controller.getMinigamesDiDefault()).get(0);
+        minigame2 = (controller.getMinigamesDiDefault()).get(1);
+        //aggiorno i label e i titoli con i valori necessari
+        tabbedPane1.setTitleAt(tabbedPane1.indexOfComponent(minigame1Panel), minigame1.getNomeGioco());
+        tabbedPane1.setTitleAt(tabbedPane1.indexOfComponent(minigame2Panel), minigame2.getNomeGioco());
+        labelEnergia1.setText(String.valueOf(minigame1.getEnergiaConsumata()));
+        labelPunti1.setText(String.valueOf(minigame1.getRicompensa()));
+        labelEnergia2.setText(String.valueOf(minigame2.getEnergiaConsumata()));
+        labelPunti2.setText(String.valueOf(minigame2.getRicompensa()));
 
         //MINIGAME1 --------------------------------------------------------------------------------------------
 
@@ -50,12 +62,7 @@ public class Minigames {
         gruppoMinigame1.add(cartaRadioButton);
         gruppoMinigame1.add(forbiciRadioButton);
 
-        tabbedPane1.setTitleAt(tabbedPane1.indexOfComponent(minigame1Panel), minigame1.getNomeGioco());
-
-        labelEnergia1.setText(String.valueOf(minigame1.getEnergiaConsumata()));
-        labelPunti1.setText(String.valueOf(minigame1.getRicompensa()));
-
-        okButton.addActionListener(new ActionListener() {
+        okButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -79,6 +86,35 @@ public class Minigames {
             }
         });
 
+        //MINIGAME2 --------------------------------------------------------------------------------------------
+
+        ButtonGroup gruppoMinigame2 = new ButtonGroup();
+        gruppoMinigame2.add(testaRadioButton);
+        gruppoMinigame2.add(croceRadioButton);
+
+        okButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String inputUtente = "";
+                    if (testaRadioButton.isSelected()) {
+                        inputUtente = "testa";
+                    } else if (croceRadioButton.isSelected()) {
+                        inputUtente = "croce";
+                    }
+                    String risultatoLancio = controller.casualeLancioMoneta();
+                    String esito = controller.giocaLancioMoneta(minigame1, inputUtente, risultatoLancio, animale);
+
+                    JOptionPane.showMessageDialog(null, "Hai scommesso su " + inputUtente
+                            + "\nLa moneta è caduta su " + risultatoLancio + "."
+                            + "\nHai " + esito + " !");
+                }catch(RuntimeException ex){
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+
         //gestione pulsante indietro
         goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
 
@@ -90,5 +126,7 @@ public class Minigames {
                 minigamesFrame.setVisible(false);
             }
         });
+
+
     }
 }

@@ -200,6 +200,30 @@ public class Controller {
         return opzioni[indiceCasuale];
     }
 
+    public String casualeLancioMoneta() {
+        String testa = "testa";
+        String croce = "croce";
+        String[] opzioni = {testa,croce};
+
+        Random random = new Random();
+        int indiceCasuale = random.nextInt(opzioni.length);
+        return opzioni[indiceCasuale];
+    }
+
+    public String giocaLancioMoneta(Minigame minigame, String inputUtente, String risultatoLancio, Animale animale) throws RuntimeException{
+        if(inputUtente.isBlank()) throw new ExceptionMinigame("Nessuna opzione selezionata.");
+        if(animale.getEnergia() < minigame.getEnergiaConsumata()) throw new ExceptionMinigame("Energia non sufficiente.");
+
+        if(inputUtente.equals(risultatoLancio)) {
+            animale.gioca(minigame,true);
+            return "vinto";
+        }
+        else {
+            animale.gioca(minigame,false);
+            return "perso";
+        }
+    }
+
     public void elimina(Item item) {
         utenteAttuale.eliminaItem(item);
     }
