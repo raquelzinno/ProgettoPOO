@@ -28,6 +28,10 @@ public class Minigames {
     private JRadioButton croceRadioButton;
     private JLabel labelEnergia2;
     private JLabel labelPunti2;
+    private JPanel minigame3Panel;
+    private JLabel labelEnergia3;
+    private JLabel labelPunti3;
+    private JButton okButton3;
     private Minigame minigame1;
     private Minigame minigame2;
     private Minigame minigame3;
@@ -46,13 +50,18 @@ public class Minigames {
         //copio il riferimento ai minigame per rendere il codice più pulito
         minigame1 = (controller.getMinigamesDiDefault()).get(0);
         minigame2 = (controller.getMinigamesDiDefault()).get(1);
+        minigame3 = (controller.getMinigamesDiDefault()).get(2);
+
         //aggiorno i label e i titoli con i valori necessari
         tabbedPane1.setTitleAt(tabbedPane1.indexOfComponent(minigame1Panel), minigame1.getNomeGioco());
         tabbedPane1.setTitleAt(tabbedPane1.indexOfComponent(minigame2Panel), minigame2.getNomeGioco());
+        tabbedPane1.setTitleAt(tabbedPane1.indexOfComponent(minigame3Panel), minigame3.getNomeGioco());
         labelEnergia1.setText(String.valueOf(minigame1.getEnergiaConsumata()));
         labelPunti1.setText(String.valueOf(minigame1.getRicompensa()));
         labelEnergia2.setText(String.valueOf(minigame2.getEnergiaConsumata()));
         labelPunti2.setText(String.valueOf(minigame2.getRicompensa()));
+        labelEnergia3.setText(String.valueOf(minigame3.getEnergiaConsumata()));
+        labelPunti3.setText(String.valueOf(minigame3.getRicompensa()));
 
         //MINIGAME1 --------------------------------------------------------------------------------------------
 
@@ -79,7 +88,7 @@ public class Minigames {
 
                     JOptionPane.showMessageDialog(null, "Hai usato " + manoUtente
                             + "\nL'avversario ha usato " + manoAvversaria + "."
-                            + "\nHai " + esito + " !");
+                            + "\nHai " + esito + "!");
                 }catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
@@ -103,11 +112,29 @@ public class Minigames {
                         inputUtente = "croce";
                     }
                     String risultatoLancio = controller.casualeLancioMoneta();
-                    String esito = controller.giocaLancioMoneta(minigame1, inputUtente, risultatoLancio, animale);
+                    String esito = controller.giocaLancioMoneta(minigame2, inputUtente, risultatoLancio, animale);
 
                     JOptionPane.showMessageDialog(null, "Hai scommesso su " + inputUtente
                             + "\nLa moneta è caduta su " + risultatoLancio + "."
-                            + "\nHai " + esito + " !");
+                            + "\nHai " + esito + "!");
+                }catch(RuntimeException ex){
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        //MINIGAME3 --------------------------------------------------------------------------------------------
+
+        okButton3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int slot1 = controller.casualeSlotMachine();
+                    int slot2 = controller.casualeSlotMachine();
+                    int slot3 = controller.casualeSlotMachine();
+                    String esito = controller.giocaSlotMachine(minigame3, animale, slot1, slot2, slot3);
+                    JOptionPane.showMessageDialog(null, "E' uscito:  " + slot1 + " " + slot2 + " " + slot3
+                            + "\nHai " + esito + "!");
                 }catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }

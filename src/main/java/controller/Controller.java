@@ -60,7 +60,7 @@ public class Controller {
 
     public boolean checkUtente(String utente, String password){
         if(utente.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
-        if(password.isBlank())
+        if(password.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
 
         for(Utente u : listaUtenti){
             if(u.getLogin().equals(utente) && u.getPassword().equals(password)){
@@ -176,8 +176,7 @@ public class Controller {
         if(manoUtente.isBlank()) throw new ExceptionMinigame("Nessuna opzione selezionata.");
         if(animale.getEnergia() < minigame.getEnergiaConsumata()) throw new ExceptionMinigame("Energia non sufficiente.");
 
-        if(manoAvversaria.equals(manoUtente)) {
-                animale.gioca(minigame,false); //casi di pareggio
+        if(manoAvversaria.equals(manoUtente)) { //casi di pareggio
                 return "pareggiato";
             }
             else if ((manoAvversaria.equals("sasso") && manoUtente.equals("forbici")) || (manoAvversaria.equals("forbici") && manoUtente.equals("carta")) || (manoAvversaria.equals("carta") && manoUtente.equals("sasso"))) {
@@ -216,6 +215,23 @@ public class Controller {
         if(animale.getEnergia() < minigame.getEnergiaConsumata()) throw new ExceptionMinigame("Energia non sufficiente.");
 
         if(inputUtente.equals(risultatoLancio)) {
+            animale.gioca(minigame,true);
+            return "vinto";
+        }
+        else {
+            animale.gioca(minigame,false);
+            return "perso";
+        }
+    }
+
+    public int casualeSlotMachine() {
+        Random random = new Random();
+        int numeroSlot = random.nextInt(4);
+        return numeroSlot;
+    }
+
+    public String giocaSlotMachine(Minigame minigame, Animale animale, int slot1, int slot2, int slot3) {
+        if(slot1 == slot2 && slot2 == slot3) {
             animale.gioca(minigame,true);
             return "vinto";
         }

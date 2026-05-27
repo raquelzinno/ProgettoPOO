@@ -55,6 +55,15 @@ public class NegozioPrincipale {
             Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
             label.setIcon(new ImageIcon(img));
 
+            label.setOpaque(true); //permette di configurare il comportamento in caso di selezione
+            if (isSelected) {
+                label.setBackground(list.getSelectionBackground()); //colore blu di selezione
+                label.setForeground(list.getSelectionForeground()); //testo bianco quando selezionato
+            } else {
+                label.setBackground(list.getBackground());  //sfondo normale
+                label.setForeground(list.getForeground());  //testo normale
+            }
+
             return label;
         });
 

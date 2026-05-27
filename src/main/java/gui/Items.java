@@ -47,18 +47,32 @@ public class Items {
 
         listaItem.setModel(modelloListaItems);
 
+        listaItem.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
+
+            JLabel label = new JLabel(value.toString());
+            Item item = (Item) value;
+
+            String path = item.getIconPath();
+            ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(path));
+            Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+            label.setIcon(new ImageIcon(img));
+
+            label.setOpaque(true); //permette di configurare il comportamento in caso di selezione
+            if (isSelected) {
+                label.setBackground(list.getSelectionBackground()); //colore blu di selezione
+                label.setForeground(list.getSelectionForeground()); //testo bianco quando selezionato
+            } else {
+                label.setBackground(list.getBackground());  //sfondo normale
+                label.setForeground(list.getForeground());  //testo normale
+            }
+
+            return label;
+        });
+
         listaItem.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                //prende animale selezionato dalla lista
                 Item itemSelezionato = (Item) listaItem.getSelectedValue();
-
-                /*//get selectedValue può ritornare null, è necessario questo controllo
-                if (animaleSelezionato != null) {
-                    nomeCognome.setText(contattoSelezionato.getNome() + " " + contattoSelezionato.getCognome());
-                    numeroTelefono.setText(contattoSelezionato.getNumTelefono());
-                    email.setText(contattoSelezionato.getEmail());
-                }*/
             }
         });
 
@@ -129,7 +143,7 @@ public class Items {
                                 "Hai usato: " + oggettoSelezionato.getNome() + "!\nL'oggetto è stato indossato.",
                                 "Oggetto utilizzato",
                                 JOptionPane.INFORMATION_MESSAGE);
-                            Tamagotchi.modelloListaVestiti.addElement(oggettoSelezionato.getNome());
+                            Tamagotchi.modelloListaVestiti.addElement((Vestito) oggettoSelezionato);
 
                     }
                 }catch(RuntimeException ex){

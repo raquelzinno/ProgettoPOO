@@ -26,7 +26,7 @@ public class Tamagotchi {
     private JList listaVestitiIndossati;
     private Animale animale;
     private Timer gameTime;
-    public static DefaultListModel<String> modelloListaVestiti;
+    public static DefaultListModel<Vestito> modelloListaVestiti;
 
     public void aggiornaLabel(){
         labelPunti.setText(String.valueOf(animale.getPunti()));
@@ -52,12 +52,27 @@ public class Tamagotchi {
         controller.setHomeFrame(this);
         controller.iniziaTimer(animale);
 
-        modelloListaVestiti = new DefaultListModel<String>();
-        for(Vestito v : animale.getVestititIndossati()) {
-            modelloListaVestiti.addElement(v.getNome());
+        modelloListaVestiti = new DefaultListModel<Vestito>();
+
+        for(Vestito v : animale.getVestititIndossati()){
+            modelloListaVestiti.addElement(v);
         }
 
         listaVestitiIndossati.setModel(modelloListaVestiti);
+
+        listaVestitiIndossati.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
+
+            JLabel label = new JLabel(value.toString());
+            label.setText(null); //nella jlist sarà visibile solo l'icona
+            Item item = (Item) value;
+
+            String path = item.getIconPath();
+            ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(path));
+            Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+            label.setIcon(new ImageIcon(img));
+
+            return label;
+        });
 
         //immagine dell'animale
         if(animale instanceof Orso) {
