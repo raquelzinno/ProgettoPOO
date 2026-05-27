@@ -28,7 +28,7 @@ public class Impostazioni {
         impostazioniFrame.setContentPane(impostazioniPanel);
         impostazioniFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         impostazioniFrame.pack();
-        impostazioniFrame.setSize(500, 300); //grandezza della finestra
+        impostazioniFrame.setSize(500, 330); //grandezza della finestra
         impostazioniFrame.setLocationRelativeTo(null); //finestra si apre al centro
         impostazioniFrame.setResizable(false); //non cambia dimensione
         impostazioniFrame.setVisible(true);
