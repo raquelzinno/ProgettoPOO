@@ -4,11 +4,13 @@ public abstract class Item {
     private String nome;
     private int costo;
     private Negozio negozio;
+    private String iconPath;
 
-    public Item(String nome, int costo, Negozio negozio) {
+    public Item(String nome, int costo, Negozio negozio, String iconPath) {
         this.nome = nome;
         this.costo = costo;
         this.negozio = negozio;
+        this.iconPath = iconPath;
     }
 
     public abstract Item creaCopia(); //il creaCopia ha un comportamento concreto nelle classi che estendono Item
@@ -35,5 +37,9 @@ public abstract class Item {
 
     public void setNegozio(Negozio negozio) {
         this.negozio = negozio;
+    }
+
+    public String getIconPath() {
+        return iconPath;
     }
 }

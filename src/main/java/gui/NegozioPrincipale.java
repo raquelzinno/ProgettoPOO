@@ -50,7 +50,12 @@ public class NegozioPrincipale {
 
             Item item = (Item) value;
 
-            if(item instanceof Cibo){
+            String path = item.getIconPath();
+            ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(path));
+            Image img = icon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+            label.setIcon(new ImageIcon(img));
+
+            /*if(item instanceof Cibo){
                 ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/pizza.png"));
                 Image img = icon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
                 label.setIcon(new ImageIcon(img));
@@ -62,51 +67,7 @@ public class NegozioPrincipale {
                 Image img = icon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 
                 label.setIcon(new ImageIcon(img));
-            }
-
-            /*// mantiene i colori della selezione
-            if(isSelected){
-
-                label.setBackground(list.getSelectionBackground());
-                label.setForeground(list.getSelectionForeground());
-                label.setOpaque(true);
             }*/
-
-            return label;
-        });
-
-        listaItem.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
-
-            JLabel label = new JLabel(value.toString());
-
-            Item item = (Item) value;
-
-            if(item instanceof Cibo){
-                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/pizza.png"));
-                Image img = icon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-                label.setIcon(new ImageIcon(img));
-            }
-
-            else if(item instanceof Vestito){
-                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/maglia.png")
-                );
-
-                Image img = icon.getImage().getScaledInstance(
-                        24,
-                        24,
-                        Image.SCALE_SMOOTH
-                );
-
-                label.setIcon(new ImageIcon(img));
-            }
-
-            // mantiene i colori della selezione
-            if(isSelected){
-
-                label.setBackground(list.getSelectionBackground());
-                label.setForeground(list.getSelectionForeground());
-                label.setOpaque(true);
-            }
 
             return label;
         });
