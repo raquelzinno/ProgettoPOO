@@ -58,14 +58,10 @@ public class Home {
 
                 ImageIcon icon = new ImageIcon(
                         getClass().getClassLoader()
-                                .getResource("img/orsoProva.png")
+                                .getResource("img/orso.png")
                 );
 
-                Image img = icon.getImage().getScaledInstance(
-                        50,
-                        50,
-                        Image.SCALE_SMOOTH
-                );
+                Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 
                 label.setIcon(new ImageIcon(img));
             }
@@ -74,14 +70,10 @@ public class Home {
 
                 ImageIcon icon = new ImageIcon(
                         getClass().getClassLoader()
-                                .getResource("img/pinguinoProva.png")
+                                .getResource("img/pinguino.png")
                 );
 
-                Image img = icon.getImage().getScaledInstance(
-                        50,
-                        50,
-                        Image.SCALE_SMOOTH
-                );
+                Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 
                 label.setIcon(new ImageIcon(img));
             }
@@ -94,13 +86,6 @@ public class Home {
             public void valueChanged(ListSelectionEvent e) {
                 //prende animale selezionato dalla lista
                 Animale animaleSelezionato = (Animale) listaAnimali.getSelectedValue();
-
-                /*//get selectedValue può ritornare null, è necessario questo controllo
-                if (animaleSelezionato != null) {
-                    nomeCognome.setText(contattoSelezionato.getNome() + " " + contattoSelezionato.getCognome());
-                    numeroTelefono.setText(contattoSelezionato.getNumTelefono());
-                    email.setText(contattoSelezionato.getEmail());
-                }*/
             }
         });
 

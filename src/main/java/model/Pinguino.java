@@ -2,7 +2,7 @@ package model;
 
 public class Pinguino extends Animale{
     public Pinguino(String nome) {
-        super(nome, 20, 15, 0);  //valori di default dell'animale di tipo Pinguino
+        super(nome, 20, 20, 0);  //valori di default dell'animale di tipo Pinguino
     }
 
     @Override

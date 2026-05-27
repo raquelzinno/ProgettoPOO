@@ -233,7 +233,9 @@ public class Controller {
         return random.nextInt(4);
     }
 
-    public String giocaSlotMachine(Minigame minigame, Animale animale, int slot1, int slot2, int slot3) {
+    public String giocaSlotMachine(Minigame minigame, Animale animale, int slot1, int slot2, int slot3) throws RuntimeException {
+        if(animale.getEnergia() < minigame.getEnergiaConsumata()) throw new ExceptionMinigame("Energia non sufficiente.");
+
         if(slot1 == slot2 && slot2 == slot3) {
             animale.gioca(minigame,true);
             return "vinto";

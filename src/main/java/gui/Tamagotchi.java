@@ -48,10 +48,12 @@ public class Tamagotchi {
 
         //i valori dell'animale vengono resi visibili
         aggiornaLabel();
+
         //passo al controller la home e inizio il timer
         controller.setHomeFrame(this);
         controller.iniziaTimer(animale);
 
+        //lista vestiti
         modelloListaVestiti = new DefaultListModel<Vestito>();
 
         for(Vestito v : animale.getVestititIndossati()){
@@ -80,13 +82,13 @@ public class Tamagotchi {
         if(animale instanceof Orso) {
             immagineAnimale.setIcon(new ImageIcon(
                     new ImageIcon(
-                            getClass().getClassLoader().getResource("img/orsoProva.png")
+                            getClass().getClassLoader().getResource("img/orso.png")
                     ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
             ));
         }else if(animale instanceof Pinguino) {
             immagineAnimale.setIcon(new ImageIcon(
                     new ImageIcon(
-                            getClass().getClassLoader().getResource("img/pinguinoProva.png")
+                            getClass().getClassLoader().getResource("img/pinguino.png")
                     ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
             ));
         }

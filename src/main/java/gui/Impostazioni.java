@@ -21,7 +21,7 @@ public class Impostazioni {
     private JButton confermaCambioPasswordButton;
     private JCheckBox controlloEliminaCheckBox;
     private JButton eliminaButton;
-    private JTextArea tutorialTextArea;
+    private JLabel tutorialLabel;
 
     public Impostazioni(JFrame tamagotchiFrame, Controller controller, Animale animale,Tamagotchi tamagotchi, JFrame frameHome, Home home) {
         JFrame impostazioniFrame = new JFrame("Impostazioni");
@@ -33,7 +33,7 @@ public class Impostazioni {
         impostazioniFrame.setResizable(false); //non cambia dimensione
         impostazioniFrame.setVisible(true);
 
-        tutorialTextArea.setEditable(false);
+        //tutorialTextArea.setEditable(false);
 
         //gestione pulsante cambia nome animale
         confermaCambioNomeButton.addActionListener(e -> {
