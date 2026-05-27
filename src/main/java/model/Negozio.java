@@ -17,16 +17,16 @@ public class Negozio {
         //CIBO ---------------------------------------------------------------------------------------
         Cibo pizza = new Cibo("Pizza", 3, this, TipoCibo.salato, 4, "img/pizza.png");
         Cibo salmone = new Cibo("Salmone", 5, this, TipoCibo.salato, 8, "img/salmone.png");
-        Cibo broccolo = new Cibo("Broccolo", 2, this, TipoCibo.salato, 3, "img/salmone.png");
-        Cibo pasta = new Cibo("Pasta al sugo", 4, this, TipoCibo.salato, 5, "img/pizza.png");
+        Cibo broccolo = new Cibo("Broccolo", 2, this, TipoCibo.salato, 3, "img/broccolo.png");
+        Cibo pasta = new Cibo("Pasta al sugo", 4, this, TipoCibo.salato, 5, "img/pasta.png");
 
-        Cibo torta = new Cibo("Torta al cioccolato", 3, this, TipoCibo.dolce, 4,"img/pizza.png");
-        Cibo mela = new Cibo("Mela", 2, this, TipoCibo.dolce, 3,"img/pizza.png");
-        Cibo baba = new Cibo("Babà", 5, this, TipoCibo.dolce, 8,"img/pizza.png");
+        Cibo torta = new Cibo("Torta al cioccolato", 3, this, TipoCibo.dolce, 4,"img/torta.png");
+        Cibo mela = new Cibo("Mela", 2, this, TipoCibo.dolce, 3,"img/mela.png");
+        Cibo baba = new Cibo("Babà", 5, this, TipoCibo.dolce, 8,"img/baba.png");
 
-        Cibo acqua = new Cibo("Acqua", 1, this, TipoCibo.bevanda, 1,"img/pizza.png");
-        Cibo cocacola = new Cibo("CocaCola", 2, this, TipoCibo.bevanda, 2,"img/pizza.png");
-        Cibo monster = new Cibo("Monster", 2, this, TipoCibo.bevanda, 2,"img/pizza.png");
+        Cibo acqua = new Cibo("Acqua", 1, this, TipoCibo.bevanda, 1,"img/acqua.png");
+        Cibo cocacola = new Cibo("CocaCola", 2, this, TipoCibo.bevanda, 2,"img/cocacola.png");
+        Cibo monster = new Cibo("Monster", 2, this, TipoCibo.bevanda, 2,"img/monster.png");
 
         //VESTITI ---------------------------------------------------------------------------------------
         Vestito magliaNapoli = new Vestito("Maglia del Napoli", 30, this, 25,0,"img/magliaNapoli.png");

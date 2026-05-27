@@ -60,7 +60,8 @@ public class Controller {
 
     public boolean checkUtente(String utente, String password){
         if(utente.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
-        if(password.isBlank()) throw new ExceptionPassword("Il campo password è vuoto.");
+        if(password.isBlank())
+
         for(Utente u : listaUtenti){
             if(u.getLogin().equals(utente) && u.getPassword().equals(password)){
                 u.setAccessoEffettuato(true);
@@ -104,7 +105,7 @@ public class Controller {
 
     public void esciUtente() {
         this.utenteAttuale.setAccessoEffettuato(false);
-        //this.utenteAttuale = null;
+        this.utenteAttuale = null;
     }
 
     public ArrayList<Utente> getListaUtenti(){

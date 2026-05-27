@@ -43,7 +43,7 @@ public class NegozioPrincipale {
         //item di default
         popolaListaItem(controller.getNegozioBase());
 
-        //gestione icone
+        //gestione icone items
         listaItem.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
 
             JLabel label = new JLabel(value.toString());
@@ -52,22 +52,8 @@ public class NegozioPrincipale {
 
             String path = item.getIconPath();
             ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(path));
-            Image img = icon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+            Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
             label.setIcon(new ImageIcon(img));
-
-            /*if(item instanceof Cibo){
-                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/pizza.png"));
-                Image img = icon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-                label.setIcon(new ImageIcon(img));
-            }
-
-            else if(item instanceof Vestito){
-                ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("img/maglia.png"));
-
-                Image img = icon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-
-                label.setIcon(new ImageIcon(img));
-            }*/
 
             return label;
         });
@@ -77,13 +63,6 @@ public class NegozioPrincipale {
             public void valueChanged(ListSelectionEvent e) {
                 //prende animale selezionato dalla lista
                 Item itemSelezionato = (Item) listaItem.getSelectedValue();
-
-                /*//get selectedValue può ritornare null, è necessario questo controllo
-                if (animaleSelezionato != null) {
-                    nomeCognome.setText(contattoSelezionato.getNome() + " " + contattoSelezionato.getCognome());
-                    numeroTelefono.setText(contattoSelezionato.getNumTelefono());
-                    email.setText(contattoSelezionato.getEmail());
-                }*/
             }
         });
 

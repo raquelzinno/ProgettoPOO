@@ -117,7 +117,4 @@ public class Animale {
         return vestititIndossati;
     }
 
-    public void setVestititIndossati(ArrayList<Vestito> vestititIndossati) {
-        this.vestititIndossati = vestititIndossati;
-    }
 }
