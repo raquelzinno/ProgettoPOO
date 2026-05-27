@@ -72,31 +72,35 @@ public class Controller {
         throw new ExceptionUtente("Utente non trovato.");
     }
 
-    public void checkAnimali(Utente utente) throws RuntimeException{
-        if((utente.getAnimaliPosseduti()).size() >= 2) throw new ExceptionTroppiAnimali("Hai il massimo di animali consentiti!");
+    public void checkAnimali() throws RuntimeException{
+        if((utenteAttuale.getAnimaliPosseduti()).size() >= 2) throw new ExceptionTroppiAnimali("Hai il massimo di animali consentiti!");
     }
 
-    public void creaAnimale(Utente utente, String tipo, String nome) throws RuntimeException{
-        checkAnimali(utente); //controlli
+    public void creaAnimale(String tipo, String nome) throws RuntimeException{
+        checkAnimali(); //controlli
         if(tipo.isBlank()) throw new ExceptionAnimale("Nessun tipo selezionato.");
         if(nome.isBlank()) throw new ExceptionAnimale("Nessun nome inserito.");
 
         if(tipo.equals("Orso")){
             Orso animale = new Orso(nome);
-            aggiungiAnimale(utente, animale);
+            aggiungiAnimale(animale);
         }
         else if(tipo.equals("Pinguino")){
             Pinguino animale = new Pinguino(nome);
-            aggiungiAnimale(utente, animale);
+            aggiungiAnimale(animale);
         }
     }
 
-    public void aggiungiAnimale(Utente utente, Animale animale){
-        utente.creaAnimale(animale); //crea l'animale che è legato all'utente
+    public void modificaNomeAnimale(String nome, Animale animale) {
+        animale.setNome(nome);
     }
 
-    public void compra(Utente utente, Item item, Animale animale) throws RuntimeException{
-        utente.compraItem(item, animale);
+    public void aggiungiAnimale(Animale animale){
+        utenteAttuale.creaAnimale(animale); //crea l'animale che è legato all'utente
+    }
+
+    public void compra(Item item, Animale animale) throws RuntimeException{
+        utenteAttuale.compraItem(item, animale);
     }
 
     public Utente getUtenteAttuale() {
@@ -112,11 +116,11 @@ public class Controller {
         return listaUtenti;
     }
 
-    public void usaItem(Utente utente, Item item, Animale animale) throws RuntimeException{
+    public void usaItem(Item item, Animale animale) throws RuntimeException{
         if(item instanceof Cibo)
-            utente.daiCibo((Cibo) item, animale);
+            utenteAttuale.daiCibo((Cibo) item, animale);
         else if(item instanceof Vestito)
-            utente.vesti((Vestito) item, animale);
+            utenteAttuale.vesti((Vestito) item, animale);
     }
 
     public void rimuoviVestito(Vestito vestito, Animale animale){
@@ -154,7 +158,7 @@ public class Controller {
     public void sveglia(Animale animale) {
         animale.setDorme(false);
         if(sonnoTimer != null && sonnoTimer.isRunning()) //se il timer del sonno è attivo, questo viene fermato
-        sonnoTimer.stop();
+            sonnoTimer.stop();
     }
 
     public void eliminaAnimale(Animale animale) {
@@ -226,8 +230,7 @@ public class Controller {
 
     public int casualeSlotMachine() {
         Random random = new Random();
-        int numeroSlot = random.nextInt(4);
-        return numeroSlot;
+        return random.nextInt(4);
     }
 
     public String giocaSlotMachine(Minigame minigame, Animale animale, int slot1, int slot2, int slot3) {

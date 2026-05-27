@@ -68,8 +68,10 @@ public class Tamagotchi {
 
             String path = item.getIconPath();
             ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(path));
-            Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+            Image img = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
             label.setIcon(new ImageIcon(img));
+            label.setHorizontalAlignment(JLabel.CENTER);
+            label.setVerticalAlignment(JLabel.CENTER);
 
             return label;
         });

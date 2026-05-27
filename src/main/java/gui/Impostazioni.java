@@ -39,7 +39,7 @@ public class Impostazioni {
         confermaCambioNomeButton.addActionListener(e -> {
             try {
                 String nome = inputNome.getText();
-                animale.setNome(nome);
+                controller.modificaNomeAnimale(nome,animale);
                 JOptionPane.showMessageDialog(impostazioniFrame,
                         "Ora il tuo animale si chiama " + animale.getNome(),
                         "Nome cambiato",
@@ -85,7 +85,6 @@ public class Impostazioni {
             }
 
         });
-
 
         //gestione pulsante indietro
         goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra

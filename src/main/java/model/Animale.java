@@ -26,7 +26,7 @@ public class Animale {
 
     public void caricaEnergia() {  //se l'energia è minore dell'energia massima,l'energia viene aumentata
         if(energia < energiaMax)
-        energia++;
+            energia++;
     }
 
     public void consumaFame() {  //se la fame non è arrivata a 0 può essere consumata
@@ -40,7 +40,7 @@ public class Animale {
     }
 
     public void gioca(Minigame minigame, boolean vittoria) {
-        if(energia > minigame.getEnergiaConsumata()) {   //posso giocare solo se ho abbastanza energia rispetto a quella richiesta dal minigame
+        if(energia >= minigame.getEnergiaConsumata()) {   //posso giocare solo se ho abbastanza energia rispetto a quella richiesta dal minigame
             energia = energia - minigame.getEnergiaConsumata(); //in ogni caso energia verrà consumata
             if (vittoria) {
                 punti = punti + minigame.getRicompensa(); //in caso di vittoria ricalcolo la ricompensa

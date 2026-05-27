@@ -48,7 +48,7 @@ public class CreaAnimale {
 
                     for (Utente u : controller.getListaUtenti()) {
                         if (u.isAccessoEffettuato())
-                            controller.creaAnimale(u, tipo, nome);
+                            controller.creaAnimale(tipo, nome);
                     }
                     JOptionPane.showMessageDialog(null, "Animale creato con successo.");
 

@@ -57,18 +57,23 @@ public class Items {
             Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
             label.setIcon(new ImageIcon(img));
 
-            label.setOpaque(true); //permette di configurare il comportamento in caso di selezione
-            if (isSelected) {
-                label.setBackground(list.getSelectionBackground()); //colore blu di selezione
-                label.setForeground(list.getSelectionForeground()); //testo bianco quando selezionato
+            label.setOpaque(true);
+
+            if (isSelected) {  //gestisce la selezione della jlist
+                label.setBackground(list.getSelectionBackground());
+                label.setForeground(list.getSelectionForeground());
             } else {
-                label.setBackground(list.getBackground());  //sfondo normale
-                label.setForeground(list.getForeground());  //testo normale
+                if (item instanceof Vestito && ((Vestito) item).isIndossato()) {  //colore diverso se l'item è un vestito indossato;
+                    label.setBackground(new Color(198, 239, 206));
+                    label.setForeground(new Color(0, 97, 0));
+                } else { //caso standard per tutti gli altri item non selezionati
+                    label.setBackground(list.getBackground());
+                    label.setForeground(list.getForeground());
+                }
             }
 
             return label;
         });
-
         listaItem.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -83,11 +88,18 @@ public class Items {
 
                 if(itemCliccato instanceof Vestito) { //funziona solo se l'item cliccato è un vestito
                     Vestito vestito = (Vestito) itemCliccato;
-
                     if (vestito != null && vestito.isIndossato()) {
+                        if(animale.isDorme()) {
+                            listaItem.clearSelection();
+                            JOptionPane.showMessageDialog(itemsFrame,
+                                    animale.getNome() + " sta ancora dormendo!\nSveglialo per cambiare vestiti.",
+                                    "Buonanotte",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            return;
+                        }
                         if((animale.getVestititIndossati()).contains(itemCliccato)) { //se il vestito è attualmente indossato lo rimuove
                             controller.rimuoviVestito(vestito, animale);
-                            Tamagotchi.modelloListaVestiti.removeElement(vestito.getNome());
+                            Tamagotchi.modelloListaVestiti.removeElement(vestito);
                             listaItem.clearSelection();
                             JOptionPane.showMessageDialog(itemsFrame,
                                     "Hai rimosso: " + itemCliccato.getNome() + "!\nL'oggetto è stato rimosso",
@@ -95,6 +107,7 @@ public class Items {
                                     JOptionPane.INFORMATION_MESSAGE);
                         }
                         else { //se il vestito è indossato ma da un altro animale dà un avviso
+                            listaItem.clearSelection();
                             JOptionPane.showMessageDialog(itemsFrame,
                                     itemCliccato.getNome() + " è già indossato da un altro animale!",
                                     "Già indossato",
@@ -126,7 +139,7 @@ public class Items {
                         return;
                     }
 
-                    controller.usaItem(controller.getUtenteAttuale(), oggettoSelezionato, animale);
+                    controller.usaItem(oggettoSelezionato, animale);
 
                     if(oggettoSelezionato instanceof Cibo) { //se cibo
                         controller.elimina(oggettoSelezionato);
@@ -139,12 +152,11 @@ public class Items {
                     }else
                         if(oggettoSelezionato instanceof Vestito){ //se vestito
                             listaItem.clearSelection();
+                            Tamagotchi.modelloListaVestiti.addElement((Vestito) oggettoSelezionato);
                             JOptionPane.showMessageDialog(itemsFrame,
                                 "Hai usato: " + oggettoSelezionato.getNome() + "!\nL'oggetto è stato indossato.",
                                 "Oggetto utilizzato",
                                 JOptionPane.INFORMATION_MESSAGE);
-                            Tamagotchi.modelloListaVestiti.addElement((Vestito) oggettoSelezionato);
-
                     }
                 }catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
@@ -160,6 +172,13 @@ public class Items {
                     JOptionPane.showMessageDialog(itemsFrame,
                             "Devi prima selezionare un oggetto!",
                             "Nessuna selezione",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                if(oggettoSelezionato instanceof Vestito && ((Vestito) oggettoSelezionato).isIndossato()) {
+                    JOptionPane.showMessageDialog(itemsFrame,
+                            "Non puoi eliminare un vestito che stai indossando!",
+                            "Già Indossato",
                             JOptionPane.WARNING_MESSAGE);
                     return;
                 }

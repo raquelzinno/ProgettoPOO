@@ -87,7 +87,7 @@ public class NegozioPrincipale {
                     return;
                 }
 
-                controller.compra(controller.getUtenteAttuale(), oggettoSelezionato, animale);
+                controller.compra(oggettoSelezionato, animale);
 
                 JOptionPane.showMessageDialog(negozioFrame,
                         "Hai acquistato: " + oggettoSelezionato.getNome() + "!\nL'oggetto è stato aggiunto al tuo inventario.",

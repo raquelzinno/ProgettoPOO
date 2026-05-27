@@ -109,7 +109,7 @@ public class Home {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-                    controller.checkAnimali(controller.getUtenteAttuale());
+                    controller.checkAnimali();
                     CreaAnimale creaAnimale = new CreaAnimale(frameHome, controller);
                     frameHome.setVisible(false);
                 }catch(RuntimeException ex){

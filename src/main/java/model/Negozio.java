@@ -30,11 +30,11 @@ public class Negozio {
 
         //VESTITI ---------------------------------------------------------------------------------------
         Vestito magliaNapoli = new Vestito("Maglia del Napoli", 30, this, 25,0,"img/magliaNapoli.png");
-        Vestito pantaloniSkinny = new Vestito("Pantaloni skinny", 30, this, 10, 20, "img/magliaNapoli.png");
-        Vestito scarpeGinanstica = new Vestito("Scarpe da ginnastica", 30, this, 20, 0, "img/magliaNapoli.png");
-        Vestito bavaglino = new Vestito("Bavaglino", 20, this, 0, 15, "img/magliaNapoli.png");
-        Vestito laurea = new Vestito("Cappello da laurea", 40, this, 25, 25, "img/magliaNapoli.png");
-        Vestito corona = new Vestito("Corona", 100, this, 50, 50, "img/magliaNapoli.png");
+        Vestito pantaloniSkinny = new Vestito("Pantaloni skinny", 30, this, 10, 20, "img/pantaloniSkinny.png");
+        Vestito scarpeGinanstica = new Vestito("Scarpe da ginnastica", 30, this, 20, 0, "img/scarpeGinnastica.png");
+        Vestito bavaglino = new Vestito("Bavaglino", 20, this, 0, 15, "img/bavaglino.png");
+        Vestito laurea = new Vestito("Cappello da laurea", 40, this, 25, 25, "img/cappelloLaurea.png");
+        Vestito corona = new Vestito("Corona", 100, this, 50, 50, "img/corona.png");
 
         //aggiungo gli item
         this.aggiungiItem(pizza);

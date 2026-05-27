@@ -24,61 +24,12 @@ public class Utente {
         return login;
     }
 
-    /*public void disconnettiAccount() {
-        if(accessoEffettuato) {
-            accessoEffettuato = false;
-        }
-        else {
-            System.out.println("non hai ancora effettuato l'accesso"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
-        }
-    }
-
-    public void faiLogin (String login, String password) {
-        if((this.login).equals(login) && (this.password).equals(password)) {
-            accessoEffettuato = true;
-        }
-        else
-        {
-            System.out.println("Nome utente o password sbagliata"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
-        }
-    }
-
-    public void cambiaPassword(String vecchiaPassword,String nuovaPassword) {
-        if(accessoEffettuato) {
-            if((this.password).equals(vecchiaPassword)) {
-                this.password = nuovaPassword;
-            }
-            else {
-                System.out.println("Password sbagliata"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
-            }
-        }
-        else {
-            System.out.println("non hai ancora effettuato l'accesso");
-        }
-    }*/
-
     public void creaAnimale(Animale animale) {
         animaliPosseduti.add(animale);
-        /*if(accessoEffettuato) {
-            if (animaliPosseduti.size() == 2) {
-                System.out.println("Hai già il massimo di animali consentiti"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
-            } else {
-                animale.setUtente(this);
-                animaliPosseduti.add(animale);
-            }
-        }
-        else {
-            System.out.println("non hai ancora effettuato l'accesso");
-        }*/
-
     }
 
     public void eliminaAnimale(Animale animale) {
         animaliPosseduti.remove(animale);
-    }
-
-    public void modificaNome(String nome,Animale animale) {
-        animale.setNome(nome);
     }
 
     public void compraItem(Item item, Animale animale) throws RuntimeException {
