@@ -21,6 +21,7 @@ public class Home {
     private JPanel creaAnimalePanel;
     private JList listaAnimali;
     private JLabel exit;
+    private JLabel titolo;
     private JFrame frameHome;
     private Controller controller;
     public static DefaultListModel<Animale> modelloListaAnimali;
@@ -38,6 +39,18 @@ public class Home {
         frameHome.setLocationRelativeTo(null); //finestra si apre al centro
         frameHome.setVisible(true);
 
+        //fonts
+        try {
+            titolo.setFont(Font.createFont(
+                    Font.TRUETYPE_FONT,
+                    getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
+            ).deriveFont(18f));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         //lista dove sono riportati gli animali dell'utente
         modelloListaAnimali = new DefaultListModel<>();
 
@@ -47,18 +60,17 @@ public class Home {
 
         listaAnimali.setModel(modelloListaAnimali);
 
+        listaAnimali.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
+
         //icone animali
         listaAnimali.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
-
             JLabel label = new JLabel(value.toString());
-
             Animale animale = (Animale) value;
 
             if(animale instanceof Orso){
-
                 ImageIcon icon = new ImageIcon(
                         getClass().getClassLoader()
-                                .getResource("img/orso.png")
+                                .getResource("img/orsoIcona.png")
                 );
 
                 Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
@@ -67,14 +79,12 @@ public class Home {
             }
 
             else if(animale instanceof Pinguino){
-
                 ImageIcon icon = new ImageIcon(
                         getClass().getClassLoader()
-                                .getResource("img/pinguino.png")
+                                .getResource("img/pinguinoIcona.png")
                 );
 
                 Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-
                 label.setIcon(new ImageIcon(img));
             }
             return label;

@@ -3,6 +3,7 @@ package gui;
 import controller.Controller;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,7 +31,28 @@ public class Login {
         loginFrame.setSize(450, 350); //grandezza della finestra
         loginFrame.setLocationRelativeTo(null); //finestra si apre al centro
         loginFrame.setResizable(false); //non cambia dimensione
+
+        ImageIcon icon = new ImageIcon(Login.class.getResource("/img/creaAccountIcona.png")); //icona della finestra
+        loginFrame.setIconImage(icon.getImage());
+
         loginFrame.setVisible(true);
+
+        //fonts
+        try {
+            login.titolo.setFont(Font.createFont(
+                    Font.TRUETYPE_FONT,
+                    login.getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
+            ).deriveFont(24f));
+
+            login.loginLabel.setFont(Font.createFont(
+                    Font.TRUETYPE_FONT,
+                    login.getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
+            ).deriveFont(18f));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         // gestione pulsante crea account
         login.creaAccountButton.addActionListener(new ActionListener() {

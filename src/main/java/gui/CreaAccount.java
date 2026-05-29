@@ -15,6 +15,7 @@ public class CreaAccount {
     private JButton creaAccountButton;
     private JPanel creaAccountPanel;
     private JLabel tornaLogin;
+    private JLabel titolo;
 
     public CreaAccount(JFrame loginFrame, Controller controller){
         JFrame creaAccountFrame = new JFrame("Crea un nuovo account");
@@ -24,7 +25,25 @@ public class CreaAccount {
         creaAccountFrame.setSize(400, 300); //grandezza della finestra
         creaAccountFrame.setLocationRelativeTo(null); //finestra si apre al centro
         creaAccountFrame.setResizable(false); //non cambia dimensione
+        ImageIcon icon = new ImageIcon(Login.class.getResource("/img/creaAccountIcona.png")); //icona della finestra
+        creaAccountFrame.setIconImage(icon.getImage());
         creaAccountFrame.setVisible(true);
+
+        //immagine account
+        titolo.setIcon(new ImageIcon(getClass().getResource("/img/creaAccountIcona.png")));
+        titolo.setHorizontalTextPosition(SwingConstants.CENTER);
+        titolo.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        //fonts
+        try {
+            titolo.setFont(Font.createFont(
+                    Font.TRUETYPE_FONT,
+                    getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
+            ).deriveFont(22f));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //gestone pulsante torna alla pagina di login
         tornaLogin.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
