@@ -16,6 +16,7 @@ public class CreaAccount {
     private JPanel creaAccountPanel;
     private JLabel tornaLogin;
     private JLabel titolo;
+    private ImageIcon backGroundImage;
 
     public CreaAccount(JFrame loginFrame, Controller controller){
         JFrame creaAccountFrame = new JFrame("Crea un nuovo account");
@@ -75,5 +76,18 @@ public class CreaAccount {
                 }
             }
         });
+    }
+
+    private void createUIComponents() { //custom create del panel per gestire lo sfondo
+        backGroundImage = new ImageIcon(getClass().getResource("/img/backGroundDefault.png")); //immagine sfondo
+        creaAccountPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backGroundImage != null) {
+                    g.drawImage(backGroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
     }
 }

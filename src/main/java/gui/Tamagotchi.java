@@ -24,9 +24,13 @@ public class Tamagotchi {
     private JLabel goBack;
     private JButton impostazioniButton;
     private JList listaVestitiIndossati;
+    private JPanel animalePanel;
+    private JPanel bottoniPanel;
+    private JPanel vestititPanel;
     private Animale animale;
     private Timer gameTime;
     public static DefaultListModel<Vestito> modelloListaVestiti;
+    private ImageIcon backGroundImage;
 
     public void aggiornaLabel(){
         labelPunti.setText(String.valueOf(animale.getPunti()));
@@ -43,6 +47,8 @@ public class Tamagotchi {
         tamagotchiFrame.setSize(550, 350); //grandezza della finestra
         tamagotchiFrame.setLocationRelativeTo(null); //finestra si apre al centro
         tamagotchiFrame.setResizable(false); //non cambia dimensione
+        animalePanel.setOpaque(false);
+        vestititPanel.setOpaque(false);
         tamagotchiFrame.setVisible(true);
         this.animale = animale;
 
@@ -165,5 +171,18 @@ public class Tamagotchi {
             }
         });
 
+    }
+
+    private void createUIComponents() { //custom create del panel per gestire lo sfondo
+        backGroundImage = new ImageIcon(getClass().getResource("/img/backGroundTamagotchi.png")); //immagine sfondo
+        tamagotchiPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backGroundImage != null) {
+                    g.drawImage(backGroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
     }
 }

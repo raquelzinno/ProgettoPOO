@@ -25,6 +25,7 @@ public class Home {
     private JFrame frameHome;
     private Controller controller;
     public static DefaultListModel<Animale> modelloListaAnimali;
+    private ImageIcon backGroundImage;
 
     public void rimuoviAnimale(Animale animale){
         modelloListaAnimali.removeElement(animale);
@@ -36,7 +37,10 @@ public class Home {
         frameHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameHome.pack();
         frameHome.setSize(450, 350); //grandezza della finestra
-        frameHome.setLocationRelativeTo(null); //finestra si apre al centro
+        frameHome.setLocationRelativeTo(null);//finestra si apre al centro
+        vuotoPanel.setOpaque(false); //rende i pannelli opachi per far vedere lo sfondo
+        creaAnimalePanel.setOpaque(false);
+        vuotoPanel.setBorder(null);
         frameHome.setVisible(true);
 
         //fonts
@@ -140,4 +144,16 @@ public class Home {
 
     }
 
+    private void createUIComponents() { //custom create del panel per gestire lo sfondo
+        backGroundImage = new ImageIcon(getClass().getResource("/img/backGroundHome.png")); //immagine sfondo
+        mainPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backGroundImage != null) {
+                    g.drawImage(backGroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
+    }
 }

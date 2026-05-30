@@ -20,6 +20,7 @@ public class Login {
     private JLabel passwordLabel;
     private JLabel creaAccountLabel;
     private JPasswordField passwordField;
+    private ImageIcon backGroundImage;
 
     public static void main(String[] args) {
         Controller controller = new Controller();
@@ -82,5 +83,19 @@ public class Login {
                 }
             }
         });
+    }
+
+    private void createUIComponents() {
+        backGroundImage = new ImageIcon(Login.class.getResource("/img/backGroundDefault.png"));
+
+        loginForm = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backGroundImage != null) {
+                    g.drawImage(backGroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
     }
 }

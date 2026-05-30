@@ -17,6 +17,7 @@ public class CreaAnimale {
     private JTextField nomeTextField;
     private JButton okButton;
     private JLabel goBack;
+    private ImageIcon backGroundImage;
 
     public CreaAnimale(JFrame frameHome, Controller controller){
         JFrame creaAnimaleFrame = new JFrame("Crea un nuovo animale");
@@ -74,6 +75,19 @@ public class CreaAnimale {
                 creaAnimaleFrame.setVisible(false);
             }
         });
+    }
+
+    private void createUIComponents() { //custom create del panel per gestire lo sfondo
+        backGroundImage = new ImageIcon(getClass().getResource("/img/backGroundDefault.png")); //immagine sfondo
+        creaAnimalePanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backGroundImage != null) {
+                    g.drawImage(backGroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
     }
 
 }
