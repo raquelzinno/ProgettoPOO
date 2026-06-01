@@ -58,6 +58,7 @@
                 </constraints>
                 <properties>
                   <font size="18" style="1"/>
+                  <foreground color="-16764197"/>
                   <text value="Login"/>
                 </properties>
               </component>
@@ -87,7 +88,7 @@
                   <text value="Password"/>
                 </properties>
               </component>
-              <component id="be03b" class="javax.swing.JButton" binding="loginButton" default-binding="true">
+              <component id="be03b" class="javax.swing.JButton" binding="loginButton" custom-create="true" default-binding="true">
                 <constraints>
                   <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -126,7 +127,7 @@
             </constraints>
           </hspacer>
           <grid id="13849" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+            <margin top="0" left="10" bottom="0" right="10"/>
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -145,7 +146,7 @@
                   <text value="Non hai ancora un account? Crealo qui!"/>
                 </properties>
               </component>
-              <component id="ea947" class="javax.swing.JButton" binding="creaAccountButton" default-binding="true">
+              <component id="ea947" class="javax.swing.JButton" binding="creaAccountButton" custom-create="true" default-binding="true">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>

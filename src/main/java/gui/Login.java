@@ -67,6 +67,11 @@ public class Login {
         });
 
         //gestione pulsante login
+
+        //login.loginButton.setContentAreaFilled(false);
+        //login.loginButton.setBorderPainted(false);
+        //login.loginButton.setIcon(new ImageIcon("/img/buttonBackground.png"));
+
         login.loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,7 +90,7 @@ public class Login {
         });
     }
 
-    private void createUIComponents() {
+    /*private void createUIComponents() {
         backGroundImage = new ImageIcon(Login.class.getResource("/img/backGroundDefault.png"));
 
         loginForm = new JPanel() {
@@ -97,5 +102,70 @@ public class Login {
                 }
             }
         };
+    }*/
+
+    //da rivedere per mettere immagine al bottone, ricordati di mettere custom create
+    private void createUIComponents() {
+
+        backGroundImage = new ImageIcon(
+                Login.class.getResource("/img/backGroundDefault.png")
+        );
+
+        loginForm = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backGroundImage != null) {
+                    g.drawImage(
+                            backGroundImage.getImage(),
+                            0, 0,
+                            getWidth(), getHeight(),
+                            this
+                    );
+                }
+            }
+        };
+
+        ImageIcon buttonImage = new ImageIcon(
+                Login.class.getResource("/img/buttonBackground.png")
+        );
+
+        loginButton = new JButton("Login") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(
+                        buttonImage.getImage(),
+                        0, 0,
+                        getWidth(), getHeight(),
+                        this
+                );
+                super.paintComponent(g);
+            }
+        };
+
+        loginButton.setContentAreaFilled(false);
+        loginButton.setBorderPainted(false);
+        loginButton.setFocusPainted(false);
+        loginButton.setOpaque(false);
+        loginButton.setForeground(Color.WHITE);
+
+        creaAccountButton = new JButton("Crea Account") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(
+                        buttonImage.getImage(),
+                        0, 0,
+                        getWidth(), getHeight(),
+                        this
+                );
+                super.paintComponent(g);
+            }
+        };
+
+        creaAccountButton.setContentAreaFilled(false);
+        creaAccountButton.setBorderPainted(false);
+        creaAccountButton.setFocusPainted(false);
+        creaAccountButton.setOpaque(false);
+        creaAccountButton.setForeground(Color.WHITE);
     }
 }

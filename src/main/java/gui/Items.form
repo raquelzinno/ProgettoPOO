@@ -66,7 +66,8 @@
           </grid>
         </constraints>
         <properties>
-          <text value="  &lt; Indietro"/>
+          <icon value="img/indietroIcona.png"/>
+          <text value="Indietro"/>
         </properties>
       </component>
       <component id="d796f" class="javax.swing.JLabel">

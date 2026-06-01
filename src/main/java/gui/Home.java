@@ -48,7 +48,7 @@ public class Home {
             titolo.setFont(Font.createFont(
                     Font.TRUETYPE_FONT,
                     getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
-            ).deriveFont(18f));
+            ).deriveFont(22f));
 
         } catch (Exception e) {
             e.printStackTrace();
