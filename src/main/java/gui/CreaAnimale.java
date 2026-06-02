@@ -88,6 +88,23 @@ public class CreaAnimale {
                 }
             }
         };
+
+        ImageIcon buttonImage = new ImageIcon(
+                Login.class.getResource("/img/buttonBackground.png")
+        );
+
+        okButton = new JButton("Ok") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                super.paintComponent(g);
+            }
+        };
+
+        okButton.setContentAreaFilled(false);
+        okButton.setFocusPainted(false);
+        okButton.setOpaque(false);
+        okButton.setForeground(Color.WHITE);
     }
 
 }

@@ -68,6 +68,8 @@ public class Login {
 
         //gestione pulsante login
 
+
+
         //login.loginButton.setContentAreaFilled(false);
         //login.loginButton.setBorderPainted(false);
         //login.loginButton.setIcon(new ImageIcon("/img/buttonBackground.png"));
@@ -144,12 +146,11 @@ public class Login {
         };
 
         loginButton.setContentAreaFilled(false);
-        loginButton.setBorderPainted(false);
         loginButton.setFocusPainted(false);
         loginButton.setOpaque(false);
         loginButton.setForeground(Color.WHITE);
 
-        creaAccountButton = new JButton("Crea Account") {
+        creaAccountButton = new JButton("Crea account") {
             @Override
             protected void paintComponent(Graphics g) {
                 g.drawImage(
@@ -163,7 +164,6 @@ public class Login {
         };
 
         creaAccountButton.setContentAreaFilled(false);
-        creaAccountButton.setBorderPainted(false);
         creaAccountButton.setFocusPainted(false);
         creaAccountButton.setOpaque(false);
         creaAccountButton.setForeground(Color.WHITE);

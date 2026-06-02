@@ -89,5 +89,22 @@ public class CreaAccount {
                 }
             }
         };
+
+        ImageIcon buttonImage = new ImageIcon(
+                Login.class.getResource("/img/buttonBackground.png")
+        );
+
+        creaAccountButton = new JButton("Crea account") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                super.paintComponent(g);
+            }
+        };
+
+        creaAccountButton.setContentAreaFilled(false);
+        creaAccountButton.setFocusPainted(false);
+        creaAccountButton.setOpaque(false);
+        creaAccountButton.setForeground(Color.WHITE);
     }
 }

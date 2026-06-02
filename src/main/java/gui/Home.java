@@ -155,5 +155,22 @@ public class Home {
                 }
             }
         };
+
+        ImageIcon buttonImage = new ImageIcon(
+                Login.class.getResource("/img/buttonBackground.png")
+        );
+
+        creaAnimaleButton = new JButton("Crea animale") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                super.paintComponent(g);
+            }
+        };
+
+        creaAnimaleButton.setContentAreaFilled(false);
+        creaAnimaleButton.setFocusPainted(false);
+        creaAnimaleButton.setOpaque(false);
+        creaAnimaleButton.setForeground(Color.WHITE);
     }
 }
