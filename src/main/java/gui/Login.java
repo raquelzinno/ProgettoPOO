@@ -33,7 +33,8 @@ public class Login {
         loginFrame.setLocationRelativeTo(null); //finestra si apre al centro
         loginFrame.setResizable(false); //non cambia dimensione
 
-        ImageIcon icon = new ImageIcon(Login.class.getResource("/img/creaAccountIcona.png")); //icona della finestra
+        //icona della finestra
+        ImageIcon icon = new ImageIcon(Login.class.getResource("/img/tamagotchiIcon.png"));
         loginFrame.setIconImage(icon.getImage());
 
         loginFrame.setVisible(true);
@@ -67,12 +68,6 @@ public class Login {
         });
 
         //gestione pulsante login
-
-
-
-        //login.loginButton.setContentAreaFilled(false);
-        //login.loginButton.setBorderPainted(false);
-        //login.loginButton.setIcon(new ImageIcon("/img/buttonBackground.png"));
 
         login.loginButton.addActionListener(new ActionListener() {
             @Override
@@ -118,12 +113,7 @@ public class Login {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 if (backGroundImage != null) {
-                    g.drawImage(
-                            backGroundImage.getImage(),
-                            0, 0,
-                            getWidth(), getHeight(),
-                            this
-                    );
+                    g.drawImage(backGroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
                 }
             }
         };
@@ -135,12 +125,7 @@ public class Login {
         loginButton = new JButton("Login") {
             @Override
             protected void paintComponent(Graphics g) {
-                g.drawImage(
-                        buttonImage.getImage(),
-                        0, 0,
-                        getWidth(), getHeight(),
-                        this
-                );
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
                 super.paintComponent(g);
             }
         };
@@ -153,12 +138,7 @@ public class Login {
         creaAccountButton = new JButton("Crea account") {
             @Override
             protected void paintComponent(Graphics g) {
-                g.drawImage(
-                        buttonImage.getImage(),
-                        0, 0,
-                        getWidth(), getHeight(),
-                        this
-                );
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
                 super.paintComponent(g);
             }
         };

@@ -23,7 +23,10 @@ public class Items {
     private JScrollPane itemsScrollPane;
     private JButton eliminaButton;
     private JLabel spazio;
+    private JLabel itemsLabel;
+    private JPanel pulsantiPanel;
     public static DefaultListModel<Item> modelloListaItems;
+    private ImageIcon backGroundImage;
 
     public Items(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi){
         JFrame itemsFrame = new JFrame("I tuoi items");
@@ -34,6 +37,21 @@ public class Items {
         itemsFrame.setLocationRelativeTo(null); //finestra si apre al centro
         itemsFrame.setResizable(false); //non cambia dimensione
         itemsFrame.setVisible(true);
+
+        //icona della finestra
+        ImageIcon iconFrame = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
+        itemsFrame.setIconImage(iconFrame.getImage());
+
+        //fonts
+        try {
+            itemsLabel.setFont(Font.createFont(
+                    Font.TRUETYPE_FONT,
+                    getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
+            ).deriveFont(20f));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //la barra di scorrimento della lista è visibile solo quando necessario
         itemsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -205,5 +223,49 @@ public class Items {
                 itemsFrame.setVisible(false);
             }
         });
+    }
+
+    private void createUIComponents() {
+        backGroundImage = new ImageIcon(getClass().getResource("/img/backGroundItems.png")); //immagine sfondo
+        itemsPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backGroundImage != null) {
+                    g.drawImage(backGroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
+
+        ImageIcon buttonImage = new ImageIcon(
+                Login.class.getResource("/img/buttonBackground.png")
+        );
+
+        usaButton = new JButton("Usa") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                super.paintComponent(g);
+            }
+        };
+        usaButton.setContentAreaFilled(false);
+        usaButton.setFocusPainted(false);
+        usaButton.setOpaque(false);
+        usaButton.setForeground(Color.WHITE);
+
+        eliminaButton = new JButton("Elimina") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                super.paintComponent(g);
+            }
+        };
+        eliminaButton.setContentAreaFilled(false);
+        eliminaButton.setFocusPainted(false);
+        eliminaButton.setOpaque(false);
+        eliminaButton.setForeground(Color.WHITE);
+
+        pulsantiPanel = new JPanel();
+        pulsantiPanel.setOpaque(false);
     }
 }

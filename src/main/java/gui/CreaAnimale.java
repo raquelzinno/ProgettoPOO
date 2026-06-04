@@ -29,6 +29,10 @@ public class CreaAnimale {
         creaAnimaleFrame.setResizable(false); //non cambia dimensione
         creaAnimaleFrame.setVisible(true);
 
+        //icona della finestra
+        ImageIcon icon = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
+        creaAnimaleFrame.setIconImage(icon.getImage());
+
         //pulsanti del tipo
         ButtonGroup gruppoAnimali = new ButtonGroup();
         gruppoAnimali.add(orsoRadioButton);

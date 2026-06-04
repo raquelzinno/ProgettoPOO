@@ -35,7 +35,7 @@ public class Minigames {
     private Minigame minigame1;
     private Minigame minigame2;
     private Minigame minigame3;
-
+    private ImageIcon backGroundImage;
 
     public Minigames(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi){
         JFrame minigamesFrame = new JFrame("Minigames");
@@ -46,6 +46,10 @@ public class Minigames {
         minigamesFrame.setLocationRelativeTo(null); //finestra si apre al centro
         minigamesFrame.setResizable(false); //non cambia dimensione
         minigamesFrame.setVisible(true);
+
+        //icona della finestra
+        ImageIcon icon = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
+        minigamesFrame.setIconImage(icon.getImage());
 
         //copio il riferimento ai minigame per rendere il codice più pulito
         minigame1 = (controller.getMinigamesDiDefault()).get(0);
@@ -154,6 +158,61 @@ public class Minigames {
             }
         });
 
+
+    }
+
+    private void createUIComponents() {
+        backGroundImage = new ImageIcon(Login.class.getResource("/img/backGroundMinigames.png"));
+
+        minigamesPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backGroundImage != null) {
+                    g.drawImage(backGroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
+
+        ImageIcon buttonImage = new ImageIcon(
+                Login.class.getResource("/img/buttonBackground.png")
+        );
+
+        okButton1 = new JButton("Gioca!") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                super.paintComponent(g);
+            }
+        };
+        okButton1.setContentAreaFilled(false);
+        okButton1.setFocusPainted(false);
+        okButton1.setOpaque(false);
+        okButton1.setForeground(Color.WHITE);
+
+        okButton2 = new JButton("Lancia!") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                super.paintComponent(g);
+            }
+        };
+        okButton2.setContentAreaFilled(false);
+        okButton2.setFocusPainted(false);
+        okButton2.setOpaque(false);
+        okButton2.setForeground(Color.WHITE);
+
+        okButton3 = new JButton("Tira la leva!") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                super.paintComponent(g);
+            }
+        };
+        okButton3.setContentAreaFilled(false);
+        okButton3.setFocusPainted(false);
+        okButton3.setOpaque(false);
+        okButton3.setForeground(Color.WHITE);
 
     }
 }

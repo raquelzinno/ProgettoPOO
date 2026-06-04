@@ -43,6 +43,10 @@ public class Home {
         vuotoPanel.setBorder(null);
         frameHome.setVisible(true);
 
+        //icona della finestra
+        ImageIcon iconFrame = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
+        frameHome.setIconImage(iconFrame.getImage());
+
         //fonts
         try {
             titolo.setFont(Font.createFont(
@@ -63,6 +67,10 @@ public class Home {
         }
 
         listaAnimali.setModel(modelloListaAnimali);
+
+        listaAnimali.setBorder(
+                BorderFactory.createLineBorder(Color.BLUE, 3)
+        );
 
         listaAnimali.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
 

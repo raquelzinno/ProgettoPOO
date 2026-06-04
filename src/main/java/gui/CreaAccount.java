@@ -26,9 +26,11 @@ public class CreaAccount {
         creaAccountFrame.setSize(400, 300); //grandezza della finestra
         creaAccountFrame.setLocationRelativeTo(null); //finestra si apre al centro
         creaAccountFrame.setResizable(false); //non cambia dimensione
-        ImageIcon icon = new ImageIcon(Login.class.getResource("/img/creaAccountIcona.png")); //icona della finestra
-        creaAccountFrame.setIconImage(icon.getImage());
         creaAccountFrame.setVisible(true);
+
+        //icona della finestra
+        ImageIcon icon = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
+        creaAccountFrame.setIconImage(icon.getImage());
 
         //immagine account
         titolo.setIcon(new ImageIcon(getClass().getResource("/img/creaAccountIcona.png")));

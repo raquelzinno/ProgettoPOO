@@ -22,6 +22,8 @@ public class Impostazioni {
     private JCheckBox controlloEliminaCheckBox;
     private JButton eliminaButton;
     private JLabel tutorialLabel;
+    private JLabel impostazioniLabel;
+    private ImageIcon backGroundImage;
 
     public Impostazioni(JFrame tamagotchiFrame, Controller controller, Animale animale,Tamagotchi tamagotchi, JFrame frameHome, Home home) {
         JFrame impostazioniFrame = new JFrame("Impostazioni");
@@ -33,7 +35,20 @@ public class Impostazioni {
         impostazioniFrame.setResizable(false); //non cambia dimensione
         impostazioniFrame.setVisible(true);
 
-        //tutorialTextArea.setEditable(false);
+        //icona della finestra
+        ImageIcon icon = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
+        impostazioniFrame.setIconImage(icon.getImage());
+
+        //fonts
+        try {
+            impostazioniLabel.setFont(Font.createFont(
+                    Font.TRUETYPE_FONT,
+                    getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
+            ).deriveFont(20f));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //gestione pulsante cambia nome animale
         confermaCambioNomeButton.addActionListener(e -> {
@@ -97,5 +112,59 @@ public class Impostazioni {
                 impostazioniFrame.setVisible(false);
             }
         });
+    }
+
+    private void createUIComponents() {
+        backGroundImage = new ImageIcon(Login.class.getResource("/img/backGroundDefault.png"));
+
+        impostazioniPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backGroundImage != null) {
+                    g.drawImage(backGroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
+
+        ImageIcon buttonImage = new ImageIcon(
+                Login.class.getResource("/img/buttonBackground.png")
+        );
+
+        confermaCambioNomeButton = new JButton("Conferma") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                super.paintComponent(g);
+            }
+        };
+        confermaCambioNomeButton.setContentAreaFilled(false);
+        confermaCambioNomeButton.setFocusPainted(false);
+        confermaCambioNomeButton.setOpaque(false);
+        confermaCambioNomeButton.setForeground(Color.WHITE);
+
+        confermaCambioPasswordButton = new JButton("Conferma") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                super.paintComponent(g);
+            }
+        };
+        confermaCambioPasswordButton.setContentAreaFilled(false);
+        confermaCambioPasswordButton.setFocusPainted(false);
+        confermaCambioPasswordButton.setOpaque(false);
+        confermaCambioPasswordButton.setForeground(Color.WHITE);
+
+        eliminaButton = new JButton("Conferma") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                super.paintComponent(g);
+            }
+        };
+        eliminaButton.setContentAreaFilled(false);
+        eliminaButton.setFocusPainted(false);
+        eliminaButton.setOpaque(false);
+        eliminaButton.setForeground(Color.WHITE);
     }
 }

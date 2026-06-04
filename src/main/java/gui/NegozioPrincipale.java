@@ -16,7 +16,9 @@ public class NegozioPrincipale {
     private JLabel goBack;
     private JButton compraButton;
     private JList listaItem;
+    private JLabel negozioLabel;
     public static DefaultListModel<Item> modelloListaItem;
+    private ImageIcon backGroundImage;
 
     private void popolaListaItem(Negozio negozio) {
         modelloListaItem = new DefaultListModel<Item>();
@@ -32,10 +34,25 @@ public class NegozioPrincipale {
         negozioFrame.setContentPane(negozioPanel);
         negozioFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         negozioFrame.pack();
-        negozioFrame.setSize(500, 300); //grandezza della finestra
+        negozioFrame.setSize(500, 310); //grandezza della finestra
         negozioFrame.setLocationRelativeTo(null); //finestra si apre al centro
         negozioFrame.setResizable(false); //non cambia dimensione
         negozioFrame.setVisible(true);
+
+        //icona della finestra
+        ImageIcon iconFrame = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
+        negozioFrame.setIconImage(iconFrame.getImage());
+
+        //fonts
+        try {
+            negozioLabel.setFont(Font.createFont(
+                    Font.TRUETYPE_FONT,
+                    getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
+            ).deriveFont(22f));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //i valori dell'animale vengono resi visibili
         LabelPunti.setText(String.valueOf(animale.getPunti()));
@@ -112,5 +129,35 @@ public class NegozioPrincipale {
                 negozioFrame.setVisible(false);
             }
         });
+    }
+
+    private void createUIComponents() {
+        backGroundImage = new ImageIcon(Login.class.getResource("/img/backGroundNegozio.png"));
+
+        negozioPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (backGroundImage != null) {
+                    g.drawImage(backGroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
+
+        ImageIcon buttonImage = new ImageIcon(
+                Login.class.getResource("/img/buttonBackground.png")
+        );
+
+        compraButton = new JButton("Compra") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                super.paintComponent(g);
+            }
+        };
+        compraButton.setContentAreaFilled(false);
+        compraButton.setFocusPainted(false);
+        compraButton.setOpaque(false);
+        compraButton.setForeground(Color.WHITE);
     }
 }
