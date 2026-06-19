@@ -68,7 +68,6 @@ public class Login {
         });
 
         //gestione pulsante login
-
         login.loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -87,21 +86,7 @@ public class Login {
         });
     }
 
-    /*private void createUIComponents() {
-        backGroundImage = new ImageIcon(Login.class.getResource("/img/backGroundDefault.png"));
-
-        loginForm = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                if (backGroundImage != null) {
-                    g.drawImage(backGroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
-                }
-            }
-        };
-    }*/
-
-    //da rivedere per mettere immagine al bottone, ricordati di mettere custom create
+    //per mettere immagine al bottone, ricordati di mettere custom create
     private void createUIComponents() {
 
         backGroundImage = new ImageIcon(

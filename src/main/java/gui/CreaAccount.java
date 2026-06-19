@@ -71,7 +71,7 @@ public class CreaAccount {
 
                     //torna alla pagina di login
                     loginFrame.setVisible(true);
-                    creaAccountFrame.setVisible(false);
+                    creaAccountFrame.dispose();
                 }
                 catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);

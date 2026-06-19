@@ -48,6 +48,9 @@ public class Controller {
         if(login.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
         if(password.isBlank()) throw new ExceptionPassword("Il campo password è vuoto.");
 
+        if(login.length() > 15) throw new ExceptionUtente("Il nome utente deve essere di massimo 15 caratteri.");
+        if(password.length() > 15) throw new ExceptionPassword("La password deve essere di massimo 15 caratteri.");
+
         for(Utente u : listaUtenti){ //controlla se il nome utente esiste già
             if(u.getLogin().equals(login)){
                 throw new ExceptionUtente("Nome utente già esistente.");
@@ -80,6 +83,12 @@ public class Controller {
         checkAnimali(); //controlli
         if(tipo.isBlank()) throw new ExceptionAnimale("Nessun tipo selezionato.");
         if(nome.isBlank()) throw new ExceptionAnimale("Nessun nome inserito.");
+
+        for(Animale a : utenteAttuale.getAnimaliPosseduti()){ //controlla se il nome dell'animale esiste già
+            if(a.getNome().equals(nome)){
+                throw new ExceptionAnimale("Nome animale già esistente.");
+            }
+        }
 
         if(tipo.equals("Orso")){
             Orso animale = new Orso(nome);

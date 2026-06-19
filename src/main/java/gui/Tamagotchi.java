@@ -39,6 +39,30 @@ public class Tamagotchi {
         labelNomeAnimale.setText(animale.getNome());
     }
 
+    public void immagineAnimale(){
+        if(animale instanceof Orso) {
+            if(animale.isDorme()){
+                immagineAnimale.setIcon(new ImageIcon(
+                        new ImageIcon(
+                                getClass().getClassLoader().getResource("img/orsoDorme.png")
+                        ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
+                ));
+            }else {
+                immagineAnimale.setIcon(new ImageIcon(
+                        new ImageIcon(
+                                getClass().getClassLoader().getResource("img/orso.png")
+                        ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
+                ));
+            }
+        }else if(animale instanceof Pinguino) {
+            immagineAnimale.setIcon(new ImageIcon(
+                    new ImageIcon(
+                            getClass().getClassLoader().getResource("img/pinguino.png")
+                    ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
+            ));
+        }
+    }
+
     public Tamagotchi(JFrame frameHome, Controller controller, Animale animale, Home home) {
         JFrame tamagotchiFrame = new JFrame("Tamagotchi");
         tamagotchiFrame.setContentPane(tamagotchiPanel);
@@ -104,7 +128,8 @@ public class Tamagotchi {
         });
 
         //immagine dell'animale
-        if(animale instanceof Orso) {
+        immagineAnimale();
+        /*if(animale instanceof Orso) {
             immagineAnimale.setIcon(new ImageIcon(
                     new ImageIcon(
                             getClass().getClassLoader().getResource("img/orso.png")
@@ -116,7 +141,7 @@ public class Tamagotchi {
                             getClass().getClassLoader().getResource("img/pinguino.png")
                     ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
             ));
-        }
+        }*/
 
         //gestisce il pulsante negozio
         negozioButton.addActionListener(new ActionListener() {
@@ -159,11 +184,12 @@ public class Tamagotchi {
                 if(animale.isDorme()) {
                     controller.sveglia(animale);
                     vaiADormireButton.setText("Vai a dormire");
+                    immagineAnimale();
                 }
                 else {
                     controller.addormenta(animale);
                     vaiADormireButton.setText("Svegliati");
-
+                    immagineAnimale();
                 }
             }
         });
@@ -191,6 +217,8 @@ public class Tamagotchi {
         });
 
     }
+
+    //MODIFICHE GRAFICHE -------------------------------------------------------------------------------
 
     private void createUIComponents() { //custom create del panel per gestire lo sfondo
         backGroundImage = new ImageIcon(getClass().getResource("/img/backGroundTamagotchi.png")); //immagine sfondo
