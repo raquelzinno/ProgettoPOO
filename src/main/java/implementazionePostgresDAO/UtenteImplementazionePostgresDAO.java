@@ -16,8 +16,7 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
         Connection connection = ConnessioneDatabase.getInstance().connection;
 
         //EFFETTUO LA QUERY
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO \"Utente\" (\"user\", \"password\") VALUES (?, ?);");
-        //ResultSet rs = ps.executeQuery();
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO \"Utente\" (\"login\", \"password\") VALUES (?, ?);");
 
         ps.setString(1, utente.getLogin());
         ps.setString(2, utente.getPassword());
@@ -29,15 +28,7 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
             System.out.println("Utente salvato nel Database con successo!");
         }
 
-        /*//ELABORO IL RESULT SET
-        while(rs.next())
-        {
-            ps.setString(1, utente.getLogin());
-            ps.setString(2, utente.getPassword());
-        }*/
-
         //CHIUDO CONNESSIONE
-        //rs.close();
         connection.close();
     }
 
@@ -47,7 +38,7 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
         Connection connection = ConnessioneDatabase.getInstance().connection;
 
         //EFFETTUO LA QUERY
-        String sql = "UPDATE \"Utente\" " + "SET \"user\" = "+userNuovo+" WHERE \"user\" = '"+userVecchio+"' ;";
+        String sql = "UPDATE \"Utente\" " + "SET \"login\" = "+userNuovo+" WHERE \"login\" = '"+userVecchio+"' ;";
 
         PreparedStatement updatePrezzoPS = connection.prepareStatement(sql);
 
@@ -60,5 +51,31 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
 
         //CHIUDO CONNESSIONE
         connection.close();
+    }
+
+    @Override
+    public boolean cercaUtente(String login, String password) throws SQLException {
+        //INSTAURO LA CONNESSIONE
+        Connection connection = ConnessioneDatabase.getInstance().connection;
+
+        //EFFETTUO LA QUERY
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Utente\" WHERE \"login\" = ? AND \"password\" = ?;");
+
+        ps.setString(1, login);
+        ps.setString(2, password);
+
+        //RESULT SET
+        ResultSet rs = ps.executeQuery();
+
+        //CONTROLLO CHE LA QUERY SIA STATA ESEGUITA
+        if (rs.next()) {
+            System.out.println("Utente trovato nel Database con successo!");
+            return true;
+        }
+
+        //CHIUDO CONNESSIONE
+        rs.close();
+        connection.close();
+        return false;
     }
 }

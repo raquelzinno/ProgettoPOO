@@ -1,7 +1,9 @@
 package controller;
 
+import dao.UtenteDAO;
 import exceptions.*;
 import gui.Tamagotchi;
+import implementazionePostgresDAO.UtenteImplementazionePostgresDAO;
 import model.Animale;
 import model.Utente;
 import model.Vestito;
@@ -14,6 +16,7 @@ import model.Minigame;
 import model.Negozio;
 import javax.swing.Timer;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -59,19 +62,44 @@ public class Controller {
 
         Utente utente = new Utente(login, password);
         aggiungiUtente(utente);
+
+        //DA RIVEDERE O OTTIMIZZARE
+        try {
+            UtenteDAO utenteDAO = new UtenteImplementazionePostgresDAO();
+            utenteDAO.salvaUtente(utente);
+        }
+        catch (SQLException e){
+            System.err.println("Errore durante l'inserimento dell'utente nel database!");
+            e.printStackTrace();
+        }
     }
 
     public boolean checkUtente(String utente, String password){
         if(utente.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
         if(password.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
 
-        for(Utente u : listaUtenti){
+        try {
+            UtenteDAO utenteDAO = new UtenteImplementazionePostgresDAO();
+            if(utenteDAO.cercaUtente(utente, password)) {
+                Utente u = new Utente(utente, password);
+                utenteAttuale = u;
+                utenteAttuale.setAccessoEffettuato(true);
+                return true;
+            }
+        }
+        catch (SQLException e){
+            System.err.println("Errore durante la ricerca dell'utente nel database!");
+            e.printStackTrace();
+        }
+
+        //DA RIMUOVERE, USA ARRAYLIST DI CONTROLLER E NON IL DB
+        /*for(Utente u : listaUtenti){
             if(u.getLogin().equals(utente) && u.getPassword().equals(password)){
                 u.setAccessoEffettuato(true);
                 utenteAttuale = u;
                 return true;
             }
-        }
+        }*/
         throw new ExceptionUtente("Utente non trovato.");
     }
 

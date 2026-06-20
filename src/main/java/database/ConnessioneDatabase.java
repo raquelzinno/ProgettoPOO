@@ -11,7 +11,7 @@ public class ConnessioneDatabase {
 	public Connection connection = null;
 	private String nome = "postgres";
 	private String password = "password";
-	private String url = "jdbc:postgresql://localhost:5433/Tamagotchi";
+	private String url = "jdbc:postgresql://localhost:5432/Tamagotchi";
 	private String driver = "org.postgresql.Driver";
 
 	// COSTRUTTORE
@@ -24,9 +24,7 @@ public class ConnessioneDatabase {
 			System.out.println("Database Connection Creation Failed : " + ex.getMessage());
 			ex.printStackTrace();
 		}
-
 	}
-
 
 	public static ConnessioneDatabase getInstance() throws SQLException {
 		if (instance == null) {
