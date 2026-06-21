@@ -1,8 +1,10 @@
 package controller;
 
+import dao.AnimaleDAO;
 import dao.UtenteDAO;
 import exceptions.*;
 import gui.Tamagotchi;
+import implementazionePostgresDAO.AnimaleImplementazionePostgresDAO;
 import implementazionePostgresDAO.UtenteImplementazionePostgresDAO;
 import model.Animale;
 import model.Utente;
@@ -104,6 +106,11 @@ public class Controller {
     }
 
     public void checkAnimali() throws RuntimeException{
+        // 1. Forza il controller a leggere gli animali reali dal DB PostgreSQL
+        this.sincronizzaListaAnimali();
+
+        // 2. Stampa di debug in console per vedere quanti animali rileva IntelliJ in questo momento
+        System.out.println("Animali rilevati nel DB per il controllo: " + utenteAttuale.getAnimaliPosseduti().size());
         if((utenteAttuale.getAnimaliPosseduti()).size() >= 2) throw new ExceptionTroppiAnimali("Hai il massimo di animali consentiti!");
     }
 
@@ -126,9 +133,56 @@ public class Controller {
             Pinguino animale = new Pinguino(nome);
             aggiungiAnimale(animale);
         }
+
+        try {
+            AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
+            if(tipo.equals("Orso")){
+                Orso animale = new Orso(nome);
+                animaleDAO.salvaAnimale(animale, utenteAttuale.getLogin(), utenteAttuale.getAnimaliPosseduti());
+                //aggiungiAnimale(animale);
+            }
+            else if(tipo.equals("Pinguino")){
+                Pinguino animale = new Pinguino(nome);
+                animaleDAO.salvaAnimale(animale, utenteAttuale.getLogin(), utenteAttuale.getAnimaliPosseduti());
+                //aggiungiAnimale(animale);
+            }
+        }
+        catch (SQLException e){
+            System.err.println("Errore durante l'inserimento dell'animale nel database!");
+            e.printStackTrace();
+        }
     }
 
-    public void modificaNomeAnimale(String nome, Animale animale) {
+    public void sincronizzaListaAnimali() {
+        try {
+            String usernameUtente = this.getUtenteAttuale().getLogin();
+
+            AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
+            ArrayList<Animale> animaliDalDb = animaleDAO.recuperaListaAnimali(usernameUtente);
+
+            this.getUtenteAttuale().setAnimaliPosseduti(animaliDalDb);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void salvaStatoAnimale(Animale animale) {
+        try {
+            AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
+            animaleDAO.aggiornaStatoAnimale(animale, getUtenteAttuale().getLogin());
+
+            sincronizzaListaAnimali(); //sincronizzo la memoria locale con il DB
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void modificaNomeAnimale(String nome, Animale animale) throws SQLException {
+        AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
+        animaleDAO.modificaNome(utenteAttuale.getLogin(), animale, nome); //lo modifico prima nel database
         animale.setNome(nome);
     }
 
@@ -198,18 +252,23 @@ public class Controller {
             sonnoTimer.stop();
     }
 
-    public void eliminaAnimale(Animale animale) {
+    public void eliminaAnimale(Animale animale) throws SQLException{
         if (gameTimer != null && gameTimer.isRunning())  //gestione di possibili timer attivi che devono essere fermati
             gameTimer.stop();
         if(sonnoTimer != null && sonnoTimer.isRunning())
             sonnoTimer.stop();
+
+        AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
+        animaleDAO.eliminaAnimale(animale, utenteAttuale.getLogin());
         utenteAttuale.eliminaAnimale(animale);
     }
 
-    public void cambiaPassword(String vecchiaPass, String nuovaPass) throws RuntimeException{
+    public void cambiaPassword(String vecchiaPass, String nuovaPass) throws RuntimeException, SQLException {
         if(nuovaPass.isBlank()) throw new ExceptionPassword("Nessuna password inserita.");
         if(utenteAttuale.getPassword().equals(vecchiaPass)){
             utenteAttuale.setPassword(nuovaPass);
+            UtenteDAO utenteDAO = new UtenteImplementazionePostgresDAO();
+            utenteDAO.aggiornaPassword(utenteAttuale.getLogin(), vecchiaPass,nuovaPass);
         }else throw new ExceptionPassword("La password è errata.");
     }
 

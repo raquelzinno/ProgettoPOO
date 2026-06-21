@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class Impostazioni {
     private JPanel impostazioniPanel;
@@ -62,6 +63,8 @@ public class Impostazioni {
                 inputNome.setText("");
             } catch(RuntimeException ex){
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+            } catch(SQLException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -75,7 +78,11 @@ public class Impostazioni {
                             "Password cambiata con successo.",
                             "Password cambiata",
                             JOptionPane.INFORMATION_MESSAGE);
+                    vecchiaPasswordField.setText("");
+                    nuovaPasswordTextField.setText("");
                 } catch(RuntimeException ex){
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                } catch (SQLException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -83,20 +90,24 @@ public class Impostazioni {
 
         //gestione pulsante elimina animale
         eliminaButton.addActionListener(e -> {
-            if (controlloEliminaCheckBox.isSelected()) {
-                JOptionPane.showMessageDialog(impostazioniFrame,
-                        "Hai rimosso " + animale.getNome() + ".\nVerrai rimandato alla home.",
-                        "Animale eliminato",
-                        JOptionPane.INFORMATION_MESSAGE);
-                controller.eliminaAnimale(animale);
-                home.rimuoviAnimale(animale);
-                frameHome.setVisible(true);
-                impostazioniFrame.setVisible(false);
-            } else {
-                JOptionPane.showMessageDialog(impostazioniFrame,
-                        "Devi prima selezionare la casella per poter procedere!",
-                        "Attenzione",
-                        JOptionPane.WARNING_MESSAGE);
+            try {
+                if (controlloEliminaCheckBox.isSelected()) {
+                    JOptionPane.showMessageDialog(impostazioniFrame,
+                            "Hai rimosso " + animale.getNome() + ".\nVerrai rimandato alla home.",
+                            "Animale eliminato",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    controller.eliminaAnimale(animale);
+                    home.rimuoviAnimale(animale);
+                    frameHome.setVisible(true);
+                    impostazioniFrame.setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(impostazioniFrame,
+                            "Devi prima selezionare la casella per poter procedere!",
+                            "Attenzione",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            } catch(SQLException ex){
+                ex.printStackTrace();
             }
 
         });

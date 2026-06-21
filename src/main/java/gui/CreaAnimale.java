@@ -51,10 +51,13 @@ public class CreaAnimale {
                     }
                     String nome = nomeTextField.getText();
 
-                    for (Utente u : controller.getListaUtenti()) {
+                    controller.creaAnimale(tipo, nome);
+
+                    //DA RIVEDERE, USA L'ARRAYLIST DEGLI UTENTI INVECE CHE IL DATABASE
+                    /*for (Utente u : controller.getListaUtenti()) {
                         if (u.isAccessoEffettuato())
                             controller.creaAnimale(tipo, nome);
-                    }
+                    }*/
                     JOptionPane.showMessageDialog(null, "Animale creato con successo.");
 
                     Home.modelloListaAnimali.addElement(controller.getUtenteAttuale().getAnimaliPosseduti().getLast());

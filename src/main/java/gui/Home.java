@@ -60,6 +60,8 @@ public class Home {
 
 
         //lista dove sono riportati gli animali dell'utente
+        controller.sincronizzaListaAnimali(); //aggiorna la lista degli animali prendendoli dal database
+
         modelloListaAnimali = new DefaultListModel<>();
 
         for(Animale a : controller.getUtenteAttuale().getAnimaliPosseduti()){
@@ -144,6 +146,12 @@ public class Home {
         exit.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e){
+
+                //aggiorna i parametri degli animali dell'utente nel database
+                for(Animale a : controller.getUtenteAttuale().getAnimaliPosseduti()){
+                    controller.salvaStatoAnimale(a);
+                }
+
                 controller.esciUtente();
                 loginFrame.setVisible(true);
                 frameHome.setVisible(false);

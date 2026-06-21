@@ -42,7 +42,7 @@ public class Minigames {
         minigamesFrame.setContentPane(minigamesPanel);
         minigamesFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         minigamesFrame.pack();
-        minigamesFrame.setSize(500, 300); //grandezza della finestra
+        minigamesFrame.setSize(500, 330); //grandezza della finestra
         minigamesFrame.setLocationRelativeTo(null); //finestra si apre al centro
         minigamesFrame.setResizable(false); //non cambia dimensione
         minigamesFrame.setVisible(true);
@@ -68,6 +68,19 @@ public class Minigames {
         labelPunti3.setText(String.valueOf(minigame3.getRicompensa()));
 
         //MINIGAME1 --------------------------------------------------------------------------------------------
+
+        //immagine pulsanti
+        sassoRadioButton.setIcon(new ImageIcon(getClass().getResource("/img/sasso.png")));
+        sassoRadioButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        sassoRadioButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        cartaRadioButton.setIcon(new ImageIcon(getClass().getResource("/img/carta.png")));
+        cartaRadioButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        cartaRadioButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        forbiciRadioButton.setIcon(new ImageIcon(getClass().getResource("/img/forbici.png")));
+        forbiciRadioButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        forbiciRadioButton.setVerticalTextPosition(SwingConstants.BOTTOM);
 
         //pulsanti minigame1
         ButtonGroup gruppoMinigame1 = new ButtonGroup();

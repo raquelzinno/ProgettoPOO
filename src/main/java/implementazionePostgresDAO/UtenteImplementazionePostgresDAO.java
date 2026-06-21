@@ -33,17 +33,21 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
     }
 
     @Override
-    public void aggiornaNomeUtente(String userVecchio, String userNuovo) throws SQLException {
+    public void aggiornaPassword(String login, String passwordVecchia, String passwordNuova) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
 
         //EFFETTUO LA QUERY
-        String sql = "UPDATE \"Utente\" " + "SET \"login\" = "+userNuovo+" WHERE \"login\" = '"+userVecchio+"' ;";
+        String sql = "UPDATE \"Utente\" SET \"password\" = ? WHERE \"login\" = ? AND \"password\" = ?;";
 
-        PreparedStatement updatePrezzoPS = connection.prepareStatement(sql);
+        PreparedStatement ps = connection.prepareStatement(sql);
+
+        ps.setString(1, passwordNuova);
+        ps.setString(2, login);
+        ps.setString(3, passwordVecchia);
 
 
-        int righeInserite = updatePrezzoPS.executeUpdate();
+        int righeInserite = ps.executeUpdate();
 
         if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite
             System.out.println("Utente aggiornato nel Database con successo!");
