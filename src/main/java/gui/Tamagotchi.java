@@ -129,19 +129,6 @@ public class Tamagotchi {
 
         //immagine dell'animale
         immagineAnimale();
-        /*if(animale instanceof Orso) {
-            immagineAnimale.setIcon(new ImageIcon(
-                    new ImageIcon(
-                            getClass().getClassLoader().getResource("img/orso.png")
-                    ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
-            ));
-        }else if(animale instanceof Pinguino) {
-            immagineAnimale.setIcon(new ImageIcon(
-                    new ImageIcon(
-                            getClass().getClassLoader().getResource("img/pinguino.png")
-                    ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
-            ));
-        }*/
 
         //gestisce il pulsante negozio
         negozioButton.addActionListener(new ActionListener() {

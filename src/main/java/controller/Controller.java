@@ -200,8 +200,35 @@ public class Controller {
         return listaItemDB;
     }
 
-    public void compra(Item item, Animale animale) throws RuntimeException{
-        utenteAttuale.compraItem(item, animale);
+    public void caricaInventarioUtente() throws SQLException {
+        ItemDAO itemDAO = new ItemImplementazionePostgresDAO();
+        if (utenteAttuale!= null) {
+            //prende i dati aggiornati dal database
+            ArrayList<Item> itemDalDB = itemDAO.recuperaItemAggiornati(utenteAttuale.getLogin());
+
+            //sostituisce la vecchia lista locale con quella reale del DB
+            utenteAttuale.setItemPosseduti(itemDalDB);
+
+            System.out.println("Inventario sincronizzato! Elementi trovati: " + itemDalDB.size());
+        }
+    }
+
+    public void compra(Item item, Animale animale) throws RuntimeException, SQLException{
+        UtenteDAO utenteDAO = new UtenteImplementazionePostgresDAO();
+
+        boolean salvataggioRiuscito = utenteDAO.salvaAcquisto(utenteAttuale.getLogin(), item);
+
+        if (salvataggioRiuscito) {
+            //se il DB si aggiorna, aggiorna anche la lista locale in Java
+            utenteAttuale.compraItem(item, animale);
+            System.out.println("Acquisto completato con successo sul DB e in Java!");
+        } else {
+            System.out.println("Errore durante il salvataggio dell'acquisto nel database.");
+        }
+
+
+
+
     }
 
     public Utente getUtenteAttuale() {

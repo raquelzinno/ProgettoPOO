@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class Home {
     private JPanel mainPanel;
@@ -61,6 +62,13 @@ public class Home {
 
         //lista dove sono riportati gli animali dell'utente
         controller.sincronizzaListaAnimali(); //aggiorna la lista degli animali prendendoli dal database
+
+        //aggiorna gli item dell'utente
+        try {
+            controller.caricaInventarioUtente();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         modelloListaAnimali = new DefaultListModel<>();
 

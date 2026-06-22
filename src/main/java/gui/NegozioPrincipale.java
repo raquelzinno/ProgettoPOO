@@ -9,6 +9,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class NegozioPrincipale {
     private JPanel negozioPanel;
@@ -115,6 +116,8 @@ public class NegozioPrincipale {
             } catch(RuntimeException ex){
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
         });
 

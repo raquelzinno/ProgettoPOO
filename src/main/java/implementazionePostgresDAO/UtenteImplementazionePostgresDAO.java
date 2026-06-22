@@ -2,7 +2,7 @@ package implementazionePostgresDAO;
 
 import dao.UtenteDAO;
 import database.ConnessioneDatabase;
-import model.Utente;
+import model.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -82,4 +82,123 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
         connection.close();
         return false;
     }
+
+    //metodo chiamato dal controller quando l'utente compra un Item
+    public boolean salvaAcquisto(String login, Item item) throws SQLException{
+        if (item instanceof Cibo) {
+            return aggiungiAInventarioCibo(login, item);
+        }
+        else if (item instanceof Vestito) {
+            return aggiungiAInventarioVestito(login, item);
+        }
+        return false;
+    }
+
+    public boolean aggiungiAInventarioCibo(String login, Item item) throws SQLException {
+        //INSTAURO LA CONNESSIONE
+        Connection connection = ConnessioneDatabase.getInstance().connection;
+
+        //RECUPERO L'ID DELL'UTENTE DAL DATABASE
+        int idUtente = -1;
+        String sqlCercaUtente = "SELECT \"idUtente\" FROM \"Utente\" WHERE \"login\" = ?;";
+
+        try (PreparedStatement psUtente = connection.prepareStatement(sqlCercaUtente)) {
+            psUtente.setString(1, login);
+            try (ResultSet rs = psUtente.executeQuery()) {
+                if (rs.next()) {
+                    idUtente = rs.getInt("idUtente");
+                }
+            }
+        }
+
+        //RECUPERO L'ID DEL CIBO DAL DATABASE
+        int idCibo = -1;
+        String sqlCercaCibo = "SELECT \"idCibo\" FROM \"Cibo\" WHERE \"nome\" = ?;";
+
+        try (PreparedStatement psCibo = connection.prepareStatement(sqlCercaCibo)) {
+            psCibo.setString(1, item.getNome());
+            try (ResultSet rs = psCibo.executeQuery()) {
+                if (rs.next()) {
+                    idCibo = rs.getInt("idCibo");
+                }
+            }
+        }
+
+        //ESEGUO LA QUERY
+        String sql = "INSERT INTO \"InventarioCibo\" (\"idUtente\", \"idCibo\") VALUES (?, ?)";
+
+        PreparedStatement ps = connection.prepareStatement(sql);
+
+        ps.setInt(1, idUtente);
+        ps.setInt(2, idCibo);
+
+        //CONTROLLO CHE LA QUERY SIA STATA ESEGUITA
+        int righeInserite = ps.executeUpdate();
+
+        if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite
+            System.out.println("Inventario aggiornato nel Database con successo!");
+
+            //CHIUDO CONNESSIONE
+            connection.close();
+            return true;
+        }else{
+            //CHIUDO CONNESSIONE
+            connection.close();
+            return false;
+        }
+
+    }
+
+    public boolean aggiungiAInventarioVestito(String login, Item item) throws SQLException {
+        //INSTAURO LA CONNESSIONE
+        Connection connection = ConnessioneDatabase.getInstance().connection;
+
+        //RECUPERO L'ID DELL'UTENTE DAL DATABASE
+        int idUtente = -1;
+        String sqlCercaUtente = "SELECT \"idUtente\" FROM \"Utente\" WHERE \"login\" = ?;";
+
+        try (PreparedStatement psUtente = connection.prepareStatement(sqlCercaUtente)) {
+            psUtente.setString(1, login);
+            try (ResultSet rs = psUtente.executeQuery()) {
+                if (rs.next()) {
+                    idUtente = rs.getInt("idUtente");
+                }
+            }
+        }
+
+        //RECUPERO L'ID DEL VESTITO DAL DATABASE
+        int idVestito = -1;
+        String sqlCercaVestito = "SELECT \"idVestito\" FROM \"Vestito\" WHERE \"nome\" = ?;";
+
+        try (PreparedStatement psVestito = connection.prepareStatement(sqlCercaVestito)) {
+            psVestito.setString(1, item.getNome());
+            try (ResultSet rs = psVestito.executeQuery()) {
+                if (rs.next()) {
+                    idVestito = rs.getInt("idVestito");
+                }
+            }
+        }
+
+        //ESEGUO LA QUERY (idAnimale è impostato a NULL dato che nessun animale sta indossando il vestito)
+        String sql = "INSERT INTO \"InventarioVestito\" (\"idUtente\", \"idVestito\") VALUES (?, ?)";
+
+        PreparedStatement ps = connection.prepareStatement(sql);
+
+        ps.setInt(1, idUtente);
+        ps.setInt(2, idVestito);
+
+        //CONTROLLO CHE LA QUERY SIA STATA ESEGUITA
+        int righeInserite = ps.executeUpdate();
+
+        if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite
+            //CHIUDO CONNESSIONE
+            connection.close();
+            return true;
+        }else{
+            //CHIUDO CONNESSIONE
+            connection.close();
+            return false;
+        }
+    }
 }
+
