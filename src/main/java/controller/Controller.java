@@ -1,10 +1,12 @@
 package controller;
 
 import dao.AnimaleDAO;
+import dao.ItemDAO;
 import dao.UtenteDAO;
 import exceptions.*;
 import gui.Tamagotchi;
 import implementazionePostgresDAO.AnimaleImplementazionePostgresDAO;
+import implementazionePostgresDAO.ItemImplementazionePostgresDAO;
 import implementazionePostgresDAO.UtenteImplementazionePostgresDAO;
 import model.Animale;
 import model.Utente;
@@ -31,9 +33,9 @@ public class Controller {
     private Negozio negozioBase;
     private ArrayList<Minigame> minigamesDiDefault;
 
-    public Controller() {
+    public Controller() throws SQLException {
         listaUtenti = new ArrayList<Utente>();
-        negozioBase = new Negozio(); //istanzio un oggetto negozio che avrà già tutti gli item di default
+        negozioBase = new Negozio(popolaNegozio()); //istanzio un oggetto negozio che avrà già tutti gli item di default
         minigamesDiDefault = Minigame.getMinigamesDiDefault(); //grazie al metodo statico, stabilisco l'arrayList che conterrà tutti i minigames di default
     }
 
@@ -188,6 +190,14 @@ public class Controller {
 
     public void aggiungiAnimale(Animale animale){
         utenteAttuale.creaAnimale(animale); //crea l'animale che è legato all'utente
+    }
+
+    public ArrayList<Item> popolaNegozio() throws SQLException {
+        ItemDAO itemDAO = new ItemImplementazionePostgresDAO();
+
+        ArrayList<Item> listaItemDB = itemDAO.recuperaListaItem();
+
+        return listaItemDB;
     }
 
     public void compra(Item item, Animale animale) throws RuntimeException{

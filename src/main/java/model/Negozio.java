@@ -4,9 +4,9 @@ import java.util.ArrayList;
 public class Negozio {
     private ArrayList<Item> listaItem;
 
-    public Negozio() {
-        listaItem = new ArrayList<Item>();
-        aggiungiItemDefault(); //ogni volta che verrà istanziato il negozio avrà già degli item di default
+    public Negozio(ArrayList<Item> listaItem) {
+        this.listaItem = listaItem;
+        //aggiungiItemDefault(); //ogni volta che verrà istanziato il negozio avrà già degli item di default
     }
 
     public void aggiungiItem(Item item) {

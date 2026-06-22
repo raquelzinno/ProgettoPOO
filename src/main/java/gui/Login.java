@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class Login {
     private static JFrame loginFrame;
@@ -22,7 +23,7 @@ public class Login {
     private JPasswordField passwordField;
     private ImageIcon backGroundImage;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException { //questa eccezione proviene dal controller quando istanzia il negozio, da rivedere
         Controller controller = new Controller();
         Login login = new Login();
         loginFrame = new JFrame("Login");
