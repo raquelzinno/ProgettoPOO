@@ -13,80 +13,49 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
+
     @Override
-    public void salvaAnimale(Animale animale, String login, ArrayList<Animale> listaAnimali) throws SQLException {
+    public boolean salvaAnimale(Animale animale, int idUtente) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
 
-        //RECUPERO L'ID DELL'UTENTE DAL DATABASE
-        int idUtente = -1;
-        String sqlCercaUtente = "SELECT \"idUtente\" FROM \"Utente\" WHERE \"login\" = ?;";
-
-        try (PreparedStatement psUtente = connection.prepareStatement(sqlCercaUtente)) {
-            psUtente.setString(1, login);
-            try (ResultSet rs = psUtente.executeQuery()) {
-                if (rs.next()) {
-                    idUtente = rs.getInt("idUtente");
-                }
-            }
-        }
-
-        //EFFETTUO LA QUERY
+        // EFFETTUO LA QUERY
         String sql = "INSERT INTO \"Animale\" (\"nome\", \"fame\", \"energia\", \"punti\", " +
                 "\"dorme\", \"fameMax\", \"energiaMax\", \"specie\", \"idUtente\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        PreparedStatement ps = connection.prepareStatement(sql);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
-        ps.setString(1, animale.getNome());
-        ps.setInt(2, animale.getFame());
-        ps.setInt(3, animale.getEnergia());
-        ps.setInt(4, animale.getPunti());
-        ps.setBoolean(5, animale.isDorme());
-        ps.setInt(6, animale.getFameMax());
-        ps.setInt(7, animale.getEnergiaMax());
-        if(animale instanceof Orso)
-            ps.setString(8, "Orso");
-        else if(animale instanceof Pinguino)
-            ps.setString(8, "Pinguino");
-        ps.setInt(9, idUtente);
+            ps.setString(1, animale.getNome());
+            ps.setInt(2, animale.getFame());
+            ps.setInt(3, animale.getEnergia());
+            ps.setInt(4, animale.getPunti());
+            ps.setBoolean(5, animale.isDorme());
+            ps.setInt(6, animale.getFameMax());
+            ps.setInt(7, animale.getEnergiaMax());
+            if (animale instanceof Orso) {
+                ps.setString(8, "Orso");
+            } else if (animale instanceof Pinguino) {
+                ps.setString(8, "Pinguino");
+            }
+            ps.setInt(9, idUtente);
 
-        listaAnimali.add(animale);
-
-
-        //CONTROLLO CHE LA QUERY SIA STATA ESEGUITA
-        int righeInserite = ps.executeUpdate();
-
-        if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite
-            System.out.println("Animale salvato nel Database con successo!");
+            int righeInserite = ps.executeUpdate();
+            if (righeInserite > 0) {
+                System.out.println("Animale salvato nel Database con successo!");
+            }
+            return righeInserite > 0;
         }
-
-        //CHIUDO CONNESSIONE
-        connection.close();
     }
 
     @Override
-    public ArrayList<Animale> recuperaListaAnimali(String login) throws SQLException{
+    public ArrayList<Animale> recuperaListaAnimali(int idUtente) throws SQLException{
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
 
         //CREO LA LISTA PER GLI ANIMALI
         ArrayList<Animale> listaAnimali = new ArrayList<>();
 
-        //RECUPERO L'ID DELL'UTENTE DAL DATABASE
-        int idUtente = -1;
-        String sqlCercaUtente = "SELECT \"idUtente\" FROM \"Utente\" WHERE \"login\" = ?;";
-
-        try (PreparedStatement psUtente = connection.prepareStatement(sqlCercaUtente)) {
-            psUtente.setString(1, login);
-            try (ResultSet rs = psUtente.executeQuery()) {
-                if (rs.next()) {
-                    idUtente = rs.getInt("idUtente");
-                }
-            }
-        }
-
-        //EFFETTUO LA QUERY
+        //QUERY PER RECUPERARE GLI ANIMALI
         String sql = "SELECT * FROM \"Animale\" WHERE \"idUtente\" = ?;";
-
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idUtente);
 
@@ -96,7 +65,6 @@ public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
                     String specie = rs.getString("specie");
                     String nomeAnimale = rs.getString("nome");
 
-                    //istanza la sottoclasse corretta in base alla stringa nel database
                     if ("Orso".equals(specie)) {
                         animale = new Orso(nomeAnimale);
                     } else if ("Pinguino".equals(specie)) {
@@ -105,7 +73,6 @@ public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
                         continue;
                     }
 
-                    //ricostruisco l'oggetto dai dati del database
                     animale.setFame(rs.getInt("fame"));
                     animale.setEnergia(rs.getInt("energia"));
                     animale.setPunti(rs.getInt("punti"));
@@ -117,30 +84,12 @@ public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
                 }
             }
         }
-
-        //CHIUDO CONNESSIONE
-        connection.close();
-
         return listaAnimali;
     }
-
     @Override
-    public void modificaNome(String login, Animale animale, String nome) throws SQLException {
+    public void modificaNome(int idUtente, Animale animale, String nome) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
-
-        //RECUPERO L'ID DELL'UTENTE DAL DATABASE
-        int idUtente = -1;
-        String sqlCercaUtente = "SELECT \"idUtente\" FROM \"Utente\" WHERE \"login\" = ?;";
-
-        try (PreparedStatement psUtente = connection.prepareStatement(sqlCercaUtente)) {
-            psUtente.setString(1, login);
-            try (ResultSet rs = psUtente.executeQuery()) {
-                if (rs.next()) {
-                    idUtente = rs.getInt("idUtente");
-                }
-            }
-        }
 
         //EFFETTUO LA QUERY
         String sql = "UPDATE \"Animale\" SET \"nome\" = ? WHERE \"nome\" = ? AND \"idUtente\" = ?;";
@@ -162,22 +111,9 @@ public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
     }
 
     @Override
-    public void eliminaAnimale(Animale animale, String login) throws SQLException {
+    public void eliminaAnimale(Animale animale, int idUtente) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
-
-        //RECUPERO L'ID DELL'UTENTE DAL DATABASE
-        int idUtente = -1;
-        String sqlCercaUtente = "SELECT \"idUtente\" FROM \"Utente\" WHERE \"login\" = ?;";
-
-        try (PreparedStatement psUtente = connection.prepareStatement(sqlCercaUtente)) {
-            psUtente.setString(1, login);
-            try (ResultSet rs = psUtente.executeQuery()) {
-                if (rs.next()) {
-                    idUtente = rs.getInt("idUtente");
-                }
-            }
-        }
 
         //EFFETTUO LA QUERY
         String sql = "DELETE FROM \"Animale\" WHERE \"nome\" = ? AND \"idUtente\" = ?";
@@ -198,25 +134,12 @@ public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
     }
 
     @Override
-    public void aggiornaStatoAnimale(Animale animale, String login) throws SQLException {
+    public void aggiornaStatoAnimale(Animale animale, int idUtente) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
 
         //CREO LA LISTA PER GLI ANIMALI
         ArrayList<Animale> listaAnimali = new ArrayList<>();
-
-        //RECUPERO L'ID DELL'UTENTE DAL DATABASE
-        int idUtente = -1;
-        String sqlCercaUtente = "SELECT \"idUtente\" FROM \"Utente\" WHERE \"login\" = ?;";
-
-        try (PreparedStatement psUtente = connection.prepareStatement(sqlCercaUtente)) {
-            psUtente.setString(1, login);
-            try (ResultSet rs = psUtente.executeQuery()) {
-                if (rs.next()) {
-                    idUtente = rs.getInt("idUtente");
-                }
-            }
-        }
 
         //EFFETTUO LA QUERY
         String sql = "UPDATE \"Animale\" SET \"fame\" = ?, \"energia\" = ?, \"punti\" = ?, \"dorme\" = ?, \"fameMax\" = ?, \"energiaMax\" = ? WHERE \"nome\" = ? AND \"idUtente\" = ?;";

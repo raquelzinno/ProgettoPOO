@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Controller {
-    private ArrayList<Utente> listaUtenti;
     private Utente utenteAttuale = null;
+    private int idUtenteAttuale = -1;
     private Timer gameTimer;
     private Timer sonnoTimer;
     private Tamagotchi tamagotchiFrame;
@@ -34,7 +34,6 @@ public class Controller {
     private ArrayList<Minigame> minigamesDiDefault;
 
     public Controller() throws SQLException {
-        listaUtenti = new ArrayList<Utente>();
         negozioBase = new Negozio(popolaNegozio()); //istanzio un oggetto negozio che avrà già tutti gli item di default
         minigamesDiDefault = Minigame.getMinigamesDiDefault(); //grazie al metodo statico, stabilisco l'arrayList che conterrà tutti i minigames di default
     }
@@ -47,10 +46,6 @@ public class Controller {
         return negozioBase;
     }
 
-    public void aggiungiUtente(Utente utente){
-        listaUtenti.add(utente);
-    }
-
     public void creaUtente(String login, String password) throws RuntimeException{
         if(login.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
         if(password.isBlank()) throw new ExceptionPassword("Il campo password è vuoto.");
@@ -58,19 +53,19 @@ public class Controller {
         if(login.length() > 15) throw new ExceptionUtente("Il nome utente deve essere di massimo 15 caratteri.");
         if(password.length() > 15) throw new ExceptionPassword("La password deve essere di massimo 15 caratteri.");
 
-        for(Utente u : listaUtenti){ //controlla se il nome utente esiste già
-            if(u.getLogin().equals(login)){
+        UtenteDAO utenteDAO = new UtenteImplementazionePostgresDAO();
+        //effettuo prima il controllo per verificare se il login è unico
+        try {
+            if(utenteDAO.controlloLogin(login)) {
                 throw new ExceptionUtente("Nome utente già esistente.");
             }
+        } catch (SQLException e) {
+            System.err.println("Errore durante il controllo del login!");
+            e.printStackTrace();
         }
-
-        Utente utente = new Utente(login, password);
-        aggiungiUtente(utente);
-
-        //DA RIVEDERE O OTTIMIZZARE
+        //salvo i dati nel database
         try {
-            UtenteDAO utenteDAO = new UtenteImplementazionePostgresDAO();
-            utenteDAO.salvaUtente(utente);
+            utenteDAO.salvaUtente(login, password);
         }
         catch (SQLException e){
             System.err.println("Errore durante l'inserimento dell'utente nel database!");
@@ -78,16 +73,16 @@ public class Controller {
         }
     }
 
-    public boolean checkUtente(String utente, String password){
-        if(utente.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
-        if(password.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
-
+    public boolean checkUtente(String login, String password) throws RuntimeException{
+        if(login.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
+        if(password.isBlank()) throw new ExceptionUtente("Il campo password utente è vuoto.");
+        UtenteDAO utenteDAO = new UtenteImplementazionePostgresDAO();
         try {
-            UtenteDAO utenteDAO = new UtenteImplementazionePostgresDAO();
-            if(utenteDAO.cercaUtente(utente, password)) {
-                Utente u = new Utente(utente, password);
+            if(utenteDAO.cercaUtente(login, password)) {  //controlla se l'utente esiste nel database
+                Utente u = new Utente(login, password);
                 utenteAttuale = u;
                 utenteAttuale.setAccessoEffettuato(true);
+                idUtenteAttuale = utenteDAO.recuperaId(login);
                 return true;
             }
         }
@@ -95,58 +90,43 @@ public class Controller {
             System.err.println("Errore durante la ricerca dell'utente nel database!");
             e.printStackTrace();
         }
-
-        //DA RIMUOVERE, USA ARRAYLIST DI CONTROLLER E NON IL DB
-        /*for(Utente u : listaUtenti){
-            if(u.getLogin().equals(utente) && u.getPassword().equals(password)){
-                u.setAccessoEffettuato(true);
-                utenteAttuale = u;
-                return true;
-            }
-        }*/
-        throw new ExceptionUtente("Utente non trovato.");
+        throw new ExceptionUtente("Utente non trovato."); //se si arriva a questo punto, l'utente non è stato trovato
     }
 
     public void checkAnimali() throws RuntimeException{
-        // 1. Forza il controller a leggere gli animali reali dal DB PostgreSQL
+        //Forza il controller a leggere gli animali dal db
         this.sincronizzaListaAnimali();
 
-        // 2. Stampa di debug in console per vedere quanti animali rileva IntelliJ in questo momento
+        //Stampa di debug in console per vedere quanti animali rileva IntelliJ in questo momento
         System.out.println("Animali rilevati nel DB per il controllo: " + utenteAttuale.getAnimaliPosseduti().size());
         if((utenteAttuale.getAnimaliPosseduti()).size() >= 2) throw new ExceptionTroppiAnimali("Hai il massimo di animali consentiti!");
     }
 
-    public void creaAnimale(String tipo, String nome) throws RuntimeException{
+    public void creaAnimale(String tipo, String nome) throws RuntimeException {
         checkAnimali(); //controlli
+
         if(tipo.isBlank()) throw new ExceptionAnimale("Nessun tipo selezionato.");
         if(nome.isBlank()) throw new ExceptionAnimale("Nessun nome inserito.");
 
-        for(Animale a : utenteAttuale.getAnimaliPosseduti()){ //controlla se il nome dell'animale esiste già
+        for(Animale a : utenteAttuale.getAnimaliPosseduti()){
             if(a.getNome().equals(nome)){
                 throw new ExceptionAnimale("Nome animale già esistente.");
             }
         }
 
-        if(tipo.equals("Orso")){
-            Orso animale = new Orso(nome);
-            aggiungiAnimale(animale);
+        Animale animale = null;
+        if("Orso".equals(tipo)){
+            animale = new Orso(nome);
         }
-        else if(tipo.equals("Pinguino")){
-            Pinguino animale = new Pinguino(nome);
-            aggiungiAnimale(animale);
+        else if("Pinguino".equals(tipo)){
+            animale = new Pinguino(nome);
         }
 
         try {
             AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
-            if(tipo.equals("Orso")){
-                Orso animale = new Orso(nome);
-                animaleDAO.salvaAnimale(animale, utenteAttuale.getLogin(), utenteAttuale.getAnimaliPosseduti());
-                //aggiungiAnimale(animale);
-            }
-            else if(tipo.equals("Pinguino")){
-                Pinguino animale = new Pinguino(nome);
-                animaleDAO.salvaAnimale(animale, utenteAttuale.getLogin(), utenteAttuale.getAnimaliPosseduti());
-                //aggiungiAnimale(animale);
+            if(animaleDAO.salvaAnimale(animale, idUtenteAttuale)) {
+                aggiungiAnimale(animale);
+                System.out.println("Animale creato con successo!");
             }
         }
         catch (SQLException e){
@@ -157,14 +137,13 @@ public class Controller {
 
     public void sincronizzaListaAnimali() {
         try {
-            String usernameUtente = this.getUtenteAttuale().getLogin();
-
             AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
-            ArrayList<Animale> animaliDalDb = animaleDAO.recuperaListaAnimali(usernameUtente);
+            ArrayList<Animale> animaliDalDb = animaleDAO.recuperaListaAnimali(idUtenteAttuale);
 
             this.getUtenteAttuale().setAnimaliPosseduti(animaliDalDb);
 
         } catch (SQLException e) {
+            System.err.println("Errore durante il recupero della lista animali dal database!");
             e.printStackTrace();
         }
     }
@@ -172,11 +151,12 @@ public class Controller {
     public void salvaStatoAnimale(Animale animale) {
         try {
             AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
-            animaleDAO.aggiornaStatoAnimale(animale, getUtenteAttuale().getLogin());
+            animaleDAO.aggiornaStatoAnimale(animale, idUtenteAttuale);
 
             sincronizzaListaAnimali(); //sincronizzo la memoria locale con il DB
 
         } catch (SQLException e) {
+            System.err.println("Errore durante il salvataggio dei dati dell'animale!");
             e.printStackTrace();
         }
     }
@@ -184,7 +164,7 @@ public class Controller {
 
     public void modificaNomeAnimale(String nome, Animale animale) throws SQLException {
         AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
-        animaleDAO.modificaNome(utenteAttuale.getLogin(), animale, nome); //lo modifico prima nel database
+        animaleDAO.modificaNome(idUtenteAttuale, animale, nome); //lo modifico prima nel database
         animale.setNome(nome);
     }
 
@@ -216,7 +196,7 @@ public class Controller {
     public void compra(Item item, Animale animale) throws RuntimeException, SQLException{
         UtenteDAO utenteDAO = new UtenteImplementazionePostgresDAO();
 
-        boolean salvataggioRiuscito = utenteDAO.salvaAcquisto(utenteAttuale.getLogin(), item);
+        boolean salvataggioRiuscito = utenteDAO.salvaAcquisto(idUtenteAttuale, item);
 
         if (salvataggioRiuscito) {
             //se il DB si aggiorna, aggiorna anche la lista locale in Java
@@ -238,10 +218,6 @@ public class Controller {
     public void esciUtente() {
         this.utenteAttuale.setAccessoEffettuato(false);
         this.utenteAttuale = null;
-    }
-
-    public ArrayList<Utente> getListaUtenti(){
-        return listaUtenti;
     }
 
     public void usaItem(Item item, Animale animale) throws RuntimeException{
@@ -296,7 +272,7 @@ public class Controller {
             sonnoTimer.stop();
 
         AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
-        animaleDAO.eliminaAnimale(animale, utenteAttuale.getLogin());
+        animaleDAO.eliminaAnimale(animale, idUtenteAttuale);
         utenteAttuale.eliminaAnimale(animale);
     }
 

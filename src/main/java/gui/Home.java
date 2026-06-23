@@ -25,7 +25,8 @@ public class Home {
     private JLabel titolo;
     private JFrame frameHome;
     private Controller controller;
-    public static DefaultListModel<Animale> modelloListaAnimali;
+    public
+    static DefaultListModel<Animale> modelloListaAnimali;
     private ImageIcon backGroundImage;
 
     public void rimuoviAnimale(Animale animale){

@@ -11,25 +11,59 @@ import java.sql.SQLException;
 
 public class UtenteImplementazionePostgresDAO implements UtenteDAO {
     @Override
-    public void salvaUtente(Utente utente) throws SQLException {
+    public int recuperaId(String login) throws SQLException {
+        Connection connection = ConnessioneDatabase.getInstance().connection;
+
+        String sql = "SELECT \"idUtente\" FROM \"Utente\" WHERE \"login\" = ?;";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, login);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("idUtente");
+                }
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public void salvaUtente(String login, String password) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
 
+        String query = "INSERT INTO \"Utente\" (\"login\", \"password\") VALUES (?, ?);";
         //EFFETTUO LA QUERY
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO \"Utente\" (\"login\", \"password\") VALUES (?, ?);");
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, login);
+            ps.setString(2, password);
 
-        ps.setString(1, utente.getLogin());
-        ps.setString(2, utente.getPassword());
+            int righeInserite = ps.executeUpdate();
+            if (righeInserite > 0) {
+                System.out.println("Utente salvato nel Database con successo!");
+            }
 
-        //CONTROLLO CHE LA QUERY SIA STATA ESEGUITA
-        int righeInserite = ps.executeUpdate();
-
-        if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite
-            System.out.println("Utente salvato nel Database con successo!");
         }
+    }
 
-        //CHIUDO CONNESSIONE
-        connection.close();
+    public boolean controlloLogin(String login) throws SQLException {
+        //INSTAURO LA CONNESSIONE
+        Connection connection = ConnessioneDatabase.getInstance().connection;
+
+        String query = "SELECT * FROM \"Utente\" WHERE \"login\" = ?;";
+        //EFFETTUO LA QUERY
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, login);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    System.out.println("Login già esistente nel database");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -84,32 +118,19 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
     }
 
     //metodo chiamato dal controller quando l'utente compra un Item
-    public boolean salvaAcquisto(String login, Item item) throws SQLException{
+    public boolean salvaAcquisto(int idUtente, Item item) throws SQLException{
         if (item instanceof Cibo) {
-            return aggiungiAInventarioCibo(login, item);
+            return aggiungiAInventarioCibo(idUtente, item);
         }
         else if (item instanceof Vestito) {
-            return aggiungiAInventarioVestito(login, item);
+            return aggiungiAInventarioVestito(idUtente, item);
         }
         return false;
     }
 
-    public boolean aggiungiAInventarioCibo(String login, Item item) throws SQLException {
+    public boolean aggiungiAInventarioCibo(int idUtente, Item item) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
-
-        //RECUPERO L'ID DELL'UTENTE DAL DATABASE
-        int idUtente = -1;
-        String sqlCercaUtente = "SELECT \"idUtente\" FROM \"Utente\" WHERE \"login\" = ?;";
-
-        try (PreparedStatement psUtente = connection.prepareStatement(sqlCercaUtente)) {
-            psUtente.setString(1, login);
-            try (ResultSet rs = psUtente.executeQuery()) {
-                if (rs.next()) {
-                    idUtente = rs.getInt("idUtente");
-                }
-            }
-        }
 
         //RECUPERO L'ID DEL CIBO DAL DATABASE
         int idCibo = -1;
@@ -149,22 +170,9 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
 
     }
 
-    public boolean aggiungiAInventarioVestito(String login, Item item) throws SQLException {
+    public boolean aggiungiAInventarioVestito(int idUtente, Item item) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
-
-        //RECUPERO L'ID DELL'UTENTE DAL DATABASE
-        int idUtente = -1;
-        String sqlCercaUtente = "SELECT \"idUtente\" FROM \"Utente\" WHERE \"login\" = ?;";
-
-        try (PreparedStatement psUtente = connection.prepareStatement(sqlCercaUtente)) {
-            psUtente.setString(1, login);
-            try (ResultSet rs = psUtente.executeQuery()) {
-                if (rs.next()) {
-                    idUtente = rs.getInt("idUtente");
-                }
-            }
-        }
 
         //RECUPERO L'ID DEL VESTITO DAL DATABASE
         int idVestito = -1;

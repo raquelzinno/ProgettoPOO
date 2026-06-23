@@ -7,11 +7,13 @@ import model.Utente;
 import java.sql.SQLException;
 
 public interface UtenteDAO {
-    public void salvaUtente(Utente utente) throws SQLException;
+    public int recuperaId(String login) throws SQLException;
+    public void salvaUtente(String login,String password) throws SQLException;
+    public boolean controlloLogin(String login) throws SQLException;
     public void aggiornaPassword(String login, String passwordVecchia, String passwordNuova) throws SQLException;
     public boolean cercaUtente(String login, String password) throws SQLException;
-    public boolean salvaAcquisto(String login, Item item) throws SQLException;
-    public boolean aggiungiAInventarioCibo(String login, Item item) throws SQLException;
-    public boolean aggiungiAInventarioVestito(String login, Item item) throws SQLException;
+    public boolean salvaAcquisto(int idUtente, Item item) throws SQLException;
+    public boolean aggiungiAInventarioCibo(int idUtente, Item item) throws SQLException;
+    public boolean aggiungiAInventarioVestito(int idUtente, Item item) throws SQLException;
 }
 
