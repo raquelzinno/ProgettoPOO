@@ -63,11 +63,11 @@ public class Utente {
                 throw new ExceptionVestiti("Stai già indossando questo vestito!");
             }
             else {
-                if((animale.getVestititIndossati()).size() == 2) { //controllo se sto indossando il massimo di vestiti consentiti
+                if((animale.getVestitiIndossati()).size() == 2) { //controllo se sto indossando il massimo di vestiti consentiti
                     throw new ExceptionVestiti("Non puoi indossare più di due vestiti!");
                 }
                 else {
-                    (animale.getVestititIndossati()).add(vestito);  //il vestito viene aggiunto all'animale
+                    (animale.getVestitiIndossati()).add(vestito);  //il vestito viene aggiunto all'animale
                     animale.setEnergiaMax(animale.getEnergiaMax() + vestito.getBoostEnergia());  //vengono settati i nuovi livelli max in base ai valori boost
                     animale.setFameMax(animale.getFameMax() + vestito.getBoostFame());
                     vestito.setIndossato(true);
@@ -87,7 +87,7 @@ public class Utente {
     public void rimuoviVestito(Vestito vestito, Animale animale){
         if(itemPosseduti.contains(vestito)) {  //prima controllo se possiedo i vestiti nei miei item
             if (vestito.isIndossato()) {
-                (animale.getVestititIndossati()).remove(vestito);  //il vestito viene rimosso all'animale
+                (animale.getVestitiIndossati()).remove(vestito);  //il vestito viene rimosso all'animale
                 animale.setEnergiaMax(animale.getEnergiaMax() - vestito.getBoostEnergia());  //vengono settati i nuovi livelli max in base ai valori boost
                 animale.setFameMax(animale.getFameMax() - vestito.getBoostFame());
                 vestito.setIndossato(false);

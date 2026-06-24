@@ -33,6 +33,19 @@ public class Home {
         modelloListaAnimali.removeElement(animale);
     }
 
+    public void caricaDati(Controller controller) {
+        try {
+            controller.puliziaDati();
+            controller.sincronizzaListaAnimali();
+            controller.caricaInventarioUtente();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Errore critico nel tentativo di caricare i dati dal Database.");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
     public Home(JFrame loginFrame, Controller controller) {
         frameHome = new JFrame("Home");
         frameHome.setContentPane(mainPanel);
@@ -60,25 +73,13 @@ public class Home {
             e.printStackTrace();
         }
 
-
-        //lista dove sono riportati gli animali dell'utente
-        controller.sincronizzaListaAnimali(); //aggiorna la lista degli animali prendendoli dal database
-
-        //aggiorna gli item dell'utente
-        try {
-            controller.caricaInventarioUtente();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        caricaDati(controller);
 
         modelloListaAnimali = new DefaultListModel<>();
-
         for(Animale a : controller.getUtenteAttuale().getAnimaliPosseduti()){
             modelloListaAnimali.addElement(a);
         }
-
         listaAnimali.setModel(modelloListaAnimali);
-
         listaAnimali.setBorder(
                 BorderFactory.createLineBorder(Color.BLUE, 3)
         );
@@ -130,7 +131,10 @@ public class Home {
                     controller.checkAnimali();
                     CreaAnimale creaAnimale = new CreaAnimale(frameHome, controller);
                     frameHome.setVisible(false);
-                }catch(RuntimeException ex){
+                }catch (SQLException ex){
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+                catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
 
@@ -142,6 +146,7 @@ public class Home {
             if (!e.getValueIsAdjusting()) {
                 Animale animaleCliccato = (Animale) listaAnimali.getSelectedValue();
                 if (animaleCliccato != null) {
+                    controller.selezionaAnimale(animaleCliccato);
                     Tamagotchi tamagotchi = new Tamagotchi(frameHome, controller, animaleCliccato, Home.this);
                     frameHome.setVisible(false);
                     listaAnimali.clearSelection();
@@ -154,16 +159,22 @@ public class Home {
 
         exit.addMouseListener(new MouseAdapter(){
             @Override
-            public void mouseClicked(MouseEvent e){
-
-                //aggiorna i parametri degli animali dell'utente nel database
-                for(Animale a : controller.getUtenteAttuale().getAnimaliPosseduti()){
-                    controller.salvaStatoAnimale(a);
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    //aggiorna i parametri degli animali dell'utente nel database
+                    for (Animale a : controller.getUtenteAttuale().getAnimaliPosseduti()) {
+                        controller.salvaStatoAnimale(a);
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    System.err.println("Errore nel tentativo di salvare i dati dal Database.");
+                    ex.printStackTrace();
                 }
-
-                controller.esciUtente();
-                loginFrame.setVisible(true);
-                frameHome.setVisible(false);
+                finally {
+                    controller.esciUtente();
+                    loginFrame.setVisible(true);
+                    frameHome.setVisible(false);
+                }
             }
         });
 

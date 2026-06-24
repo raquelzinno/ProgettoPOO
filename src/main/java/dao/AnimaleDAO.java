@@ -6,10 +6,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface AnimaleDAO {
+    public int recuperaId(int idUtente,String nomeAnimale) throws SQLException;
     public boolean salvaAnimale(Animale animale, int idUtente) throws SQLException;
     public ArrayList<Animale> recuperaListaAnimali(int idUtente) throws SQLException;
-    public void modificaNome(int idUtente, Animale animale, String nome) throws SQLException;
-    public void eliminaAnimale(Animale animale, int idUtente) throws SQLException;
-    public void aggiornaStatoAnimale(Animale animale, int idUtente) throws SQLException;
-
+    public void modificaNome(int idAnimale, String nome) throws SQLException;
+    public void eliminaAnimale(int idAnimale) throws SQLException;
+    public void aggiornaStatoAnimale(Animale animale, int idAnimale) throws SQLException;
+    public void resetStatoSonno(int idUtente) throws SQLException;
 }

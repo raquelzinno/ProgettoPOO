@@ -113,7 +113,7 @@ public class Animale {
         this.utente = utente;
     }
 
-    public ArrayList<Vestito> getVestititIndossati() {
+    public ArrayList<Vestito> getVestitiIndossati() {
         return vestititIndossati;
     }
 

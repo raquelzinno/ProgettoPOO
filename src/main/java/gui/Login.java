@@ -23,8 +23,19 @@ public class Login {
     private JPasswordField passwordField;
     private ImageIcon backGroundImage;
 
-    public static void main(String[] args) throws SQLException { //questa eccezione proviene dal controller quando istanzia il negozio, da rivedere
+    public static void main(String[] args) {
         Controller controller = new Controller();
+        try {
+            controller.inizializzaDati();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Impossibile connettersi al database di gioco.\nVerifica che PostgreSQL sia attivo e riprova.",
+                    "Errore di Connessione",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            System.exit(1);
+        }
         Login login = new Login();
         loginFrame = new JFrame("Login");
         loginFrame.setContentPane(login.loginForm);

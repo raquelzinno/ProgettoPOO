@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class CreaAnimale {
     private JRadioButton orsoRadioButton;
@@ -53,11 +54,6 @@ public class CreaAnimale {
 
                     controller.creaAnimale(tipo, nome);
 
-                    //DA RIVEDERE, USA L'ARRAYLIST DEGLI UTENTI INVECE CHE IL DATABASE
-                    /*for (Utente u : controller.getListaUtenti()) {
-                        if (u.isAccessoEffettuato())
-                            controller.creaAnimale(tipo, nome);
-                    }*/
                     JOptionPane.showMessageDialog(null, "Animale creato con successo.");
 
                     Home.modelloListaAnimali.addElement(controller.getUtenteAttuale().getAnimaliPosseduti().getLast());
@@ -65,6 +61,9 @@ public class CreaAnimale {
                     //torna alla home
                     frameHome.setVisible(true);
                     creaAnimaleFrame.setVisible(false);
+                }
+                catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
                 catch (RuntimeException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);

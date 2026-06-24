@@ -15,6 +15,23 @@ import java.util.ArrayList;
 public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
 
     @Override
+    public int recuperaId(int idUtente, String nomeAnimale) throws SQLException {
+        Connection connection = ConnessioneDatabase.getInstance().connection;
+        
+        String sql = "SELECT \"idAnimale\" FROM \"Animale\" WHERE \"idUtente\" = ? AND \"nome\" = ?;";
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1,idUtente);
+            ps.setString(2,nomeAnimale);
+            try(ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("idAnimale");
+                }
+            }
+        }  
+        return -1;
+    }
+
+    @Override
     public boolean salvaAnimale(Animale animale, int idUtente) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
@@ -86,82 +103,77 @@ public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
         }
         return listaAnimali;
     }
+
     @Override
-    public void modificaNome(int idUtente, Animale animale, String nome) throws SQLException {
+    public void modificaNome(int idAnimale, String nome) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
 
         //EFFETTUO LA QUERY
-        String sql = "UPDATE \"Animale\" SET \"nome\" = ? WHERE \"nome\" = ? AND \"idUtente\" = ?;";
-
-        PreparedStatement ps = connection.prepareStatement(sql);
-
-        ps.setString(1, nome);
-        ps.setString(2, animale.getNome());
-        ps.setInt(3, idUtente);
-
-        int righeInserite = ps.executeUpdate();
-
-        if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite
-            System.out.println("Nome animale aggiornato nel Database con successo!");
-        }
-
-        //CHIUDO CONNESSIONE
-        connection.close();
+        String sql = "UPDATE \"Animale\" SET \"nome\" = ? WHERE \"idAnimale\" = ?;";
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, nome); 
+            ps.setInt(2, idAnimale); 
+            int righeModificate = ps.executeUpdate();
+            
+            if (righeModificate > 0) { //verifichiamo se le righe sono state effettivamente inserite
+                System.out.println("Nome animale aggiornato nel Database con successo!");           
+            }                                                                                       
+        }                                                                                                                                                                                      
     }
 
     @Override
-    public void eliminaAnimale(Animale animale, int idUtente) throws SQLException {
+    public void eliminaAnimale(int idAnimale) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
 
         //EFFETTUO LA QUERY
-        String sql = "DELETE FROM \"Animale\" WHERE \"nome\" = ? AND \"idUtente\" = ?";
+        String sql = "DELETE FROM \"Animale\" WHERE \"idAnimale\" = ?";
 
-        PreparedStatement ps = connection.prepareStatement(sql);
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idAnimale);
+            int righeInserite = ps.executeUpdate();
 
-        ps.setString(1, animale.getNome());
-        ps.setInt(2, idUtente);
-
-        int righeInserite = ps.executeUpdate();
-
-        if (righeInserite > 0) {
-            System.out.println("Animale eliminato dal Database con successo!");
+            if (righeInserite > 0) {
+                System.out.println("Animale eliminato dal Database con successo!");
+            }
         }
-
-        //CHIUDO CONNESSIONE
-        connection.close();
     }
 
     @Override
-    public void aggiornaStatoAnimale(Animale animale, int idUtente) throws SQLException {
+    public void aggiornaStatoAnimale(Animale animale, int idAnimale) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
-
-        //CREO LA LISTA PER GLI ANIMALI
-        ArrayList<Animale> listaAnimali = new ArrayList<>();
-
+        
         //EFFETTUO LA QUERY
-        String sql = "UPDATE \"Animale\" SET \"fame\" = ?, \"energia\" = ?, \"punti\" = ?, \"dorme\" = ?, \"fameMax\" = ?, \"energiaMax\" = ? WHERE \"nome\" = ? AND \"idUtente\" = ?;";
-        PreparedStatement ps = connection.prepareStatement(sql);
+        String sql = "UPDATE \"Animale\" SET \"fame\" = ?, \"energia\" = ?, \"punti\" = ?, \"dorme\" = ?, \"fameMax\" = ?, \"energiaMax\" = ? WHERE \"idAnimale\" = ?;";
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, animale.getFame());
+            ps.setInt(2, animale.getEnergia());
+            ps.setInt(3, animale.getPunti());
+            ps.setBoolean(4, animale.isDorme());
+            ps.setInt(5, animale.getFameMax());
+            ps.setInt(6, animale.getEnergiaMax());
+            ps.setInt(7, idAnimale);
 
-        ps.setInt(1, animale.getFame());
-        ps.setInt(2, animale.getEnergia());
-        ps.setInt(3, animale.getPunti());
-        ps.setBoolean(4, animale.isDorme());
-        ps.setInt(5, animale.getFameMax());
-        ps.setInt(6, animale.getEnergiaMax());
-        ps.setString(7, animale.getNome());
-        ps.setInt(8, idUtente);
+            //CONTROLLO CHE LA QUERY SIA STATA ESEGUITA
+            int righeInserite = ps.executeUpdate();
 
-        //CONTROLLO CHE LA QUERY SIA STATA ESEGUITA
-        int righeInserite = ps.executeUpdate();
-
-        if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite
-            System.out.println("Animale aggiornato nel Database con successo!");
+            if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite
+                System.out.println("Animale aggiornato nel Database con successo!");
+            }
         }
-
-        //CHIUDO CONNESSIONE
-        connection.close();
+    }
+    public void resetStatoSonno(int idUtente) throws SQLException {  //il programma potrebbe avere un arresto anomalo nel momento di salvataggio dello stato di sonno
+        Connection connection = ConnessioneDatabase.getInstance().connection;     //per assicurarci che all'avvio lo stato sonno sia sempre false, resettiamo questi dati  
+        String sqlReset = "UPDATE \"Animale\" SET \"dorme\" = FALSE WHERE \"idUtente\" = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sqlReset)) {
+            ps.setInt(1, idUtente);
+            int righeInserite = ps.executeUpdate();                                                 
+                                                                                                    
+            if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite  
+                System.out.println("Animale aggiornato nel Database con successo!");
+            }
+        }
     }
 }

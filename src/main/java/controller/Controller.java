@@ -1,13 +1,9 @@
 package controller;
 
-import dao.AnimaleDAO;
-import dao.ItemDAO;
-import dao.UtenteDAO;
+import dao.*;
 import exceptions.*;
 import gui.Tamagotchi;
-import implementazionePostgresDAO.AnimaleImplementazionePostgresDAO;
-import implementazionePostgresDAO.ItemImplementazionePostgresDAO;
-import implementazionePostgresDAO.UtenteImplementazionePostgresDAO;
+import implementazionePostgresDAO.*;
 import model.Animale;
 import model.Utente;
 import model.Vestito;
@@ -27,15 +23,31 @@ import java.util.Random;
 public class Controller {
     private Utente utenteAttuale = null;
     private int idUtenteAttuale = -1;
+    private int idAnimaleAttuale = -1;
     private Timer gameTimer;
     private Timer sonnoTimer;
     private Tamagotchi tamagotchiFrame;
     private Negozio negozioBase;
     private ArrayList<Minigame> minigamesDiDefault;
+    private UtenteDAO utenteDAO;
+    private CiboDAO ciboDAO;
+    private VestitoDAO vestitoDAO;
+    private AnimaleDAO animaleDAO;
+    private MinigameDAO minigameDAO;
 
-    public Controller() throws SQLException {
+    public Controller() {
+        negozioBase = null;
+        minigamesDiDefault = new ArrayList<Minigame>();
+        utenteDAO = new UtenteImplementazionePostgresDAO();
+        ciboDAO = new CiboImplementazionePostgresDAO();
+        vestitoDAO = new VestitoImplementazionePostgresDAO();
+        animaleDAO = new AnimaleImplementazionePostgresDAO();
+        minigameDAO = new MinigameImplementazionePostgresDAO();
+    }
+
+    public void inizializzaDati() throws SQLException{
         negozioBase = new Negozio(popolaNegozio()); //istanzio un oggetto negozio che avrà già tutti gli item di default
-        minigamesDiDefault = Minigame.getMinigamesDiDefault(); //grazie al metodo statico, stabilisco l'arrayList che conterrà tutti i minigames di default
+        minigamesDiDefault = popolaMinigames();
     }
 
     public ArrayList<Minigame> getMinigamesDiDefault() {
@@ -53,7 +65,6 @@ public class Controller {
         if(login.length() > 15) throw new ExceptionUtente("Il nome utente deve essere di massimo 15 caratteri.");
         if(password.length() > 15) throw new ExceptionPassword("La password deve essere di massimo 15 caratteri.");
 
-        UtenteDAO utenteDAO = new UtenteImplementazionePostgresDAO();
         //effettuo prima il controllo per verificare se il login è unico
         try {
             if(utenteDAO.controlloLogin(login)) {
@@ -76,7 +87,6 @@ public class Controller {
     public boolean checkUtente(String login, String password) throws RuntimeException{
         if(login.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
         if(password.isBlank()) throw new ExceptionUtente("Il campo password utente è vuoto.");
-        UtenteDAO utenteDAO = new UtenteImplementazionePostgresDAO();
         try {
             if(utenteDAO.cercaUtente(login, password)) {  //controlla se l'utente esiste nel database
                 Utente u = new Utente(login, password);
@@ -93,7 +103,7 @@ public class Controller {
         throw new ExceptionUtente("Utente non trovato."); //se si arriva a questo punto, l'utente non è stato trovato
     }
 
-    public void checkAnimali() throws RuntimeException{
+    public void checkAnimali() throws RuntimeException, SQLException {
         //Forza il controller a leggere gli animali dal db
         this.sincronizzaListaAnimali();
 
@@ -102,11 +112,13 @@ public class Controller {
         if((utenteAttuale.getAnimaliPosseduti()).size() >= 2) throw new ExceptionTroppiAnimali("Hai il massimo di animali consentiti!");
     }
 
-    public void creaAnimale(String tipo, String nome) throws RuntimeException {
+    public void creaAnimale(String tipo, String nome) throws RuntimeException, SQLException {
         checkAnimali(); //controlli
 
         if(tipo.isBlank()) throw new ExceptionAnimale("Nessun tipo selezionato.");
         if(nome.isBlank()) throw new ExceptionAnimale("Nessun nome inserito.");
+
+        if(nome.length() > 15) throw new ExceptionUtente("Il nome dell'animale deve essere di massimo 15 caratteri.");
 
         for(Animale a : utenteAttuale.getAnimaliPosseduti()){
             if(a.getNome().equals(nome)){
@@ -123,7 +135,6 @@ public class Controller {
         }
 
         try {
-            AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
             if(animaleDAO.salvaAnimale(animale, idUtenteAttuale)) {
                 aggiungiAnimale(animale);
                 System.out.println("Animale creato con successo!");
@@ -135,36 +146,45 @@ public class Controller {
         }
     }
 
-    public void sincronizzaListaAnimali() {
+    public void sincronizzaListaAnimali() throws SQLException {
+        ArrayList<Animale> animaliDalDb = animaleDAO.recuperaListaAnimali(idUtenteAttuale);
+        utenteAttuale.setAnimaliPosseduti(animaliDalDb);
+    }
+
+    public void selezionaAnimale(Animale animaleAttuale) {
         try {
-            AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
-            ArrayList<Animale> animaliDalDb = animaleDAO.recuperaListaAnimali(idUtenteAttuale);
-
-            this.getUtenteAttuale().setAnimaliPosseduti(animaliDalDb);
-
-        } catch (SQLException e) {
-            System.err.println("Errore durante il recupero della lista animali dal database!");
+            idAnimaleAttuale = animaleDAO.recuperaId(idUtenteAttuale, animaleAttuale.getNome());
+        }
+        catch (SQLException e) {
+            System.err.println("Errore durante il recupero dell'animale!");
             e.printStackTrace();
         }
     }
 
-    public void salvaStatoAnimale(Animale animale) {
-        try {
-            AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
-            animaleDAO.aggiornaStatoAnimale(animale, idUtenteAttuale);
-
-            sincronizzaListaAnimali(); //sincronizzo la memoria locale con il DB
-
-        } catch (SQLException e) {
-            System.err.println("Errore durante il salvataggio dei dati dell'animale!");
-            e.printStackTrace();
-        }
+    public void deselezionaAnimale() {
+        idAnimaleAttuale = -1;
     }
 
+    public void salvaStatoAnimale(Animale animale) throws SQLException {
+        animaleDAO.aggiornaStatoAnimale(animale, idAnimaleAttuale);
+        sincronizzaListaAnimali(); //sincronizzo la memoria locale con il DB
 
-    public void modificaNomeAnimale(String nome, Animale animale) throws SQLException {
-        AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
-        animaleDAO.modificaNome(idUtenteAttuale, animale, nome); //lo modifico prima nel database
+    }
+
+    public void puliziaDati() throws SQLException{
+        animaleDAO.resetStatoSonno(idUtenteAttuale);
+    }
+
+    public void modificaNomeAnimale(String nome, Animale animale) throws RuntimeException, SQLException {
+        if(nome.isBlank()) throw new ExceptionPassword("Il campo nome è vuoto.");
+        if(nome.length() > 15) throw new ExceptionUtente("Il nome dell'animale deve essere di massimo 15 caratteri.");
+
+        for(Animale a : utenteAttuale.getAnimaliPosseduti()){
+            if(a.getNome().equals(nome)){
+                throw new ExceptionAnimale("Nome animale già esistente.");
+            }
+        }
+        animaleDAO.modificaNome(idAnimaleAttuale, nome); //lo modifico prima nel database
         animale.setNome(nome);
     }
 
@@ -173,42 +193,50 @@ public class Controller {
     }
 
     public ArrayList<Item> popolaNegozio() throws SQLException {
-        ItemDAO itemDAO = new ItemImplementazionePostgresDAO();
+        ArrayList<Item> listaCompleta = new ArrayList<>();
 
-        ArrayList<Item> listaItemDB = itemDAO.recuperaListaItem();
+        //recupera i cibi e li aggiunge alla lista completa
+        listaCompleta.addAll(ciboDAO.recuperaListaCibo());
 
-        return listaItemDB;
+        //recupera i vestiti e li aggiunge alla lista completa
+        listaCompleta.addAll(vestitoDAO.recuperaListaVestiti());
+
+        return listaCompleta;
+    }
+
+    public ArrayList<Minigame> popolaMinigames() throws SQLException {
+        return minigameDAO.recuperaMinigame();
     }
 
     public void caricaInventarioUtente() throws SQLException {
-        ItemDAO itemDAO = new ItemImplementazionePostgresDAO();
         if (utenteAttuale!= null) {
-            //prende i dati aggiornati dal database
-            ArrayList<Item> itemDalDB = itemDAO.recuperaItemAggiornati(utenteAttuale.getLogin());
+            ArrayList<Item> inventarioCompleto = new ArrayList<>();
+
+            //recupera i cibi e i vestiti e li aggiunge alla lista completa
+            inventarioCompleto.addAll(ciboDAO.recuperaInventarioCibo(idUtenteAttuale));
+            inventarioCompleto.addAll(vestitoDAO.recuperaInventarioVestiti(idUtenteAttuale));
 
             //sostituisce la vecchia lista locale con quella reale del DB
-            utenteAttuale.setItemPosseduti(itemDalDB);
+            utenteAttuale.setItemPosseduti(inventarioCompleto);
 
-            System.out.println("Inventario sincronizzato! Elementi trovati: " + itemDalDB.size());
+            System.out.println("Inventario sincronizzato! Elementi trovati: " + inventarioCompleto.size());
         }
     }
 
     public void compra(Item item, Animale animale) throws RuntimeException, SQLException{
-        UtenteDAO utenteDAO = new UtenteImplementazionePostgresDAO();
-
-        boolean salvataggioRiuscito = utenteDAO.salvaAcquisto(idUtenteAttuale, item);
+        boolean salvataggioRiuscito = false;
+        if (item instanceof Cibo) {
+                salvataggioRiuscito = ciboDAO.aggiungiAInventarioCibo(idUtenteAttuale, item);
+            }
+        else if (item instanceof Vestito) {
+                salvataggioRiuscito = vestitoDAO.aggiungiAInventarioVestito(idUtenteAttuale, item);
+        }
 
         if (salvataggioRiuscito) {
             //se il DB si aggiorna, aggiorna anche la lista locale in Java
             utenteAttuale.compraItem(item, animale);
             System.out.println("Acquisto completato con successo sul DB e in Java!");
-        } else {
-            System.out.println("Errore durante il salvataggio dell'acquisto nel database.");
         }
-
-
-
-
     }
 
     public Utente getUtenteAttuale() {
@@ -216,8 +244,11 @@ public class Controller {
     }
 
     public void esciUtente() {
-        this.utenteAttuale.setAccessoEffettuato(false);
-        this.utenteAttuale = null;
+        if(utenteAttuale!=null) {
+            this.utenteAttuale.setAccessoEffettuato(false);
+            this.utenteAttuale = null;
+        }
+        idUtenteAttuale = -1;
     }
 
     public void usaItem(Item item, Animale animale) throws RuntimeException{
@@ -250,8 +281,9 @@ public class Controller {
         gameTimer.stop();
     }
 
-    public void addormenta(Animale animale) {  //istanzia il nuovo timer del sonno, l'energia aumenta ogni secondo
+    public void addormenta(Animale animale) throws SQLException {  //istanzia il nuovo timer del sonno, l'energia aumenta ogni secondo
         animale.setDorme(true);
+        salvaStatoAnimale(animale);
         sonnoTimer = new Timer(1000, e -> {
             animale.caricaEnergia();
             tamagotchiFrame.aggiornaLabel();
@@ -259,10 +291,11 @@ public class Controller {
         sonnoTimer.start();
     }
 
-    public void sveglia(Animale animale) {
+    public void sveglia(Animale animale) throws SQLException {
         animale.setDorme(false);
         if(sonnoTimer != null && sonnoTimer.isRunning()) //se il timer del sonno è attivo, questo viene fermato
             sonnoTimer.stop();
+        salvaStatoAnimale(animale);
     }
 
     public void eliminaAnimale(Animale animale) throws SQLException{
@@ -271,17 +304,22 @@ public class Controller {
         if(sonnoTimer != null && sonnoTimer.isRunning())
             sonnoTimer.stop();
 
-        AnimaleDAO animaleDAO = new AnimaleImplementazionePostgresDAO();
-        animaleDAO.eliminaAnimale(animale, idUtenteAttuale);
+        ArrayList<Vestito> vestitiIndossati = animale.getVestitiIndossati();
+        for (Vestito v : vestitiIndossati) {
+            v.setIndossato(false);
+        }
+
+        animaleDAO.eliminaAnimale(idAnimaleAttuale);
+        this.deselezionaAnimale();
         utenteAttuale.eliminaAnimale(animale);
     }
 
     public void cambiaPassword(String vecchiaPass, String nuovaPass) throws RuntimeException, SQLException {
         if(nuovaPass.isBlank()) throw new ExceptionPassword("Nessuna password inserita.");
+        if(nuovaPass.length() > 15) throw new ExceptionPassword("La password deve essere di massimo 15 caratteri.");
         if(utenteAttuale.getPassword().equals(vecchiaPass)){
+            utenteDAO.aggiornaPassword(idUtenteAttuale, nuovaPass);
             utenteAttuale.setPassword(nuovaPass);
-            UtenteDAO utenteDAO = new UtenteImplementazionePostgresDAO();
-            utenteDAO.aggiornaPassword(utenteAttuale.getLogin(), vecchiaPass,nuovaPass);
         }else throw new ExceptionPassword("La password è errata.");
     }
 

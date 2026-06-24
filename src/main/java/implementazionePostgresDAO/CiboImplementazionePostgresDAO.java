@@ -15,35 +15,95 @@ import java.util.ArrayList;
 public class CiboImplementazionePostgresDAO implements CiboDAO {
     @Override
     public ArrayList<Cibo> recuperaListaCibo() throws SQLException {
-        ArrayList<Cibo> listaItem = new ArrayList<>();
-
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
 
+        ArrayList<Cibo> listaItem = new ArrayList<>();
+
+        String sql = "SELECT * FROM \"Cibo\"";
         //EFFETTUO LA QUERY
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Cibo\"");
-        ResultSet rs = ps.executeQuery();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            try(ResultSet rs = ps.executeQuery()) {
 
-        //ELABORO IL RESULT SET
-        while (rs.next()) {
-            String nome = rs.getString("nome");
-            int prezzo = rs.getInt("costo");
-            String img = rs.getString("imagePath");
-            String tipo = rs.getString("tipo");
-            int punti = rs.getInt("puntiFame");
+                //ELABORO IL RESULT SET
+                while (rs.next()) {
+                    String nome = rs.getString("nome");
+                    int prezzo = rs.getInt("costo");
+                    String img = rs.getString("imagePath");
+                    String tipo = rs.getString("tipo");
+                    int punti = rs.getInt("puntiFame");
+                    TipoCibo tipoCibo = TipoCibo.valueOf(tipo);
 
-            if(tipo.equals("salato"))
-                listaItem.add(new Cibo(nome, prezzo, null, TipoCibo.salato, punti, img));
-            else if(tipo.equals("dolce"))
-                listaItem.add(new Cibo(nome, prezzo, null, TipoCibo.dolce, punti, img));
-            else if(tipo.equals("bevanda"))
-                listaItem.add(new Cibo(nome, prezzo, null, TipoCibo.bevanda, punti, img));
+                    listaItem.add(new Cibo(nome, prezzo, null, tipoCibo, punti, img));
+                }
+            }
+        }
+        return listaItem;
+    }
+
+    @Override
+    public ArrayList<Cibo> recuperaInventarioCibo(int idUtente) throws SQLException {
+        //INSTAURO LA CONNESSIONE
+        Connection connection = ConnessioneDatabase.getInstance().connection;
+
+        ArrayList<Cibo> inventarioCibo = new ArrayList<Cibo>();
+
+        String queryCibo = "SELECT c.* FROM \"InventarioCibo\" ic " +
+                "JOIN \"Cibo\" c ON ic.\"idCibo\" = c.\"idCibo\" " +
+                "WHERE ic.\"idUtente\" = ?";
+
+        try(PreparedStatement ps = connection.prepareStatement(queryCibo)) {
+            ps.setInt(1, idUtente);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String nome = rs.getString("nome");
+                    int costo = rs.getInt("costo");
+                    String tipo = rs.getString("tipo");
+                    int fame = rs.getInt("puntiFame");
+                    String img = rs.getString("imagePath");
+
+                    TipoCibo tipoCibo = TipoCibo.valueOf(tipo);
+
+                    //crea l'oggetto Cibo (il negozio può rimanere null nell'inventario)
+                    inventarioCibo.add(new Cibo(nome, costo, null, tipoCibo, fame, img));
+                }
+            }
+        }
+        return inventarioCibo;
+    }
+
+    public boolean aggiungiAInventarioCibo(int idUtente, Item item) throws SQLException {
+        //INSTAURO LA CONNESSIONE
+        Connection connection = ConnessioneDatabase.getInstance().connection;
+
+        //RECUPERO L'ID DEL CIBO DAL DATABASE
+        int idCibo = -1;
+        String sqlCercaCibo = "SELECT \"idCibo\" FROM \"Cibo\" WHERE \"nome\" = ?;";
+
+        try (PreparedStatement psCibo = connection.prepareStatement(sqlCercaCibo)) {
+            psCibo.setString(1, item.getNome());
+            try (ResultSet rs = psCibo.executeQuery()) {
+                if (rs.next()) {
+                    idCibo = rs.getInt("idCibo");
+                }
+            }
         }
 
-        //CHIUDO CONNESSIONE
-        rs.close();
-        connection.close();
+        //ESEGUO LA QUERY
+        String sql = "INSERT INTO \"InventarioCibo\" (\"idUtente\", \"idCibo\") VALUES (?, ?)";
 
-        return listaItem;
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idUtente);
+            ps.setInt(2, idCibo);
+
+            //CONTROLLO CHE LA QUERY SIA STATA ESEGUITA
+            int righeInserite = ps.executeUpdate();
+            if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite
+                System.out.println("Inventario aggiornato nel Database con successo!");
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -115,7 +115,7 @@ public class Items {
                                     JOptionPane.INFORMATION_MESSAGE);
                             return;
                         }
-                        if((animale.getVestititIndossati()).contains(itemCliccato)) { //se il vestito è attualmente indossato lo rimuove
+                        if((animale.getVestitiIndossati()).contains(itemCliccato)) { //se il vestito è attualmente indossato lo rimuove
                             controller.rimuoviVestito(vestito, animale);
                             Tamagotchi.modelloListaVestiti.removeElement(vestito);
                             listaItem.clearSelection();

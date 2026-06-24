@@ -61,9 +61,9 @@ public class Impostazioni {
                         "Nome cambiato",
                         JOptionPane.INFORMATION_MESSAGE);
                 inputNome.setText("");
-            } catch(RuntimeException ex){
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
             } catch(SQLException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+            }catch(RuntimeException ex){
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
             }
         });

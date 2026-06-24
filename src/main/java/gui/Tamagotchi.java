@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class Tamagotchi {
     private JPanel tamagotchiPanel;
@@ -66,7 +67,7 @@ public class Tamagotchi {
     public Tamagotchi(JFrame frameHome, Controller controller, Animale animale, Home home) {
         JFrame tamagotchiFrame = new JFrame("Tamagotchi");
         tamagotchiFrame.setContentPane(tamagotchiPanel);
-        tamagotchiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        tamagotchiFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         tamagotchiFrame.pack();
         tamagotchiFrame.setSize(550, 350); //grandezza della finestra
         tamagotchiFrame.setLocationRelativeTo(null); //finestra si apre al centro
@@ -101,7 +102,7 @@ public class Tamagotchi {
         //lista vestiti
         modelloListaVestiti = new DefaultListModel<Vestito>();
 
-        for(Vestito v : animale.getVestititIndossati()){
+        for(Vestito v : animale.getVestitiIndossati()){
             modelloListaVestiti.addElement(v);
         }
 
@@ -168,15 +169,20 @@ public class Tamagotchi {
         vaiADormireButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(animale.isDorme()) {
-                    controller.sveglia(animale);
-                    vaiADormireButton.setText("Vai a dormire");
-                    immagineAnimale();
-                }
-                else {
-                    controller.addormenta(animale);
-                    vaiADormireButton.setText("Svegliati");
-                    immagineAnimale();
+                try {
+                    if (animale.isDorme()) {
+                        controller.sveglia(animale);
+                        vaiADormireButton.setText("Vai a dormire");
+                        immagineAnimale();
+                    } else {
+                        controller.addormenta(animale);
+                        vaiADormireButton.setText("Svegliati");
+                        immagineAnimale();
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    System.err.println("Errore nel tentativo di cambiare lo stato dell'animale.");
+                    ex.printStackTrace();
                 }
             }
         });
@@ -195,11 +201,43 @@ public class Tamagotchi {
         goBack.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e){
-                if(animale.isDorme())
-                controller.sveglia(animale);
-                controller.fermaTimer();
-                frameHome.setVisible(true);
-                tamagotchiFrame.setVisible(false);
+                try {
+                    if (animale.isDorme()) {
+                        controller.sveglia(animale);
+                    } else { //se non sta dormendo, mi occupo semplicemente di salvare
+                        controller.salvaStatoAnimale(animale);
+                    }
+                    controller.fermaTimer();
+                    controller.deselezionaAnimale();
+                    frameHome.setVisible(true);
+                    tamagotchiFrame.setVisible(false);
+                }
+                catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    System.err.println("Errore nel tentativo di salvare i dati nel Database.");
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        tamagotchiFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                try {// prima di chiudere l'app forzo l'animale a svegliarsi e salvo le informazioni relative (avviene nel metodo sveglia stesso)
+                    if (animale.isDorme()) {
+                        controller.sveglia(animale);
+                    } else { //se non sta dormendo, mi occupo semplicemente di salvare
+                        controller.salvaStatoAnimale(animale);
+                    }
+                }
+                catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    System.err.println("Errore nel tentativo di salvare i dati nel Database.");
+                    ex.printStackTrace();
+                }
+                finally {
+                    System.exit(0);
+                }
             }
         });
 
