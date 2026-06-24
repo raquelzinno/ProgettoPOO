@@ -56,11 +56,19 @@ public class Tamagotchi {
                 ));
             }
         }else if(animale instanceof Pinguino) {
-            immagineAnimale.setIcon(new ImageIcon(
-                    new ImageIcon(
-                            getClass().getClassLoader().getResource("img/pinguino.png")
-                    ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
-            ));
+            if(animale.isDorme()) {
+                immagineAnimale.setIcon(new ImageIcon(
+                        new ImageIcon(
+                                getClass().getClassLoader().getResource("img/pinguinoDorme.png")
+                        ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
+                ));
+            } else{
+                immagineAnimale.setIcon(new ImageIcon(
+                        new ImageIcon(
+                                getClass().getClassLoader().getResource("img/pinguino.png")
+                        ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
+                ));
+            }
         }
     }
 
