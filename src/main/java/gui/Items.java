@@ -117,13 +117,17 @@ public class Items {
                             return;
                         }
                         if((animale.getVestitiIndossati()).contains(itemCliccato)) { //se il vestito è attualmente indossato lo rimuove
-                            controller.rimuoviVestito(vestito, animale);
-                            Tamagotchi.modelloListaVestiti.removeElement(vestito);
-                            listaItem.clearSelection();
-                            JOptionPane.showMessageDialog(itemsFrame,
-                                    "Hai rimosso: " + itemCliccato.getNome() + "!\nL'oggetto è stato rimosso",
-                                    "Vestito rimosso",
-                                    JOptionPane.INFORMATION_MESSAGE);
+                            try {
+                                controller.rimuoviVestito(vestito, animale);
+                                Tamagotchi.modelloListaVestiti.removeElement(vestito);
+                                listaItem.clearSelection();
+                                JOptionPane.showMessageDialog(itemsFrame,
+                                        "Hai rimosso: " + itemCliccato.getNome() + "!\nL'oggetto è stato rimosso",
+                                        "Vestito rimosso",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            } catch (SQLException ex) {
+                                JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                            }
                         }
                         else { //se il vestito è indossato ma da un altro animale dà un avviso
                             listaItem.clearSelection();
