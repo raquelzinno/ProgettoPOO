@@ -4,13 +4,35 @@ public class Vestito extends Item{
     private boolean indossato;
     private int boostEnergia;
     private  int boostFame;
+    private int idAnimale;
 
+    //costruttore per i vestiti di default del negozio
     public Vestito(String nome, int costo, Negozio negozio, int boostEnergia, int boostFame, String iconPath) {
         super(nome, costo, negozio, iconPath);
-        this.indossato = false; //di default un vestito non è indossato
+        indossato = false;
+        idAnimale = -1;
         this.boostEnergia = boostEnergia;
         this.boostFame = boostFame;
     }
+
+    //costruttore per i vestiti dell'inventario non indossati
+    public Vestito(String nome, int costo, Negozio negozio, int idIstanza,int boostEnergia, int boostFame, String iconPath) {
+        super(nome, costo, negozio, iconPath, idIstanza);
+        indossato = false;
+        idAnimale = -1;
+        this.boostEnergia = boostEnergia;
+        this.boostFame = boostFame;
+    }
+
+    //costruttore per i vestiti dell'inventario indossati
+    public Vestito(String nome, int costo, Negozio negozio, int idIstanza,int boostEnergia, int boostFame, String iconPath, int idAnimale) {
+        super(nome, costo, negozio, iconPath, idIstanza);
+        indossato = true;
+        this.idAnimale = idAnimale;
+        this.boostEnergia = boostEnergia;
+        this.boostFame = boostFame;
+    }
+
 
     @Override
     public String toString() {  //layout per la jlist
@@ -24,8 +46,8 @@ public class Vestito extends Item{
     }
 
     @Override
-    public Item creaCopia() {  //crea una copia dell'oggetto Vestito
-        return new Vestito(this.getNome(), this.getCosto(), this.getNegozio(), this.getBoostEnergia(), this.getBoostFame(), this.getIconPath());
+    public Item creaCopia(int idIstanza) {  //crea una copia dell'oggetto Vestito
+        return new Vestito(this.getNome(), this.getCosto(), this.getNegozio(), idIstanza, this.getBoostEnergia(), this.getBoostFame(), this.getIconPath());
     }
 
     public boolean isIndossato() {
@@ -50,5 +72,13 @@ public class Vestito extends Item{
 
     public void setBoostFame(int boostFame) {
         this.boostFame = boostFame;
+    }
+
+    public int getIdAnimale() {
+        return idAnimale;
+    }
+
+    public void setIdAnimale(int idAnimale) {
+        this.idAnimale = idAnimale;
     }
 }

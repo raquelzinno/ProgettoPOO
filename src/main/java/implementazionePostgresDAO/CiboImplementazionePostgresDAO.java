@@ -6,10 +6,7 @@ import model.Cibo;
 import model.Item;
 import model.TipoCibo;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class CiboImplementazionePostgresDAO implements CiboDAO {
@@ -48,7 +45,7 @@ public class CiboImplementazionePostgresDAO implements CiboDAO {
 
         ArrayList<Cibo> inventarioCibo = new ArrayList<Cibo>();
 
-        String queryCibo = "SELECT c.* FROM \"InventarioCibo\" ic " +
+        String queryCibo = "SELECT c.*, ic.\"idIstanza\" FROM \"InventarioCibo\" ic " +
                 "JOIN \"Cibo\" c ON ic.\"idCibo\" = c.\"idCibo\" " +
                 "WHERE ic.\"idUtente\" = ?";
 
@@ -59,6 +56,7 @@ public class CiboImplementazionePostgresDAO implements CiboDAO {
                 while (rs.next()) {
                     String nome = rs.getString("nome");
                     int costo = rs.getInt("costo");
+                    int idIstanza = rs.getInt("idIstanza");
                     String tipo = rs.getString("tipo");
                     int fame = rs.getInt("puntiFame");
                     String img = rs.getString("imagePath");
@@ -66,14 +64,14 @@ public class CiboImplementazionePostgresDAO implements CiboDAO {
                     TipoCibo tipoCibo = TipoCibo.valueOf(tipo);
 
                     //crea l'oggetto Cibo (il negozio può rimanere null nell'inventario)
-                    inventarioCibo.add(new Cibo(nome, costo, null, tipoCibo, fame, img));
+                    inventarioCibo.add(new Cibo(nome, costo, null, idIstanza, tipoCibo, fame, img));
                 }
             }
         }
         return inventarioCibo;
     }
 
-    public boolean aggiungiAInventarioCibo(int idUtente, Item item) throws SQLException {
+    public int aggiungiAInventarioCibo(int idUtente, Item item) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
 
@@ -93,17 +91,35 @@ public class CiboImplementazionePostgresDAO implements CiboDAO {
         //ESEGUO LA QUERY
         String sql = "INSERT INTO \"InventarioCibo\" (\"idUtente\", \"idCibo\") VALUES (?, ?)";
 
-        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+        try(PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, idUtente);
             ps.setInt(2, idCibo);
+            ps.executeUpdate();
 
-            //CONTROLLO CHE LA QUERY SIA STATA ESEGUITA
-            int righeInserite = ps.executeUpdate();
-            if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite
-                System.out.println("Inventario aggiornato nel Database con successo!");
-                return true;
+            //RECUPERO L'ID APPENA GENERATO
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int idIstanza = generatedKeys.getInt(1); // Prende il valore della prima colonna generata (la PK)
+                    return idIstanza; // Restituiamo l'ID al Controller
+                }
             }
         }
-        return false;
+        throw new SQLException("Inserimento riuscito, ma non è stato possibile recuperare l'idIstanza.");
+    }
+
+    @Override
+    public void eliminaDaInventario(int idIstanza) throws SQLException{
+        //INSTAURO LA CONNESSIONE
+        Connection connection = ConnessioneDatabase.getInstance().connection;
+
+        String sql = "DELETE FROM \"InventarioCibo\" WHERE \"idIstanza\" = ?";
+
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idIstanza);
+            int righeInserite = ps.executeUpdate();
+            if (righeInserite > 0) {
+                System.out.println("l'item è stato eliminato dal Database con successo!");
+            }
+        }
     }
 }

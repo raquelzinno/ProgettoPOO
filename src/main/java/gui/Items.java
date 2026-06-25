@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class Items {
     private JPanel itemsPanel;
@@ -176,7 +177,9 @@ public class Items {
                                 "Oggetto utilizzato",
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
-                }catch(RuntimeException ex){
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                } catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -200,15 +203,18 @@ public class Items {
                             JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-                controller.elimina(oggettoSelezionato);
-                modelloListaItems.removeElement(oggettoSelezionato);
-                JOptionPane.showMessageDialog(itemsFrame,
-                        "Hai eliminato " + oggettoSelezionato.getNome(),
-                        "Item eliminato",
-                        JOptionPane.INFORMATION_MESSAGE);
 
+                try {
+                    controller.elimina(oggettoSelezionato);
+                    modelloListaItems.removeElement(oggettoSelezionato);
+                    JOptionPane.showMessageDialog(itemsFrame,
+                            "Hai eliminato " + oggettoSelezionato.getNome(),
+                            "Item eliminato",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }
             }
-
         });
 
 

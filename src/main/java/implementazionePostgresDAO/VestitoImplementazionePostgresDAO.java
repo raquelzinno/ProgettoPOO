@@ -5,10 +5,7 @@ import database.ConnessioneDatabase;
 import model.Item;
 import model.Vestito;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class VestitoImplementazionePostgresDAO implements VestitoDAO {
@@ -21,8 +18,8 @@ public class VestitoImplementazionePostgresDAO implements VestitoDAO {
 
         String sql = "SELECT * FROM \"Vestito\"";
         //EFFETTUO LA QUERY
-        try(PreparedStatement ps = connection.prepareStatement(sql)) {
-            try(ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
                 //ELABORO IL RESULT SET
                 while (rs.next()) {
                     String nome = rs.getString("nome");
@@ -44,29 +41,35 @@ public class VestitoImplementazionePostgresDAO implements VestitoDAO {
 
         ArrayList<Vestito> inventarioVestiti = new ArrayList<Vestito>();
 
-        String queryVestito = "SELECT v.* FROM \"InventarioVestito\" iv " +
+        String queryVestito = "SELECT v.*, iv.\"idIstanza\", iv.\"idAnimale\" FROM \"InventarioVestito\" iv " +
                 "JOIN \"Vestito\" v ON iv.\"idVestito\" = v.\"idVestito\" " +
                 "WHERE iv.\"idUtente\" = ?";
 
-        try(PreparedStatement ps2 = connection.prepareStatement(queryVestito)) {
+        try (PreparedStatement ps2 = connection.prepareStatement(queryVestito)) {
             ps2.setInt(1, idUtente);
 
             try (ResultSet rs = ps2.executeQuery()) {
                 while (rs.next()) {
                     String nome = rs.getString("nome");
                     int costo = rs.getInt("costo");
+                    int idIstanza = rs.getInt("idIstanza");
                     int boostFame = rs.getInt("boostFame");
                     int boostEnergia = rs.getInt("boostEnergia");
                     String img = rs.getString("imagePath");
+                    Integer oggettoIdAnimale = (Integer) rs.getObject("idAnimale");
 
-                    inventarioVestiti.add(new Vestito(nome, costo, null, boostEnergia, boostFame, img));
+                    if (oggettoIdAnimale == null) {
+                        inventarioVestiti.add(new Vestito(nome, costo, null, idIstanza, boostEnergia, boostFame, img));
+                    } else {
+                        inventarioVestiti.add(new Vestito(nome, costo, null, idIstanza, boostEnergia, boostFame, img, oggettoIdAnimale));
+                    }
                 }
             }
         }
         return inventarioVestiti;
     }
 
-    public boolean aggiungiAInventarioVestito(int idUtente, Item item) throws SQLException {
+    public int aggiungiAInventarioVestito(int idUtente, Item item) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
 
@@ -86,16 +89,67 @@ public class VestitoImplementazionePostgresDAO implements VestitoDAO {
         //ESEGUO LA QUERY (idAnimale è impostato a NULL dato che nessun animale sta indossando il vestito)
         String sql = "INSERT INTO \"InventarioVestito\" (\"idUtente\", \"idVestito\") VALUES (?, ?)";
 
-        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, idUtente);
             ps.setInt(2, idVestito);
+            ps.executeUpdate();
 
-            //CONTROLLO CHE LA QUERY SIA STATA ESEGUITA
-            int righeInserite = ps.executeUpdate();
-            if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite
-                return true;
+            //RECUPERO L'ID APPENA GENERATO
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int idIstanza = generatedKeys.getInt(1); // Prende il valore della prima colonna generata (la PK)
+                    return idIstanza; // Restituiamo l'ID al Controller
+                }
             }
         }
-        return false;
+        throw new SQLException("Inserimento riuscito, ma non è stato possibile recuperare l'idIstanza.");
+    }
+
+    @Override
+    public void eliminaDaInventario(int idIstanza) throws SQLException{
+        //INSTAURO LA CONNESSIONE
+        Connection connection = ConnessioneDatabase.getInstance().connection;
+
+        String sql = "DELETE FROM \"InventarioVestito\" WHERE \"idIstanza\" = ?";
+
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idIstanza);
+            int righeInserite = ps.executeUpdate();
+            if (righeInserite > 0) {
+                System.out.println("l'item è stato eliminato dal Database con successo!");
+            }
+        }
+    }
+
+    public void indossaVestito(int idIstanza,int idAnimale) throws SQLException {
+        //INSTAURO LA CONNESSIONE
+        Connection connection = ConnessioneDatabase.getInstance().connection;
+
+        //EFFETTUO LA QUERY
+        String sql = "UPDATE \"InventarioVestito\" SET \"idAnimale\" = ? WHERE \"idIstanza\" = ?;";
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idAnimale);
+            ps.setInt(2, idIstanza);
+            int righeInserite = ps.executeUpdate();
+            if (righeInserite > 0) {
+                System.out.println("l'item è stato indossato con successo");
+            }
+        }
+    }
+
+    public void rimuoviVestito(int idIstanza) throws SQLException {
+        //INSTAURO LA CONNESSIONE
+        Connection connection = ConnessioneDatabase.getInstance().connection;
+
+        //EFFETTUO LA QUERY
+        String sql = "UPDATE \"InventarioVestito\" SET \"idAnimale\" = NULL WHERE \"idIstanza\" = ?;";
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idIstanza);
+            int righeInserite = ps.executeUpdate();
+            if (righeInserite > 0) {
+                System.out.println("l'item è stato rimosso con successo");
+            }
+        }
     }
 }
+

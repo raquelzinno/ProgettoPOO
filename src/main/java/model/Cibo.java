@@ -10,6 +10,12 @@ public class Cibo extends Item{
         this.puntiFame = puntiFame;
     }
 
+    public Cibo(String nome, int costo, Negozio negozio, int idIstanza, TipoCibo tipo, int puntiFame, String iconPath) {
+        super(nome, costo, negozio, iconPath, idIstanza);
+        this.tipo = tipo;
+        this.puntiFame = puntiFame;
+    }
+
     @Override
     public String toString() {  //layout per la jlist
         return "<html>" +
@@ -23,8 +29,8 @@ public class Cibo extends Item{
     }
 
     @Override
-    public Item creaCopia() { //crea una copia dell'oggetto Cibo
-        return new Cibo(this.getNome(), this.getCosto(), this.getNegozio(), this.getTipo(), this.getPuntiFame(), this.getIconPath());
+    public Item creaCopia(int idIstanza) { //crea una copia dell'oggetto Cibo
+        return new Cibo(this.getNome(), this.getCosto(), this.getNegozio(), idIstanza, this.getTipo(), this.getPuntiFame(), this.getIconPath());
     }
 
     public TipoCibo getTipo() {

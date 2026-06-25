@@ -38,6 +38,7 @@ public class Home {
             controller.puliziaDati();
             controller.sincronizzaListaAnimali();
             controller.caricaInventarioUtente();
+            controller.caricaVestitiIndossati();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
             System.err.println("Errore critico nel tentativo di caricare i dati dal Database.");

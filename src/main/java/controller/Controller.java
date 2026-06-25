@@ -223,20 +223,36 @@ public class Controller {
         }
     }
 
+    public void caricaVestitiIndossati() throws SQLException {
+        ArrayList<Animale> listaAnimali = utenteAttuale.getAnimaliPosseduti();
+        ArrayList<Item> inventario = utenteAttuale.getItemPosseduti();
+
+        for(Animale a : listaAnimali) {
+            ArrayList<Vestito> vestitiIndossati = a.getVestitiIndossati();
+            int idAnimaleCorrente = animaleDAO.recuperaId(idUtenteAttuale, a.getNome());
+
+            for(Item i : inventario) {
+                if(i instanceof Vestito) {
+                    Vestito v = (Vestito) i;
+                    if (v.getIdAnimale() == idAnimaleCorrente) {
+                        vestitiIndossati.add(v);
+                    }
+                }
+            }
+        }
+    }
+
+
     public void compra(Item item, Animale animale) throws RuntimeException, SQLException{
-        boolean salvataggioRiuscito = false;
+        int idIstanza = -1;
         if (item instanceof Cibo) {
-                salvataggioRiuscito = ciboDAO.aggiungiAInventarioCibo(idUtenteAttuale, item);
+                idIstanza = ciboDAO.aggiungiAInventarioCibo(idUtenteAttuale, item);
             }
         else if (item instanceof Vestito) {
-                salvataggioRiuscito = vestitoDAO.aggiungiAInventarioVestito(idUtenteAttuale, item);
+                idIstanza = vestitoDAO.aggiungiAInventarioVestito(idUtenteAttuale, item);
         }
-
-        if (salvataggioRiuscito) {
-            //se il DB si aggiorna, aggiorna anche la lista locale in Java
-            utenteAttuale.compraItem(item, animale);
+            utenteAttuale.compraItem(item, animale, idIstanza);
             System.out.println("Acquisto completato con successo sul DB e in Java!");
-        }
     }
 
     public Utente getUtenteAttuale() {
@@ -251,15 +267,24 @@ public class Controller {
         idUtenteAttuale = -1;
     }
 
-    public void usaItem(Item item, Animale animale) throws RuntimeException{
-        if(item instanceof Cibo)
+    public void usaItem(Item item, Animale animale) throws RuntimeException, SQLException{
+        if(item instanceof Cibo) {
+            ciboDAO.eliminaDaInventario(item.getIdIstanza());
             utenteAttuale.daiCibo((Cibo) item, animale);
-        else if(item instanceof Vestito)
-            utenteAttuale.vesti((Vestito) item, animale);
+        } else if(item instanceof Vestito)
+            if(utenteAttuale.vesti((Vestito) item, animale)) {
+                vestitoDAO.indossaVestito(item.getIdIstanza(), idAnimaleAttuale);
+                ((Vestito) item).setIdAnimale(idAnimaleAttuale);
+            }
+        salvaStatoAnimale(animale);
     }
 
-    public void rimuoviVestito(Vestito vestito, Animale animale){
-        utenteAttuale.rimuoviVestito(vestito, animale);
+    public void rimuoviVestito(Vestito vestito, Animale animale) throws SQLException{
+        if(utenteAttuale.rimuoviVestito(vestito, animale)) {
+            vestitoDAO.rimuoviVestito(vestito.getIdIstanza());
+            vestito.setIdAnimale(-1);
+            salvaStatoAnimale(animale);
+        }
     }
 
     public void setHomeFrame(Tamagotchi tamagotchiFrame) {
@@ -393,7 +418,14 @@ public class Controller {
         }
     }
 
-    public void elimina(Item item) {
+    public void elimina(Item item) throws SQLException{
+        if(item instanceof Cibo) {
+            ciboDAO.eliminaDaInventario(item.getIdIstanza());
+        }
+        else if(item instanceof Vestito)
+        {
+            vestitoDAO.eliminaDaInventario(item.getIdIstanza());
+        }
         utenteAttuale.eliminaItem(item);
     }
 
