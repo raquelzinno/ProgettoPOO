@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class Minigames {
     private JPanel minigamesPanel;
@@ -41,7 +42,7 @@ public class Minigames {
     public Minigames(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi){
         JFrame minigamesFrame = new JFrame("Minigames");
         minigamesFrame.setContentPane(minigamesPanel);
-        minigamesFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        minigamesFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         minigamesFrame.pack();
         minigamesFrame.setSize(500, 330); //grandezza della finestra
         minigamesFrame.setLocationRelativeTo(null); //finestra si apre al centro
@@ -226,7 +227,26 @@ public class Minigames {
             }
         });
 
-
+        tamagotchiFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                try {// prima di chiudere l'app forzo l'animale a svegliarsi e salvo le informazioni relative (avviene nel metodo sveglia stesso)
+                    if (animale.isDorme()) {
+                        controller.sveglia(animale);
+                    } else { //se non sta dormendo, mi occupo semplicemente di salvare
+                        controller.salvaStatoAnimale(animale);
+                    }
+                }
+                catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    System.err.println("Errore nel tentativo di salvare i dati nel Database.");
+                    ex.printStackTrace();
+                }
+                finally {
+                    System.exit(0);
+                }
+            }
+        });
     }
 
     private void createUIComponents() {

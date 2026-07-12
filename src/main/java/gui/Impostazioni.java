@@ -29,7 +29,7 @@ public class Impostazioni {
     public Impostazioni(JFrame tamagotchiFrame, Controller controller, Animale animale,Tamagotchi tamagotchi, JFrame frameHome, Home home) {
         JFrame impostazioniFrame = new JFrame("Impostazioni");
         impostazioniFrame.setContentPane(impostazioniPanel);
-        impostazioniFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        impostazioniFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         impostazioniFrame.pack();
         impostazioniFrame.setSize(500, 330); //grandezza della finestra
         impostazioniFrame.setLocationRelativeTo(null); //finestra si apre al centro
@@ -121,6 +121,27 @@ public class Impostazioni {
                 tamagotchi.aggiornaLabel();
                 tamagotchiFrame.setVisible(true);
                 impostazioniFrame.setVisible(false);
+            }
+        });
+
+        tamagotchiFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                try {// prima di chiudere l'app forzo l'animale a svegliarsi e salvo le informazioni relative (avviene nel metodo sveglia stesso)
+                    if (animale.isDorme()) {
+                        controller.sveglia(animale);
+                    } else { //se non sta dormendo, mi occupo semplicemente di salvare
+                        controller.salvaStatoAnimale(animale);
+                    }
+                }
+                catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    System.err.println("Errore nel tentativo di salvare i dati nel Database.");
+                    ex.printStackTrace();
+                }
+                finally {
+                    System.exit(0);
+                }
             }
         });
     }

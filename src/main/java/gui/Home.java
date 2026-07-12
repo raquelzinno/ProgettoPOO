@@ -25,8 +25,7 @@ public class Home {
     private JLabel titolo;
     private JFrame frameHome;
     private Controller controller;
-    public
-    static DefaultListModel<Animale> modelloListaAnimali;
+    public static DefaultListModel<Animale> modelloListaAnimali;
     private ImageIcon backGroundImage;
 
     public void rimuoviAnimale(Animale animale){
@@ -54,6 +53,7 @@ public class Home {
         frameHome.pack();
         frameHome.setSize(450, 350); //grandezza della finestra
         frameHome.setLocationRelativeTo(null);//finestra si apre al centro
+        frameHome.setResizable(false);
         vuotoPanel.setOpaque(false); //rende i pannelli opachi per far vedere lo sfondo
         creaAnimalePanel.setOpaque(false);
         vuotoPanel.setBorder(null);

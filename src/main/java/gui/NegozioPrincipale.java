@@ -33,7 +33,7 @@ public class NegozioPrincipale {
     public NegozioPrincipale(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi) {
         JFrame negozioFrame = new JFrame("Negozio");
         negozioFrame.setContentPane(negozioPanel);
-        negozioFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        negozioFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         negozioFrame.pack();
         negozioFrame.setSize(500, 310); //grandezza della finestra
         negozioFrame.setLocationRelativeTo(null); //finestra si apre al centro
@@ -130,6 +130,27 @@ public class NegozioPrincipale {
                 tamagotchi.aggiornaLabel(); //aggiorna i punti
                 tamagotchiFrame.setVisible(true);
                 negozioFrame.setVisible(false);
+            }
+        });
+
+        tamagotchiFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                try {// prima di chiudere l'app forzo l'animale a svegliarsi e salvo le informazioni relative (avviene nel metodo sveglia stesso)
+                    if (animale.isDorme()) {
+                        controller.sveglia(animale);
+                    } else { //se non sta dormendo, mi occupo semplicemente di salvare
+                        controller.salvaStatoAnimale(animale);
+                    }
+                }
+                catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    System.err.println("Errore nel tentativo di salvare i dati nel Database.");
+                    ex.printStackTrace();
+                }
+                finally {
+                    System.exit(0);
+                }
             }
         });
     }
