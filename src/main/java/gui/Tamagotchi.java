@@ -43,31 +43,15 @@ public class Tamagotchi {
     public void immagineAnimale(){
         if(animale instanceof Orso) {
             if(animale.isDorme()){
-                immagineAnimale.setIcon(new ImageIcon(
-                        new ImageIcon(
-                                getClass().getClassLoader().getResource("img/orsoDorme.png")
-                        ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
-                ));
+                CustomGUI.caricaImmagineAnimale(immagineAnimale,"img/orsoDorme.png",false);
             }else {
-                immagineAnimale.setIcon(new ImageIcon(
-                        new ImageIcon(
-                                getClass().getClassLoader().getResource("img/orso.png")
-                        ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
-                ));
+                CustomGUI.caricaImmagineAnimale(immagineAnimale,"img/orso.png",false);
             }
         }else if(animale instanceof Pinguino) {
             if(animale.isDorme()) {
-                immagineAnimale.setIcon(new ImageIcon(
-                        new ImageIcon(
-                                getClass().getClassLoader().getResource("img/pinguinoDorme.png")
-                        ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
-                ));
+                CustomGUI.caricaImmagineAnimale(immagineAnimale,"img/pinguinoDorme.png",false);
             } else{
-                immagineAnimale.setIcon(new ImageIcon(
-                        new ImageIcon(
-                                getClass().getClassLoader().getResource("img/pinguino.png")
-                        ).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)
-                ));
+                CustomGUI.caricaImmagineAnimale(immagineAnimale,"img/pinguino.png",false);
             }
         }
     }
@@ -82,30 +66,17 @@ public class Tamagotchi {
         tamagotchiFrame.setResizable(false); //non cambia dimensione
         animalePanel.setOpaque(false);
         vestititPanel.setOpaque(false);
+
+        CustomGUI.caricaIcona(tamagotchiFrame);
+        CustomGUI.caricaFont(labelNomeAnimale,20f,true);
+
         tamagotchiFrame.setVisible(true);
         this.animale = animale;
 
-        //icona della finestra
-        ImageIcon iconFrame = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
-        tamagotchiFrame.setIconImage(iconFrame.getImage());
-
-        //i valori dell'animale vengono resi visibili
         aggiornaLabel();
 
-        //passo al controller la home e inizio il timer
         controller.setHomeFrame(this);
         controller.iniziaTimer(animale);
-
-        //fonts
-        try {
-            labelNomeAnimale.setFont(Font.createFont(
-                    Font.TRUETYPE_FONT,
-                    getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
-            ).deriveFont(20f));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         //lista vestiti
         modelloListaVestiti = new DefaultListModel<Vestito>();
@@ -126,12 +97,7 @@ public class Tamagotchi {
             label.setText(null); //nella jlist sarà visibile solo l'icona
             Item item = (Item) value;
 
-            String path = item.getIconPath();
-            ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(path));
-            Image img = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-            label.setIcon(new ImageIcon(img));
-            label.setHorizontalAlignment(JLabel.CENTER);
-            label.setVerticalAlignment(JLabel.CENTER);
+            CustomGUI.caricaImmagineItem(label,item.getIconPath(),true);
 
             return label;
         });

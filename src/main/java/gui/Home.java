@@ -57,22 +57,11 @@ public class Home {
         vuotoPanel.setOpaque(false); //rende i pannelli opachi per far vedere lo sfondo
         creaAnimalePanel.setOpaque(false);
         vuotoPanel.setBorder(null);
+
+        CustomGUI.caricaIcona(frameHome);
+        CustomGUI.caricaFont(titolo,22f,true);
+
         frameHome.setVisible(true);
-
-        //icona della finestra
-        ImageIcon iconFrame = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
-        frameHome.setIconImage(iconFrame.getImage());
-
-        //fonts
-        try {
-            titolo.setFont(Font.createFont(
-                    Font.TRUETYPE_FONT,
-                    getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
-            ).deriveFont(22f));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         caricaDati(controller);
 
@@ -92,25 +81,11 @@ public class Home {
             JLabel label = new JLabel(value.toString());
             Animale animale = (Animale) value;
 
-            if(animale instanceof Orso){
-                ImageIcon icon = new ImageIcon(
-                        getClass().getClassLoader()
-                                .getResource("img/orsoIcona.png")
-                );
-
-                Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-
-                label.setIcon(new ImageIcon(img));
+            if(animale instanceof Orso) {
+                CustomGUI.caricaImmagineAnimale(label,"img/orsoIcona.png", true);
             }
-
-            else if(animale instanceof Pinguino){
-                ImageIcon icon = new ImageIcon(
-                        getClass().getClassLoader()
-                                .getResource("img/pinguinoIcona.png")
-                );
-
-                Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-                label.setIcon(new ImageIcon(img));
+            else if(animale instanceof Pinguino) {
+                CustomGUI.caricaImmagineAnimale(label,"img/pinguinoIcona.png",true);
             }
             return label;
         });

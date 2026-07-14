@@ -17,6 +17,11 @@ public class Cibo extends Item{
     }
 
     @Override
+    public Item creaCopia(int idIstanza) { //crea una copia dell'oggetto Cibo
+        return new Cibo(this.getNome(), this.getCosto(), this.getNegozio(), idIstanza, this.getTipo(), this.getPuntiFame(), this.getIconPath());
+    }
+
+    @Override
     public String toString() {  //layout per la jlist
         return "<html>" +
                 "<b>" + this.getNome() + "</b>" +
@@ -28,14 +33,7 @@ public class Cibo extends Item{
                 "</html>";
     }
 
-    @Override
-    public Item creaCopia(int idIstanza) { //crea una copia dell'oggetto Cibo
-        return new Cibo(this.getNome(), this.getCosto(), this.getNegozio(), idIstanza, this.getTipo(), this.getPuntiFame(), this.getIconPath());
-    }
-
-    public TipoCibo getTipo() {
-        return tipo;
-    }
+    public TipoCibo getTipo() { return tipo; }
 
     public void setTipo(TipoCibo tipo) {
         this.tipo = tipo;

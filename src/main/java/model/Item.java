@@ -55,9 +55,7 @@ public abstract class Item {
         return iconPath;
     }
 
-    public int getIdIstanza() {
-        return idIstanza;
-    }
+    public int getIdIstanza() { return idIstanza; }
 
     public void setIdIstanza(int idIstanza) {
         this.idIstanza = idIstanza;

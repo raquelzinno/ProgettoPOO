@@ -34,22 +34,11 @@ public class Impostazioni {
         impostazioniFrame.setSize(500, 330); //grandezza della finestra
         impostazioniFrame.setLocationRelativeTo(null); //finestra si apre al centro
         impostazioniFrame.setResizable(false); //non cambia dimensione
+
+        CustomGUI.caricaIcona(impostazioniFrame);
+        CustomGUI.caricaFont(impostazioniLabel,20f,true);
+
         impostazioniFrame.setVisible(true);
-
-        //icona della finestra
-        ImageIcon icon = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
-        impostazioniFrame.setIconImage(icon.getImage());
-
-        //fonts
-        try {
-            impostazioniLabel.setFont(Font.createFont(
-                    Font.TRUETYPE_FONT,
-                    getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
-            ).deriveFont(20f));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         //gestione pulsante cambia nome animale
         confermaCambioNomeButton.addActionListener(e -> {
@@ -113,16 +102,7 @@ public class Impostazioni {
         });
 
         //gestione pulsante indietro
-        goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
-
-        goBack.addMouseListener(new MouseAdapter(){
-            @Override
-            public void mouseClicked(MouseEvent e){
-                tamagotchi.aggiornaLabel();
-                tamagotchiFrame.setVisible(true);
-                impostazioniFrame.setVisible(false);
-            }
-        });
+        CustomGUI.tornaIndietro(goBack,impostazioniFrame,tamagotchiFrame,true,tamagotchi);
 
         tamagotchiFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

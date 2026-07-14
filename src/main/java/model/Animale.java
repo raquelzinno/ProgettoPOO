@@ -52,9 +52,7 @@ public class Animale {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    public void setNome(String nome) { this.nome = nome; }
 
     public void setFameMax(int fameMax) {
         this.fameMax = fameMax;
@@ -116,7 +114,5 @@ public class Animale {
         return vestititIndossati;
     }
 
-    public void setVestititIndossati(ArrayList<Vestito> vestititIndossati) {
-        this.vestititIndossati = vestititIndossati;
-    }
+    public void setVestititIndossati(ArrayList<Vestito> vestititIndossati) { this.vestititIndossati = vestititIndossati; }
 }

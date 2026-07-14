@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 public class Login {
-    private static JFrame loginFrame;
+    private JFrame loginFrame;
     private JTextField utenteTextField;
     private JButton loginButton;
     private JButton creaAccountButton;
@@ -23,76 +23,41 @@ public class Login {
     private JPasswordField passwordField;
     private ImageIcon backGroundImage;
 
-    public void caricaIcona() {
-        ImageIcon icon = new ImageIcon(Login.class.getResource("/img/tamagotchiIcon.png"));
-        loginFrame.setIconImage(icon.getImage());
-    }
-
-    public static void main(String[] args) {
-        Controller controller = new Controller();
-        try {
-            controller.inizializzaDati();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Impossibile connettersi al database di gioco.\nVerifica che PostgreSQL sia attivo e riprova.",
-                    "Errore di Connessione",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            System.exit(1);
-        }
-        Login login = new Login();
+    public Login(Controller controller) {
         loginFrame = new JFrame("Login");
-        loginFrame.setContentPane(login.loginForm);
+        loginFrame.setContentPane(loginForm);
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         loginFrame.pack();
         loginFrame.setSize(450, 350); //grandezza della finestra
         loginFrame.setLocationRelativeTo(null); //finestra si apre al centro
         loginFrame.setResizable(false); //non cambia dimensione
 
-        //icona della finestra
-        ImageIcon icon = new ImageIcon(Login.class.getResource("/img/tamagotchiIcon.png"));
-        loginFrame.setIconImage(icon.getImage());
+        CustomGUI.caricaIcona(loginFrame);
+        CustomGUI.caricaFont(titolo,24f,true);
+        CustomGUI.caricaFont(loginLabel,18f,true);
 
         loginFrame.setVisible(true);
 
-        //fonts
-        try {
-            login.titolo.setFont(Font.createFont(
-                    Font.TRUETYPE_FONT,
-                    login.getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
-            ).deriveFont(24f));
-
-            login.loginLabel.setFont(Font.createFont(
-                    Font.TRUETYPE_FONT,
-                    login.getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
-            ).deriveFont(18f));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
         // gestione pulsante crea account
-        login.creaAccountButton.addActionListener(new ActionListener() {
+        creaAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                login.utenteTextField.setText(""); //se l'utente ha scritto qualcosa in questi campi, vengono resettati
-                login.passwordField.setText("");
+                utenteTextField.setText(""); //se l'utente ha scritto qualcosa in questi campi, vengono resettati
+                passwordField.setText("");
                 CreaAccount creaAccount = new CreaAccount(loginFrame, controller); //va alla pagina crea account
                 loginFrame.setVisible(false);
             }
         });
 
         //gestione pulsante login
-        login.loginButton.addActionListener(new ActionListener() {
+        loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (controller.checkUtente(login.utenteTextField.getText(), login.passwordField.getText())) {
+                    if (controller.checkUtente(utenteTextField.getText(), passwordField.getText())) {
                         JOptionPane.showMessageDialog(null, "Accesso effettuato correttamente.");
-                        login.utenteTextField.setText("");
-                        login.passwordField.setText("");
+                        utenteTextField.setText("");
+                        passwordField.setText("");
                         Home home = new Home(loginFrame, controller); //va alla home
                         loginFrame.setVisible(false);
                     }
@@ -111,6 +76,9 @@ public class Login {
         backGroundImage = new ImageIcon(
                 Login.class.getResource("/img/backGroundDefault.png")
         );
+        ImageIcon buttonImage = new ImageIcon(
+                Login.class.getResource("/img/buttonBackground.png")
+        );
 
         loginForm = new JPanel() {
             @Override
@@ -122,11 +90,15 @@ public class Login {
             }
         };
 
-        ImageIcon buttonImage = new ImageIcon(
-                Login.class.getResource("/img/buttonBackground.png")
-        );
-
         loginButton = new JButton("Login") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                super.paintComponent(g);
+            }
+        };
+
+        creaAccountButton = new JButton("Crea account") {
             @Override
             protected void paintComponent(Graphics g) {
                 g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
@@ -138,14 +110,6 @@ public class Login {
         loginButton.setFocusPainted(false);
         loginButton.setOpaque(false);
         loginButton.setForeground(Color.WHITE);
-
-        creaAccountButton = new JButton("Crea account") {
-            @Override
-            protected void paintComponent(Graphics g) {
-                g.drawImage(buttonImage.getImage(), 0, 0, getWidth(), getHeight(), this);
-                super.paintComponent(g);
-            }
-        };
 
         creaAccountButton.setContentAreaFilled(false);
         creaAccountButton.setFocusPainted(false);

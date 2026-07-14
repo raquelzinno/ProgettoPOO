@@ -28,11 +28,10 @@ public class CreaAnimale {
         creaAnimaleFrame.setSize(400, 300); //grandezza della finestra
         creaAnimaleFrame.setLocationRelativeTo(null); //finestra si apre al centro
         creaAnimaleFrame.setResizable(false); //non cambia dimensione
-        creaAnimaleFrame.setVisible(true);
 
-        //icona della finestra
-        ImageIcon icon = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
-        creaAnimaleFrame.setIconImage(icon.getImage());
+        CustomGUI.caricaIcona(creaAnimaleFrame);
+
+        creaAnimaleFrame.setVisible(true);
 
         //pulsanti del tipo
         ButtonGroup gruppoAnimali = new ButtonGroup();
@@ -72,15 +71,7 @@ public class CreaAnimale {
         });
 
         //gestione pulsante torna alla home
-        goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
-
-        goBack.addMouseListener(new MouseAdapter(){
-            @Override
-            public void mouseClicked(MouseEvent e){
-                frameHome.setVisible(true);
-                creaAnimaleFrame.setVisible(false);
-            }
-        });
+        CustomGUI.tornaIndietro(goBack,creaAnimaleFrame,frameHome,true);
     }
 
     private void createUIComponents() { //custom create del panel per gestire lo sfondo

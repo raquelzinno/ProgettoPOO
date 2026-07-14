@@ -33,6 +33,10 @@ public class Vestito extends Item{
         this.boostFame = boostFame;
     }
 
+    @Override
+    public Item creaCopia(int idIstanza) {  //crea una copia dell'oggetto Vestito
+        return new Vestito(this.getNome(), this.getCosto(), this.getNegozio(), idIstanza, this.getBoostEnergia(), this.getBoostFame(), this.getIconPath());
+    }
 
     @Override
     public String toString() {  //layout per la jlist
@@ -43,11 +47,6 @@ public class Vestito extends Item{
                 "<i>Boost Energia:</i> " + this.boostEnergia + "<br>" +
                 "<i>Boost Fame:</i> " + this.boostFame + "<br>" + "&nbsp;" +
                 "</html>";
-    }
-
-    @Override
-    public Item creaCopia(int idIstanza) {  //crea una copia dell'oggetto Vestito
-        return new Vestito(this.getNome(), this.getCosto(), this.getNegozio(), idIstanza, this.getBoostEnergia(), this.getBoostFame(), this.getIconPath());
     }
 
     public boolean isIndossato() {

@@ -27,38 +27,14 @@ public class CreaAccount {
         creaAccountFrame.setSize(400, 300); //grandezza della finestra
         creaAccountFrame.setLocationRelativeTo(null); //finestra si apre al centro
         creaAccountFrame.setResizable(false); //non cambia dimensione
+
+        CustomGUI.caricaIcona(creaAccountFrame);
+        CustomGUI.caricaFont(titolo,22f,true);
+        CustomGUI.caricaImmagineSopraTesto(titolo,"img/creaAccountIcona.png");
+
         creaAccountFrame.setVisible(true);
 
-        //icona della finestra
-        ImageIcon icon = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
-        creaAccountFrame.setIconImage(icon.getImage());
-
-        //immagine account
-        titolo.setIcon(new ImageIcon(getClass().getResource("/img/creaAccountIcona.png")));
-        titolo.setHorizontalTextPosition(SwingConstants.CENTER);
-        titolo.setVerticalTextPosition(SwingConstants.BOTTOM);
-
-        //fonts
-        try {
-            titolo.setFont(Font.createFont(
-                    Font.TRUETYPE_FONT,
-                    getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
-            ).deriveFont(22f));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //gestone pulsante torna alla pagina di login
-        tornaLogin.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
-
-        tornaLogin.addMouseListener(new MouseAdapter(){
-            @Override
-            public void mouseClicked(MouseEvent e){
-                loginFrame.setVisible(true);
-                creaAccountFrame.setVisible(false);
-            }
-        });
+        CustomGUI.tornaIndietro(tornaLogin,creaAccountFrame,loginFrame,true);
 
         //gestione pulsante crea account
         creaAccountButton.addActionListener(new ActionListener() {

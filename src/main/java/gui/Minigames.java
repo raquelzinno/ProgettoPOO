@@ -47,11 +47,11 @@ public class Minigames {
         minigamesFrame.setSize(500, 330); //grandezza della finestra
         minigamesFrame.setLocationRelativeTo(null); //finestra si apre al centro
         minigamesFrame.setResizable(false); //non cambia dimensione
+
+        CustomGUI.caricaIcona(minigamesFrame);
+
         minigamesFrame.setVisible(true);
 
-        //icona della finestra
-        ImageIcon icon = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
-        minigamesFrame.setIconImage(icon.getImage());
 
         //copio il riferimento ai minigame per rendere il codice più pulito
         minigame1 = (controller.getMinigamesDiDefault()).get(0);
@@ -216,16 +216,7 @@ public class Minigames {
 
 
         //gestione pulsante indietro
-        goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
-
-        goBack.addMouseListener(new MouseAdapter(){
-            @Override
-            public void mouseClicked(MouseEvent e){
-                tamagotchi.aggiornaLabel();
-                tamagotchiFrame.setVisible(true);
-                minigamesFrame.setVisible(false);
-            }
-        });
+        CustomGUI.tornaIndietro(goBack,minigamesFrame,tamagotchiFrame,true,tamagotchi);
 
         tamagotchiFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

@@ -37,22 +37,11 @@ public class Items {
         itemsFrame.setSize(500, 300); //grandezza della finestra
         itemsFrame.setLocationRelativeTo(null); //finestra si apre al centro
         itemsFrame.setResizable(false); //non cambia dimensione
+
+        CustomGUI.caricaIcona(itemsFrame);
+        CustomGUI.caricaFont(itemsLabel,20f,true);
+
         itemsFrame.setVisible(true);
-
-        //icona della finestra
-        ImageIcon iconFrame = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
-        itemsFrame.setIconImage(iconFrame.getImage());
-
-        //fonts
-        try {
-            itemsLabel.setFont(Font.createFont(
-                    Font.TRUETYPE_FONT,
-                    getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
-            ).deriveFont(20f));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         //la barra di scorrimento della lista è visibile solo quando necessario
         itemsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -71,10 +60,7 @@ public class Items {
             JLabel label = new JLabel(value.toString());
             Item item = (Item) value;
 
-            String path = item.getIconPath();
-            ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(path));
-            Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-            label.setIcon(new ImageIcon(img));
+            CustomGUI.caricaImmagineItem(label,item.getIconPath(),false);
 
             label.setOpaque(true);
 
@@ -223,16 +209,7 @@ public class Items {
 
 
                     //gestione pulsante indietro
-        goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
-
-        goBack.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                tamagotchi.aggiornaLabel(); //aggiorna fame e energia
-                tamagotchiFrame.setVisible(true);
-                itemsFrame.setVisible(false);
-            }
-        });
+        CustomGUI.tornaIndietro(goBack,itemsFrame,tamagotchiFrame,true,tamagotchi);
 
         tamagotchiFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

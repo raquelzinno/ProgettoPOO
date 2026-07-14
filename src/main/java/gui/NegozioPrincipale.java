@@ -26,7 +26,6 @@ public class NegozioPrincipale {
         for (Item item : negozio.getListaItem()) {
             modelloListaItem.addElement(item);
         }
-
         listaItem.setModel(modelloListaItem);
     }
 
@@ -38,22 +37,11 @@ public class NegozioPrincipale {
         negozioFrame.setSize(500, 310); //grandezza della finestra
         negozioFrame.setLocationRelativeTo(null); //finestra si apre al centro
         negozioFrame.setResizable(false); //non cambia dimensione
+
+        CustomGUI.caricaIcona(negozioFrame);
+        CustomGUI.caricaFont(negozioLabel,22f,true);
+
         negozioFrame.setVisible(true);
-
-        //icona della finestra
-        ImageIcon iconFrame = new ImageIcon(getClass().getResource("/img/tamagotchiIcon.png"));
-        negozioFrame.setIconImage(iconFrame.getImage());
-
-        //fonts
-        try {
-            negozioLabel.setFont(Font.createFont(
-                    Font.TRUETYPE_FONT,
-                    getClass().getResourceAsStream("/fonts/pixel-bold.ttf")
-            ).deriveFont(22f));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         //i valori dell'animale vengono resi visibili
         LabelPunti.setText(String.valueOf(animale.getPunti()));
@@ -65,13 +53,9 @@ public class NegozioPrincipale {
         listaItem.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
 
             JLabel label = new JLabel(value.toString());
-
             Item item = (Item) value;
 
-            String path = item.getIconPath();
-            ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(path));
-            Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-            label.setIcon(new ImageIcon(img));
+            CustomGUI.caricaImmagineItem(label,item.getIconPath(),false);
 
             label.setOpaque(true); //permette di configurare il comportamento in caso di selezione
             if (isSelected) {
@@ -122,16 +106,7 @@ public class NegozioPrincipale {
         });
 
         //gestione pulsante indietro
-        goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
-
-        goBack.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                tamagotchi.aggiornaLabel(); //aggiorna i punti
-                tamagotchiFrame.setVisible(true);
-                negozioFrame.setVisible(false);
-            }
-        });
+        CustomGUI.tornaIndietro(goBack,negozioFrame,tamagotchiFrame,true,tamagotchi);
 
         tamagotchiFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

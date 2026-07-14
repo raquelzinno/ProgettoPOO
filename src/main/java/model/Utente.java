@@ -20,10 +20,6 @@ public class Utente {
         accessoEffettuato = false;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
     public void creaAnimale(Animale animale) {
         animaliPosseduti.add(animale);
     }
@@ -99,6 +95,10 @@ public class Utente {
             }
         }
         return false;
+    }
+
+    public String getLogin() {
+        return login;
     }
 
     public String getPassword() {
