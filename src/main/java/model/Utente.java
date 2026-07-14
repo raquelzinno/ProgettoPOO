@@ -77,7 +77,6 @@ public class Utente {
         }
         else {
             throw new ExceptionVestiti("Non possiedi questo Item!");
-            //System.out.println("Non possiedi questo Item!"); //il println è per una prova, dovremmo gestire questa situazione in un'altra maniera
         }
     }
 

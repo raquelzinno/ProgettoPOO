@@ -52,8 +52,7 @@ public class Animale {
         return nome;
     }
 
-    public void setNome(String nome) throws RuntimeException {
-        if(nome.isBlank()) throw new ExceptionAnimale("Nessun nome inserito.");
+    public void setNome(String nome) {
         this.nome = nome;
     }
 

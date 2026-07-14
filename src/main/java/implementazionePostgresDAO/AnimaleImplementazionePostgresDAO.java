@@ -32,7 +32,7 @@ public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
     }
 
     @Override
-    public boolean salvaAnimale(Animale animale, int idUtente) throws SQLException {
+    public void salvaAnimale(Animale animale, int idUtente) throws SQLException {
         //INSTAURO LA CONNESSIONE
         Connection connection = ConnessioneDatabase.getInstance().connection;
 
@@ -59,7 +59,6 @@ public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
             if (righeInserite > 0) {
                 System.out.println("Animale salvato nel Database con successo!");
             }
-            return righeInserite > 0;
         }
     }
 

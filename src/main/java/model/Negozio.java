@@ -9,7 +9,6 @@ public class Negozio {
         for (Item item : this.listaItem) { //setta a tutti gli item il negozio attuale
             item.setNegozio(this);
         }
-        //aggiungiItemDefault(); //ogni volta che verrà istanziato il negozio avrà già degli item di default
     }
 
     public ArrayList<Item> getListaItem() {

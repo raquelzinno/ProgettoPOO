@@ -147,10 +147,14 @@ public class Home {
             if (!e.getValueIsAdjusting()) {
                 Animale animaleCliccato = (Animale) listaAnimali.getSelectedValue();
                 if (animaleCliccato != null) {
-                    controller.selezionaAnimale(animaleCliccato);
-                    Tamagotchi tamagotchi = new Tamagotchi(frameHome, controller, animaleCliccato, Home.this);
-                    frameHome.setVisible(false);
-                    listaAnimali.clearSelection();
+                    try {
+                        controller.selezionaAnimale(animaleCliccato);
+                        Tamagotchi tamagotchi = new Tamagotchi(frameHome, controller, animaleCliccato, Home.this);
+                        frameHome.setVisible(false);
+                        listaAnimali.clearSelection();
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });

@@ -23,6 +23,11 @@ public class Login {
     private JPasswordField passwordField;
     private ImageIcon backGroundImage;
 
+    public void caricaIcona() {
+        ImageIcon icon = new ImageIcon(Login.class.getResource("/img/tamagotchiIcon.png"));
+        loginFrame.setIconImage(icon.getImage());
+    }
+
     public static void main(String[] args) {
         Controller controller = new Controller();
         try {
@@ -91,6 +96,8 @@ public class Login {
                         Home home = new Home(loginFrame, controller); //va alla home
                         loginFrame.setVisible(false);
                     }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 } catch (RuntimeException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }

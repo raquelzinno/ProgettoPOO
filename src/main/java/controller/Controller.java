@@ -58,48 +58,30 @@ public class Controller {
         return negozioBase;
     }
 
-    public void creaUtente(String login, String password) throws RuntimeException{
+    public void creaUtente(String login, String password) throws RuntimeException, SQLException{
         if(login.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
         if(password.isBlank()) throw new ExceptionPassword("Il campo password è vuoto.");
 
         if(login.length() > 15) throw new ExceptionUtente("Il nome utente deve essere di massimo 15 caratteri.");
         if(password.length() > 15) throw new ExceptionPassword("La password deve essere di massimo 15 caratteri.");
 
-        //effettuo prima il controllo per verificare se il login è unico
-        try {
-            if(utenteDAO.controlloLogin(login)) {
-                throw new ExceptionUtente("Nome utente già esistente.");
-            }
-        } catch (SQLException e) {
-            System.err.println("Errore durante il controllo del login!");
-            e.printStackTrace();
-        }
-        //salvo i dati nel database
-        try {
-            utenteDAO.salvaUtente(login, password);
-        }
-        catch (SQLException e){
-            System.err.println("Errore durante l'inserimento dell'utente nel database!");
-            e.printStackTrace();
-        }
+        if(utenteDAO.controlloLogin(login)) throw new ExceptionUtente("Nome utente già esistente.");
+
+        utenteDAO.salvaUtente(login, password);
     }
 
-    public boolean checkUtente(String login, String password) throws RuntimeException{
+    public boolean checkUtente(String login, String password) throws RuntimeException, SQLException{
         if(login.isBlank()) throw new ExceptionUtente("Il campo nome utente è vuoto.");
         if(password.isBlank()) throw new ExceptionUtente("Il campo password utente è vuoto.");
-        try {
-            if(utenteDAO.cercaUtente(login, password)) {  //controlla se l'utente esiste nel database
-                Utente u = new Utente(login, password);
-                utenteAttuale = u;
-                utenteAttuale.setAccessoEffettuato(true);
-                idUtenteAttuale = utenteDAO.recuperaId(login);
-                return true;
-            }
+
+        if(utenteDAO.cercaUtente(login, password)) {  //controlla se l'utente esiste nel database
+            Utente u = new Utente(login, password);
+            utenteAttuale = u;
+            utenteAttuale.setAccessoEffettuato(true);
+            idUtenteAttuale = utenteDAO.recuperaId(login);
+            return true;
         }
-        catch (SQLException e){
-            System.err.println("Errore durante la ricerca dell'utente nel database!");
-            e.printStackTrace();
-        }
+
         throw new ExceptionUtente("Utente non trovato."); //se si arriva a questo punto, l'utente non è stato trovato
     }
 
@@ -134,16 +116,9 @@ public class Controller {
             animale = new Pinguino(nome);
         }
 
-        try {
-            if(animaleDAO.salvaAnimale(animale, idUtenteAttuale)) {
-                aggiungiAnimale(animale);
-                System.out.println("Animale creato con successo!");
-            }
-        }
-        catch (SQLException e){
-            System.err.println("Errore durante l'inserimento dell'animale nel database!");
-            e.printStackTrace();
-        }
+        animaleDAO.salvaAnimale(animale, idUtenteAttuale);
+        aggiungiAnimale(animale);
+        System.out.println("Animale creato con successo!");
     }
 
     public void sincronizzaListaAnimali() throws SQLException {
@@ -151,14 +126,8 @@ public class Controller {
         utenteAttuale.setAnimaliPosseduti(animaliDalDb);
     }
 
-    public void selezionaAnimale(Animale animaleAttuale) {
-        try {
+    public void selezionaAnimale(Animale animaleAttuale) throws SQLException {
             idAnimaleAttuale = animaleDAO.recuperaId(idUtenteAttuale, animaleAttuale.getNome());
-        }
-        catch (SQLException e) {
-            System.err.println("Errore durante il recupero dell'animale!");
-            e.printStackTrace();
-        }
     }
 
     public void deselezionaAnimale() {
@@ -345,12 +314,12 @@ public class Controller {
         if(utenteAttuale.getPassword().equals(vecchiaPass)){
             utenteDAO.aggiornaPassword(idUtenteAttuale, nuovaPass);
             utenteAttuale.setPassword(nuovaPass);
-        }else throw new ExceptionPassword("La password è errata.");
+        } else throw new ExceptionPassword("La password è errata.");
     }
 
     public String giocaSassoCartaForbici(Minigame minigame, String manoUtente, String manoAvversaria, Animale animale) throws RuntimeException {
         if(manoUtente.isBlank()) throw new ExceptionMinigame("Nessuna opzione selezionata.");
-        if(animale.getEnergia() < minigame.getEnergiaConsumata()) throw new ExceptionMinigame("Energia non sufficiente.");
+        if(animale.getEnergia() < minigame.getEnergiaConsumata()) throw new ExceptionEnergia("Energia non sufficiente.");
 
         if(manoAvversaria.equals(manoUtente)) { //casi di pareggio
                 return "pareggiato";
@@ -388,7 +357,7 @@ public class Controller {
 
     public String giocaLancioMoneta(Minigame minigame, String inputUtente, String risultatoLancio, Animale animale) throws RuntimeException{
         if(inputUtente.isBlank()) throw new ExceptionMinigame("Nessuna opzione selezionata.");
-        if(animale.getEnergia() < minigame.getEnergiaConsumata()) throw new ExceptionMinigame("Energia non sufficiente.");
+        if(animale.getEnergia() < minigame.getEnergiaConsumata()) throw new ExceptionEnergia("Energia non sufficiente.");
 
         if(inputUtente.equals(risultatoLancio)) {
             animale.gioca(minigame,true);
@@ -406,7 +375,7 @@ public class Controller {
     }
 
     public String giocaSlotMachine(Minigame minigame, Animale animale, int slot1, int slot2, int slot3) throws RuntimeException {
-        if(animale.getEnergia() < minigame.getEnergiaConsumata()) throw new ExceptionMinigame("Energia non sufficiente.");
+        if(animale.getEnergia() < minigame.getEnergiaConsumata()) throw new ExceptionEnergia("Energia non sufficiente.");
 
         if(slot1 == slot2 && slot2 == slot3) {
             animale.gioca(minigame,true);

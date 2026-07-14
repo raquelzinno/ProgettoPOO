@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class CreaAccount {
     private JTextField utenteTextField;
@@ -72,8 +73,9 @@ public class CreaAccount {
                     //torna alla pagina di login
                     loginFrame.setVisible(true);
                     creaAccountFrame.dispose();
-                }
-                catch(RuntimeException ex){
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                } catch(RuntimeException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }
