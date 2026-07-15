@@ -24,6 +24,21 @@ public class Login {
     private ImageIcon backGroundImage;
     private Controller controller;
 
+    public void caricaDati() {
+        try {
+            controller.inizializzaDati();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Impossibile connettersi al database di gioco: " + e.getMessage(),
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
     public Login(Controller controller) {
         loginFrame = new JFrame("Login");
         loginFrame.setContentPane(loginForm);
@@ -40,18 +55,7 @@ public class Login {
 
         loginFrame.setVisible(true);
 
-        try {
-            controller.inizializzaDati();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Impossibile connettersi al database di gioco: " + e.getMessage(),
-                    "Errore",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            e.printStackTrace();
-            System.exit(1);
-        }
+        caricaDati();
 
         // gestione pulsante crea account
         creaAccountButton.addActionListener(new ActionListener() {

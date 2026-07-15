@@ -111,6 +111,8 @@ public class Tamagotchi {
 
         immagineAnimale();
 
+        CustomGUI.salvaEdEsci(tamagotchiFrame,animale,controller);
+
         //gestisce il pulsante negozio
         negozioButton.addActionListener(new ActionListener() {
             @Override
@@ -197,28 +199,6 @@ public class Tamagotchi {
                 }
             }
         });
-
-        tamagotchiFrame.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                try {// prima di chiudere l'app forzo l'animale a svegliarsi e salvo le informazioni relative (avviene nel metodo sveglia stesso)
-                    if (animale.isDorme()) {
-                        controller.sveglia(animale);
-                    } else { //se non sta dormendo, mi occupo semplicemente di salvare
-                        controller.salvaStatoAnimale(animale);
-                    }
-                }
-                catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-                    System.err.println("Errore nel tentativo di salvare i dati nel Database.");
-                    ex.printStackTrace();
-                }
-                finally {
-                    System.exit(0);
-                }
-            }
-        });
-
     }
 
     //MODIFICHE GRAFICHE -------------------------------------------------------------------------------

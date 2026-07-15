@@ -1,11 +1,15 @@
 package gui;
 
+import controller.Controller;
+import model.Animale;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.sql.SQLException;
 
 public class CustomGUI {
 
@@ -113,6 +117,28 @@ public class CustomGUI {
                 frameInizio.setVisible(false);
                 if(isDisposable) {
                     frameInizio.dispose();
+                }
+            }
+        });
+    }
+
+    public static void salvaEdEsci(JFrame frame, Animale animale, Controller controller) {
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                try {// prima di chiudere l'app forzo l'animale a svegliarsi e salvo le informazioni relative (avviene nel metodo sveglia stesso)
+                    if (animale.isDorme()) {
+                        controller.sveglia(animale);
+                    } else { //se non sta dormendo, mi occupo semplicemente di salvare
+                        controller.salvaStatoAnimale(animale);
+                    }
+                }
+                catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Errore nel tantativo di salvare i dati: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }
+                finally {
+                    System.exit(0);
                 }
             }
         });
