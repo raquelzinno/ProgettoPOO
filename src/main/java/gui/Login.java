@@ -40,6 +40,19 @@ public class Login {
 
         loginFrame.setVisible(true);
 
+        try {
+            controller.inizializzaDati();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Impossibile connettersi al database di gioco: " + e.getMessage(),
+                    "Errore",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            e.printStackTrace();
+            System.exit(1);
+        }
+
         // gestione pulsante crea account
         creaAccountButton.addActionListener(new ActionListener() {
             @Override
@@ -64,7 +77,8 @@ public class Login {
                         loginFrame.setVisible(false);
                     }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Non è stato possibile risalire all'account per un errore di connessione: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
                 } catch (RuntimeException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }

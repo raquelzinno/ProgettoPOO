@@ -119,7 +119,8 @@ public class Items {
                                         "Vestito rimosso",
                                         JOptionPane.INFORMATION_MESSAGE);
                             } catch (SQLException ex) {
-                                JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Non è stato possibile rimuovere il vestito: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                                ex.printStackTrace();
                             }
                         }
                         else { //se il vestito è indossato ma da un altro animale dà un avviso
@@ -175,7 +176,8 @@ public class Items {
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Non è stato possibile usare l'item: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
                 } catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
@@ -209,7 +211,8 @@ public class Items {
                             "Item eliminato",
                             JOptionPane.INFORMATION_MESSAGE);
                 }catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Non è stato possibile eliminare l'item dal database: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
                 }
             }
         });

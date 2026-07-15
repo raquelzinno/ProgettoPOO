@@ -66,7 +66,8 @@ public class CreaAnimale {
                     creaAnimaleFrame.setVisible(false);
                 }
                 catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Non è stato possibile creare l'animale nel Database: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
                 }
                 catch (RuntimeException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);

@@ -39,8 +39,7 @@ public class Home {
             controller.caricaInventarioUtente();
             controller.caricaVestitiIndossati();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-            System.err.println("Errore critico nel tentativo di caricare i dati dal Database.");
+            JOptionPane.showMessageDialog(null, "Errore critico nel tentativo di recuperare i dati: " + e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
             System.exit(1);
         }
@@ -115,7 +114,8 @@ public class Home {
                     CreaAnimale creaAnimale = new CreaAnimale(frameHome, controller);
                     frameHome.setVisible(false);
                 }catch (SQLException ex){
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Non è stato possibile risalire agli animali posseduti: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
                 }
                 catch (RuntimeException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
@@ -135,7 +135,8 @@ public class Home {
                         frameHome.setVisible(false);
                         listaAnimali.clearSelection();
                     } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Non è stato possibile risalire all'animale selezionato: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                        ex.printStackTrace();
                     }
                 }
             }
@@ -153,8 +154,7 @@ public class Home {
                         controller.salvaStatoAnimale(a);
                     }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-                    System.err.println("Errore nel tentativo di salvare i dati dal Database.");
+                    JOptionPane.showMessageDialog(null, "Errore nel tentativo di salvare i dati: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                     ex.printStackTrace();
                 }
                 finally {

@@ -52,9 +52,10 @@ public class CreaAccount {
                     loginFrame.setVisible(true);
                     creaAccountFrame.dispose();
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Non è stato possibile creare l'account nel database: " + ex.getMessage(),"Errore", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
                 } catch(RuntimeException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage() +, "Errore", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

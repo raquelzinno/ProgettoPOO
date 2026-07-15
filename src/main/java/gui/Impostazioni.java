@@ -55,7 +55,8 @@ public class Impostazioni {
                         JOptionPane.INFORMATION_MESSAGE);
                 inputNome.setText("");
             } catch(SQLException ex){
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Non è stato possibile aggiornare il nome nel database: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
             }catch(RuntimeException ex){
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
             }
@@ -73,9 +74,10 @@ public class Impostazioni {
                             JOptionPane.INFORMATION_MESSAGE);
                     vecchiaPasswordField.setText("");
                     nuovaPasswordTextField.setText("");
-                } catch(RuntimeException ex){
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 } catch (SQLException ex){
+                    JOptionPane.showMessageDialog(null, "Non è stato possibile aggiornare la password nel database: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                } catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -100,6 +102,7 @@ public class Impostazioni {
                             JOptionPane.WARNING_MESSAGE);
                 }
             } catch(SQLException ex){
+                JOptionPane.showMessageDialog(null,"Non è stato possibile eliminare l'animale dal database: " + ex.getMessage(),"Errore",JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
 

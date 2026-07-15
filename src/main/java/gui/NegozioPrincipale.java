@@ -103,11 +103,11 @@ public class NegozioPrincipale {
                         JOptionPane.INFORMATION_MESSAGE);
 
                 LabelPunti.setText(String.valueOf(animale.getPunti()));
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Non è stato possibile salvare l'acquisto: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
             } catch(RuntimeException ex){
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-
-            } catch (SQLException ex) {
-                ex.printStackTrace();
             }
         });
 

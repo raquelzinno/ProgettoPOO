@@ -160,8 +160,7 @@ public class Tamagotchi {
                         immagineAnimale();
                     }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-                    System.err.println("Errore nel tentativo di cambiare lo stato dell'animale.");
+                    JOptionPane.showMessageDialog(null, "Non è stato possibile aggiornare lo stato dell'animale nel database: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                     ex.printStackTrace();
                 }
             }
@@ -193,8 +192,7 @@ public class Tamagotchi {
                     tamagotchiFrame.setVisible(false);
                 }
                 catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-                    System.err.println("Errore nel tentativo di salvare i dati nel Database.");
+                    JOptionPane.showMessageDialog(null, "Errore nel tentativo di salvare i dati: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                     ex.printStackTrace();
                 }
             }
