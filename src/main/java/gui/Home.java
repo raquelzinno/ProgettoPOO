@@ -32,7 +32,7 @@ public class Home {
         modelloListaAnimali.removeElement(animale);
     }
 
-    public void caricaDati(Controller controller) {
+    public void caricaDati() {
         try {
             controller.puliziaDati();
             controller.sincronizzaListaAnimali();
@@ -46,30 +46,15 @@ public class Home {
         }
     }
 
-    public Home(JFrame loginFrame, Controller controller) {
-        frameHome = new JFrame("Home");
-        frameHome.setContentPane(mainPanel);
-        frameHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frameHome.pack();
-        frameHome.setSize(450, 350); //grandezza della finestra
-        frameHome.setLocationRelativeTo(null);//finestra si apre al centro
-        frameHome.setResizable(false);
-        vuotoPanel.setOpaque(false); //rende i pannelli opachi per far vedere lo sfondo
-        creaAnimalePanel.setOpaque(false);
-        vuotoPanel.setBorder(null);
-
-        CustomGUI.caricaIcona(frameHome);
-        CustomGUI.caricaFont(titolo,22f,true);
-
-        frameHome.setVisible(true);
-
-        caricaDati(controller);
-
+    public void popolaListaAnimali() {
         modelloListaAnimali = new DefaultListModel<>();
         for(Animale a : controller.getUtenteAttuale().getAnimaliPosseduti()){
             modelloListaAnimali.addElement(a);
         }
         listaAnimali.setModel(modelloListaAnimali);
+    }
+
+    public void gestioneLista() {
         listaAnimali.setBorder(
                 BorderFactory.createLineBorder(Color.BLUE, 3)
         );
@@ -89,7 +74,29 @@ public class Home {
             }
             return label;
         });
+    }
 
+    public Home(JFrame loginFrame, Controller controller) {
+        frameHome = new JFrame("Home");
+        frameHome.setContentPane(mainPanel);
+        frameHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frameHome.pack();
+        frameHome.setSize(450, 350); //grandezza della finestra
+        frameHome.setLocationRelativeTo(null);//finestra si apre al centro
+        frameHome.setResizable(false);
+        vuotoPanel.setOpaque(false); //rende i pannelli opachi per far vedere lo sfondo
+        creaAnimalePanel.setOpaque(false);
+        vuotoPanel.setBorder(null);
+        this.controller = controller;
+
+        CustomGUI.caricaIcona(frameHome);
+        CustomGUI.caricaFont(titolo,22f,true);
+
+        frameHome.setVisible(true);
+
+        caricaDati();
+        popolaListaAnimali();
+        gestioneLista();
 
         listaAnimali.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -110,7 +117,7 @@ public class Home {
                 }catch (SQLException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
-                catch(RuntimeException ex){
+                catch (RuntimeException ex){
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
 

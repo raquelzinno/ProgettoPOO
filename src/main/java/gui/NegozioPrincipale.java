@@ -20,36 +20,17 @@ public class NegozioPrincipale {
     private JLabel negozioLabel;
     public static DefaultListModel<Item> modelloListaItem;
     private ImageIcon backGroundImage;
+    private Controller controller;
 
-    private void popolaListaItem(Negozio negozio) {
+    private void popolaListaItem() {
         modelloListaItem = new DefaultListModel<Item>();
-        for (Item item : negozio.getListaItem()) {
+        for (Item item : controller.getNegozioBase().getListaItem()) {
             modelloListaItem.addElement(item);
         }
         listaItem.setModel(modelloListaItem);
     }
 
-    public NegozioPrincipale(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi) {
-        JFrame negozioFrame = new JFrame("Negozio");
-        negozioFrame.setContentPane(negozioPanel);
-        negozioFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        negozioFrame.pack();
-        negozioFrame.setSize(500, 310); //grandezza della finestra
-        negozioFrame.setLocationRelativeTo(null); //finestra si apre al centro
-        negozioFrame.setResizable(false); //non cambia dimensione
-
-        CustomGUI.caricaIcona(negozioFrame);
-        CustomGUI.caricaFont(negozioLabel,22f,true);
-
-        negozioFrame.setVisible(true);
-
-        //i valori dell'animale vengono resi visibili
-        LabelPunti.setText(String.valueOf(animale.getPunti()));
-
-        //item di default
-        popolaListaItem(controller.getNegozioBase());
-
-        //gestione icone items
+    private void gestioneLista() {
         listaItem.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
 
             JLabel label = new JLabel(value.toString());
@@ -68,6 +49,31 @@ public class NegozioPrincipale {
 
             return label;
         });
+    }
+
+    public NegozioPrincipale(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi) {
+        JFrame negozioFrame = new JFrame("Negozio");
+        negozioFrame.setContentPane(negozioPanel);
+        negozioFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        negozioFrame.pack();
+        negozioFrame.setSize(500, 310); //grandezza della finestra
+        negozioFrame.setLocationRelativeTo(null); //finestra si apre al centro
+        negozioFrame.setResizable(false); //non cambia dimensione
+        this.controller = controller;
+
+        CustomGUI.caricaIcona(negozioFrame);
+        CustomGUI.caricaFont(negozioLabel,22f,true);
+
+        negozioFrame.setVisible(true);
+
+        //i valori dell'animale vengono resi visibili
+        LabelPunti.setText(String.valueOf(animale.getPunti()));
+
+        CustomGUI.tornaIndietro(goBack,negozioFrame,tamagotchiFrame,true,tamagotchi);
+
+        //item di default
+        popolaListaItem();
+        gestioneLista();
 
         listaItem.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -104,9 +110,6 @@ public class NegozioPrincipale {
                 ex.printStackTrace();
             }
         });
-
-        //gestione pulsante indietro
-        CustomGUI.tornaIndietro(goBack,negozioFrame,tamagotchiFrame,true,tamagotchi);
 
         tamagotchiFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

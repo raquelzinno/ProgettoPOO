@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Minigames {
     private JPanel minigamesPanel;
@@ -38,22 +39,18 @@ public class Minigames {
     private Minigame minigame2;
     private Minigame minigame3;
     private ImageIcon backGroundImage;
+    private Controller controller;
 
-    public Minigames(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi){
-        JFrame minigamesFrame = new JFrame("Minigames");
-        minigamesFrame.setContentPane(minigamesPanel);
-        minigamesFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        minigamesFrame.pack();
-        minigamesFrame.setSize(500, 330); //grandezza della finestra
-        minigamesFrame.setLocationRelativeTo(null); //finestra si apre al centro
-        minigamesFrame.setResizable(false); //non cambia dimensione
+    public void caricaImmagini() {
+        CustomGUI.gestionePulsantiMinigame(sassoRadioButton,"img/sasso.png");
+        CustomGUI.gestionePulsantiMinigame(cartaRadioButton,"img/carta.png");
+        CustomGUI.gestionePulsantiMinigame(forbiciRadioButton,"img/forbici.png");
+        CustomGUI.gestionePulsantiMinigame(croceRadioButton,"img/croce.png");
+        CustomGUI.gestionePulsantiMinigame(testaRadioButton,"img/testa.png");
+        CustomGUI.caricaImmagineSopraTesto(slotmachineLabel,"img/slotMachine.png");
+    }
 
-        CustomGUI.caricaIcona(minigamesFrame);
-
-        minigamesFrame.setVisible(true);
-
-
-        //copio il riferimento ai minigame per rendere il codice più pulito
+    public void caricaLabel() {
         minigame1 = (controller.getMinigamesDiDefault()).get(0);
         minigame2 = (controller.getMinigamesDiDefault()).get(1);
         minigame3 = (controller.getMinigamesDiDefault()).get(2);
@@ -68,47 +65,28 @@ public class Minigames {
         labelPunti2.setText(String.valueOf(minigame2.getRicompensa()));
         labelEnergia3.setText(String.valueOf(minigame3.getEnergiaConsumata()));
         labelPunti3.setText(String.valueOf(minigame3.getRicompensa()));
+    }
+
+    public Minigames(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi){
+        JFrame minigamesFrame = new JFrame("Minigames");
+        minigamesFrame.setContentPane(minigamesPanel);
+        minigamesFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        minigamesFrame.pack();
+        minigamesFrame.setSize(500, 330); //grandezza della finestra
+        minigamesFrame.setLocationRelativeTo(null); //finestra si apre al centro
+        minigamesFrame.setResizable(false); //non cambia dimensione
+        this.controller = controller;
+
+        CustomGUI.caricaIcona(minigamesFrame);
+
+        minigamesFrame.setVisible(true);
+
+        caricaImmagini();
+        caricaLabel();
+        CustomGUI.tornaIndietro(goBack,minigamesFrame,tamagotchiFrame,true,tamagotchi);
 
         //MINIGAME1 --------------------------------------------------------------------------------------------
 
-        //immagine pulsanti
-        sassoRadioButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
-        sassoRadioButton.setIcon(new ImageIcon(getClass().getResource("/img/sasso.png")));
-        sassoRadioButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        sassoRadioButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-        sassoRadioButton.addItemListener(e -> {
-            if (e.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
-                sassoRadioButton.setForeground(new Color(0,50,219));
-            } else {
-                sassoRadioButton.setForeground(new Color(25,26,28));
-            }
-        });
-
-        cartaRadioButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
-        cartaRadioButton.setIcon(new ImageIcon(getClass().getResource("/img/carta.png")));
-        cartaRadioButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        cartaRadioButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-        cartaRadioButton.addItemListener(e -> {
-            if (e.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
-                cartaRadioButton.setForeground(new Color(0,50,219));
-            } else {
-                cartaRadioButton.setForeground(new Color(25,26,28));
-            }
-        });
-
-        forbiciRadioButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
-        forbiciRadioButton.setIcon(new ImageIcon(getClass().getResource("/img/forbici.png")));
-        forbiciRadioButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        forbiciRadioButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-        forbiciRadioButton.addItemListener(e -> {
-            if (e.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
-                forbiciRadioButton.setForeground(new Color(0,50,219));
-            } else {
-                forbiciRadioButton.setForeground(new Color(25,26,28));
-            }
-        });
-
-        //pulsanti minigame1
         ButtonGroup gruppoMinigame1 = new ButtonGroup();
         gruppoMinigame1.add(sassoRadioButton);
         gruppoMinigame1.add(cartaRadioButton);
@@ -140,31 +118,6 @@ public class Minigames {
 
         //MINIGAME2 --------------------------------------------------------------------------------------------
 
-        //immagine pulsanti
-        testaRadioButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
-        testaRadioButton.setIcon(new ImageIcon(getClass().getResource("/img/testa.png")));
-        testaRadioButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        testaRadioButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-        testaRadioButton.addItemListener(e -> {
-            if (e.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
-                testaRadioButton.setForeground(new Color(0,50,219));
-            } else {
-                testaRadioButton.setForeground(new Color(25,26,28));
-            }
-        });
-
-        croceRadioButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
-        croceRadioButton.setIcon(new ImageIcon(getClass().getResource("/img/croce.png")));
-        croceRadioButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        croceRadioButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-        croceRadioButton.addItemListener(e -> {
-            if (e.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
-                croceRadioButton.setForeground(new Color(0,50,219));
-            } else {
-                croceRadioButton.setForeground(new Color(25,26,28));
-            }
-        });
-
         ButtonGroup gruppoMinigame2 = new ButtonGroup();
         gruppoMinigame2.add(testaRadioButton);
         gruppoMinigame2.add(croceRadioButton);
@@ -193,11 +146,6 @@ public class Minigames {
 
         //MINIGAME3 --------------------------------------------------------------------------------------------
 
-        //immagine slot machine
-        slotmachineLabel.setIcon(new ImageIcon(getClass().getResource("/img/slotmachine.png")));
-        slotmachineLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-        slotmachineLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
-
         okButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -213,10 +161,6 @@ public class Minigames {
                 }
             }
         });
-
-
-        //gestione pulsante indietro
-        CustomGUI.tornaIndietro(goBack,minigamesFrame,tamagotchiFrame,true,tamagotchi);
 
         tamagotchiFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

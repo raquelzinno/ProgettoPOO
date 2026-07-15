@@ -28,33 +28,17 @@ public class Items {
     private JPanel pulsantiPanel;
     public static DefaultListModel<Item> modelloListaItems;
     private ImageIcon backGroundImage;
+    private Controller controller;
 
-    public Items(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi){
-        JFrame itemsFrame = new JFrame("I tuoi items");
-        itemsFrame.setContentPane(itemsPanel);
-        itemsFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        itemsFrame.pack();
-        itemsFrame.setSize(500, 300); //grandezza della finestra
-        itemsFrame.setLocationRelativeTo(null); //finestra si apre al centro
-        itemsFrame.setResizable(false); //non cambia dimensione
-
-        CustomGUI.caricaIcona(itemsFrame);
-        CustomGUI.caricaFont(itemsLabel,20f,true);
-
-        itemsFrame.setVisible(true);
-
-        //la barra di scorrimento della lista è visibile solo quando necessario
-        itemsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-        //lista dove sono riportati gli item dell'utente
+    public void popolaListaItems() {
         modelloListaItems = new DefaultListModel<>();
-
         for(Item i : controller.getUtenteAttuale().getItemPosseduti()){
             modelloListaItems.addElement(i);
         }
-
         listaItem.setModel(modelloListaItems);
+    }
 
+    public void gestioneLista() {
         listaItem.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
 
             JLabel label = new JLabel(value.toString());
@@ -79,6 +63,29 @@ public class Items {
 
             return label;
         });
+    }
+
+    public Items(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi){
+        JFrame itemsFrame = new JFrame("I tuoi items");
+        itemsFrame.setContentPane(itemsPanel);
+        itemsFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        itemsFrame.pack();
+        itemsFrame.setSize(500, 300); //grandezza della finestra
+        itemsFrame.setLocationRelativeTo(null); //finestra si apre al centro
+        itemsFrame.setResizable(false); //non cambia dimensione
+        this.controller = controller;
+
+        CustomGUI.caricaIcona(itemsFrame);
+        CustomGUI.caricaFont(itemsLabel,20f,true);
+
+        itemsFrame.setVisible(true);
+
+        //la barra di scorrimento della lista è visibile solo quando necessario
+        itemsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        CustomGUI.tornaIndietro(goBack,itemsFrame,tamagotchiFrame,true,tamagotchi);
+        popolaListaItems();
+        gestioneLista();
+
         listaItem.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -209,7 +216,6 @@ public class Items {
 
 
                     //gestione pulsante indietro
-        CustomGUI.tornaIndietro(goBack,itemsFrame,tamagotchiFrame,true,tamagotchi);
 
         tamagotchiFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

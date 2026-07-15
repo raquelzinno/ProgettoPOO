@@ -18,6 +18,7 @@ public class CreaAccount {
     private JLabel tornaLogin;
     private JLabel titolo;
     private ImageIcon backGroundImage;
+    private Controller controller;
 
     public CreaAccount(JFrame loginFrame, Controller controller){
         JFrame creaAccountFrame = new JFrame("Crea un nuovo account");
@@ -27,6 +28,7 @@ public class CreaAccount {
         creaAccountFrame.setSize(400, 300); //grandezza della finestra
         creaAccountFrame.setLocationRelativeTo(null); //finestra si apre al centro
         creaAccountFrame.setResizable(false); //non cambia dimensione
+        this.controller = controller;
 
         CustomGUI.caricaIcona(creaAccountFrame);
         CustomGUI.caricaFont(titolo,22f,true);
@@ -52,7 +54,7 @@ public class CreaAccount {
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 } catch(RuntimeException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, ex.getMessage() +, "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

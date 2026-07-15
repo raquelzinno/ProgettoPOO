@@ -19,6 +19,7 @@ public class CreaAnimale {
     private JButton okButton;
     private JLabel goBack;
     private ImageIcon backGroundImage;
+    private Controller controller;
 
     public CreaAnimale(JFrame frameHome, Controller controller){
         JFrame creaAnimaleFrame = new JFrame("Crea un nuovo animale");
@@ -28,10 +29,13 @@ public class CreaAnimale {
         creaAnimaleFrame.setSize(400, 300); //grandezza della finestra
         creaAnimaleFrame.setLocationRelativeTo(null); //finestra si apre al centro
         creaAnimaleFrame.setResizable(false); //non cambia dimensione
+        this.controller = controller;
 
         CustomGUI.caricaIcona(creaAnimaleFrame);
 
         creaAnimaleFrame.setVisible(true);
+
+        CustomGUI.tornaIndietro(goBack,creaAnimaleFrame,frameHome,true);
 
         //pulsanti del tipo
         ButtonGroup gruppoAnimali = new ButtonGroup();
@@ -64,14 +68,11 @@ public class CreaAnimale {
                 catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
-                catch (RuntimeException ex){
+                catch (RuntimeException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-
-        //gestione pulsante torna alla home
-        CustomGUI.tornaIndietro(goBack,creaAnimaleFrame,frameHome,true);
     }
 
     private void createUIComponents() { //custom create del panel per gestire lo sfondo

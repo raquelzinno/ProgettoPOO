@@ -32,6 +32,33 @@ public class Tamagotchi {
     private Timer gameTime;
     public static DefaultListModel<Vestito> modelloListaVestiti;
     private ImageIcon backGroundImage;
+    private Controller controller;
+
+    public void popolaListaVestiti() {
+        modelloListaVestiti = new DefaultListModel<Vestito>();
+        for(Vestito v : animale.getVestitiIndossati()){
+            modelloListaVestiti.addElement(v);
+        }
+        listaVestitiIndossati.setModel(modelloListaVestiti);
+    }
+
+    public void gestioneLista() {
+        listaVestitiIndossati.setBorder(
+                BorderFactory.createLineBorder(Color.BLUE, 4)
+        );
+
+        listaVestitiIndossati.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
+
+            JLabel label = new JLabel(value.toString());
+            label.setText(null); //nella jlist sarà visibile solo l'icona
+            Item item = (Item) value;
+
+            CustomGUI.caricaImmagineItem(label,item.getIconPath(),true);
+
+            return label;
+        });
+
+    }
 
     public void aggiornaLabel(){
         labelPunti.setText(String.valueOf(animale.getPunti()));
@@ -66,6 +93,7 @@ public class Tamagotchi {
         tamagotchiFrame.setResizable(false); //non cambia dimensione
         animalePanel.setOpaque(false);
         vestititPanel.setOpaque(false);
+        this.controller = controller;
 
         CustomGUI.caricaIcona(tamagotchiFrame);
         CustomGUI.caricaFont(labelNomeAnimale,20f,true);
@@ -78,31 +106,9 @@ public class Tamagotchi {
         controller.setHomeFrame(this);
         controller.iniziaTimer(animale);
 
-        //lista vestiti
-        modelloListaVestiti = new DefaultListModel<Vestito>();
+        popolaListaVestiti();
+        gestioneLista();
 
-        for(Vestito v : animale.getVestitiIndossati()){
-            modelloListaVestiti.addElement(v);
-        }
-
-        listaVestitiIndossati.setModel(modelloListaVestiti);
-
-        listaVestitiIndossati.setBorder(
-                BorderFactory.createLineBorder(Color.BLUE, 4)
-        );
-
-        listaVestitiIndossati.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
-
-            JLabel label = new JLabel(value.toString());
-            label.setText(null); //nella jlist sarà visibile solo l'icona
-            Item item = (Item) value;
-
-            CustomGUI.caricaImmagineItem(label,item.getIconPath(),true);
-
-            return label;
-        });
-
-        //immagine dell'animale
         immagineAnimale();
 
         //gestisce il pulsante negozio

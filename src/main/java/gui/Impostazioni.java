@@ -25,6 +25,7 @@ public class Impostazioni {
     private JLabel tutorialLabel;
     private JLabel impostazioniLabel;
     private ImageIcon backGroundImage;
+    private Controller controller;
 
     public Impostazioni(JFrame tamagotchiFrame, Controller controller, Animale animale,Tamagotchi tamagotchi, JFrame frameHome, Home home) {
         JFrame impostazioniFrame = new JFrame("Impostazioni");
@@ -34,11 +35,14 @@ public class Impostazioni {
         impostazioniFrame.setSize(500, 330); //grandezza della finestra
         impostazioniFrame.setLocationRelativeTo(null); //finestra si apre al centro
         impostazioniFrame.setResizable(false); //non cambia dimensione
+        this.controller = controller;
 
         CustomGUI.caricaIcona(impostazioniFrame);
         CustomGUI.caricaFont(impostazioniLabel,20f,true);
 
         impostazioniFrame.setVisible(true);
+
+        CustomGUI.tornaIndietro(goBack,impostazioniFrame,tamagotchiFrame,true,tamagotchi);
 
         //gestione pulsante cambia nome animale
         confermaCambioNomeButton.addActionListener(e -> {
@@ -100,9 +104,6 @@ public class Impostazioni {
             }
 
         });
-
-        //gestione pulsante indietro
-        CustomGUI.tornaIndietro(goBack,impostazioniFrame,tamagotchiFrame,true,tamagotchi);
 
         tamagotchiFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

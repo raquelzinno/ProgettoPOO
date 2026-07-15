@@ -22,6 +22,7 @@ public class Login {
     private JLabel creaAccountLabel;
     private JPasswordField passwordField;
     private ImageIcon backGroundImage;
+    private Controller controller;
 
     public Login(Controller controller) {
         loginFrame = new JFrame("Login");
@@ -31,6 +32,7 @@ public class Login {
         loginFrame.setSize(450, 350); //grandezza della finestra
         loginFrame.setLocationRelativeTo(null); //finestra si apre al centro
         loginFrame.setResizable(false); //non cambia dimensione
+        this.controller = controller;
 
         CustomGUI.caricaIcona(loginFrame);
         CustomGUI.caricaFont(titolo,24f,true);

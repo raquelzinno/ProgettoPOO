@@ -31,7 +31,7 @@ public class CustomGUI {
     }
 
     public static void caricaImmagineAnimale(JLabel label, String percorso, boolean isIcon) {
-        ImageIcon icon = CustomGUI.caricaImmagine(percorso);
+        ImageIcon icon = caricaImmagine(percorso);
         Image img;
         if(isIcon) {
             img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
@@ -42,7 +42,7 @@ public class CustomGUI {
     }
 
     public static void caricaImmagineItem(JLabel label, String percorso, boolean isIndossato) {
-        ImageIcon icon = CustomGUI.caricaImmagine(percorso);
+        ImageIcon icon = caricaImmagine(percorso);
         Image img;
         if(isIndossato) {
             img = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
@@ -52,6 +52,20 @@ public class CustomGUI {
             img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         }
         label.setIcon(new ImageIcon(img));
+    }
+
+    public static void gestionePulsantiMinigame(JRadioButton button, String percorso) {
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
+        button.setIcon(caricaImmagine(percorso));
+        button.setHorizontalTextPosition(SwingConstants.CENTER);
+        button.setVerticalTextPosition(SwingConstants.BOTTOM);
+        button.addItemListener(e -> {
+            if (e.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+                button.setForeground(new Color(0,50,219));
+            } else {
+                button.setForeground(new Color(25,26,28));
+            }
+        });
     }
 
     public static void caricaFont(JLabel label, float size, boolean isBold) {
