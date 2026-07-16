@@ -11,6 +11,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
+/**
+ * The type Tamagotchi.
+ */
 public class Tamagotchi {
     private JPanel tamagotchiPanel;
     private JLabel labelEnergia;
@@ -30,10 +33,14 @@ public class Tamagotchi {
     private JPanel vestititPanel;
     private Animale animale;
     private Timer gameTime;
+
     public static DefaultListModel<Vestito> modelloListaVestiti;
     private ImageIcon backGroundImage;
     private Controller controller;
 
+    /**
+     * Popola la lista dei vestiti attualmente indossati dall'animale.
+     */
     public void popolaListaVestiti() {
         modelloListaVestiti = new DefaultListModel<Vestito>();
         for(Vestito v : animale.getVestitiIndossati()){
@@ -42,6 +49,9 @@ public class Tamagotchi {
         listaVestitiIndossati.setModel(modelloListaVestiti);
     }
 
+    /**
+     * Gestione lista dei vestiti indossati dall'animale.
+     */
     public void gestioneLista() {
         listaVestitiIndossati.setBorder(
                 BorderFactory.createLineBorder(Color.BLUE, 4)
@@ -60,6 +70,9 @@ public class Tamagotchi {
 
     }
 
+    /**
+     * Aggiorna i dati dell'animale a schermo.
+     */
     public void aggiornaLabel(){
         labelPunti.setText(String.valueOf(animale.getPunti()));
         labelEnergia.setText(animale.getEnergia() + "/" + animale.getEnergiaMax());
@@ -67,6 +80,9 @@ public class Tamagotchi {
         labelNomeAnimale.setText(animale.getNome());
     }
 
+    /**
+     * Gestione dell'immagine dell'animale.
+     */
     public void immagineAnimale(){
         if(animale instanceof Orso) {
             if(animale.isDorme()){
@@ -83,6 +99,16 @@ public class Tamagotchi {
         }
     }
 
+    /**
+     * Crea una nuova istanza della finestra del tamagotchi.
+     * Inizializza l'interfaccia, configura i listener per gli eventi dei pulsanti che permettono
+     * di passare alle altre schermate dell'applicazione e prepara la finestra per l'input dell'utente.
+     *
+     * @param frameHome  il frame della finestra Home
+     * @param controller il controller principale che gestisce la logica di sistema
+     * @param animale    l' {@link Animale} selezionato
+     * @param home       istanza di {@link Home} per aggiornare i dati dell'animale a schermo
+     */
     public Tamagotchi(JFrame frameHome, Controller controller, Animale animale, Home home) {
         JFrame tamagotchiFrame = new JFrame("Tamagotchi");
         tamagotchiFrame.setContentPane(tamagotchiPanel);

@@ -20,6 +20,15 @@ public class CreaAccount {
     private ImageIcon backGroundImage;
     private Controller controller;
 
+    /**
+     * Crea una nuova istanza della finestra di creazione dell'account.
+     * Inizializza l'interfaccia, configura i listener per il pulsante di conferma
+     * e prepara la finestra per l'input dell'utente.
+     *
+     * @param loginFrame il frame della pagina del login
+     * @param controller il controller principale che gestisce la logica di sistema.
+     */
+
     public CreaAccount(JFrame loginFrame, Controller controller){
         JFrame creaAccountFrame = new JFrame("Crea un nuovo account");
         creaAccountFrame.setContentPane(creaAccountPanel);

@@ -12,9 +12,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Items {
     private JPanel itemsPanel;
@@ -26,10 +25,14 @@ public class Items {
     private JLabel spazio;
     private JLabel itemsLabel;
     private JPanel pulsantiPanel;
+
     public static DefaultListModel<Item> modelloListaItems;
     private ImageIcon backGroundImage;
     private Controller controller;
 
+    /**
+     * Popola la lista degli item posseduti dall'utente.
+     */
     public void popolaListaItems() {
         modelloListaItems = new DefaultListModel<>();
         for(Item i : controller.getUtenteAttuale().getItemPosseduti()){
@@ -38,6 +41,9 @@ public class Items {
         listaItem.setModel(modelloListaItems);
     }
 
+    /**
+     * Gestione grafica della lista degli item.
+     */
     public void gestioneLista() {
         listaItem.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
 
@@ -63,8 +69,19 @@ public class Items {
 
             return label;
         });
+
     }
 
+    /**
+     * Crea una nuova istanza della finestra dell'inventario.
+     * Inizializza l'interfaccia, configura i listener per gli eventi dei pulsanti che permettono
+     * di usare o eliminare gli items e prepara la finestra per l'input dell'utente.
+     *
+     * @param tamagotchiFrame il frame della finestra Tamagotchi
+     * @param controller      il controller principale che gestisce la logica di sistema
+     * @param animale         l' {@link Animale} selezionato
+     * @param tamagotchi      istanza di {@link Tamagotchi} per aggiornare i dati dell'animale a schermo
+     */
     public Items(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi){
         JFrame itemsFrame = new JFrame("I tuoi items");
         itemsFrame.setContentPane(itemsPanel);
@@ -161,7 +178,7 @@ public class Items {
                     controller.usaItem(oggettoSelezionato, animale);
 
                     if(oggettoSelezionato instanceof Cibo) { //se cibo
-                        controller.elimina(oggettoSelezionato);
+                        controller.eliminaItem(oggettoSelezionato);
                         modelloListaItems.removeElement(oggettoSelezionato); //elimina l'item dalla lista se è un cibo
 
                         JOptionPane.showMessageDialog(itemsFrame,
@@ -206,7 +223,7 @@ public class Items {
                 }
 
                 try {
-                    controller.elimina(oggettoSelezionato);
+                    controller.eliminaItem(oggettoSelezionato);
                     modelloListaItems.removeElement(oggettoSelezionato);
                     JOptionPane.showMessageDialog(itemsFrame,
                             "Hai eliminato " + oggettoSelezionato.getNome(),

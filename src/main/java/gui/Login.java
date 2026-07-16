@@ -24,6 +24,9 @@ public class Login {
     private ImageIcon backGroundImage;
     private Controller controller;
 
+    /**
+     * Carica i dati di default del negozio e dei minigames presenti nel database.
+     */
     public void caricaDati() {
         try {
             controller.inizializzaDati();
@@ -39,6 +42,13 @@ public class Login {
         }
     }
 
+    /**
+     * Crea una nuova istanza della finestra Login.
+     * Inizializza l'interfaccia, configura i componenti grafici e associa i listener
+     * necessari per gestire le azioni di accesso e di reindirizzamento alla registrazione.
+     *
+     * @param controller il controller principale che gestisce la logica di autenticazione e di sistema.
+     */
     public Login(Controller controller) {
         loginFrame = new JFrame("Login");
         loginFrame.setContentPane(loginForm);
@@ -90,7 +100,6 @@ public class Login {
         });
     }
 
-    //per mettere immagine al bottone, ricordati di mettere custom create
     private void createUIComponents() {
 
         backGroundImage = new ImageIcon(

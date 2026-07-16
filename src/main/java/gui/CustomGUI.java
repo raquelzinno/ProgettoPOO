@@ -13,6 +13,12 @@ import java.sql.SQLException;
 
 public class CustomGUI {
 
+    /**
+     * Carica l'immagine di un elemento tramite il suo image path.
+     *
+     * @param percorso path dell'immagine
+     * @return l' {@link ImageIcon} dell'elemento
+     */
     public static ImageIcon caricaImmagine(String percorso) {
         URL risorsa = CustomGUI.class.getClassLoader().getResource(percorso);
         if(risorsa != null) {
@@ -24,16 +30,35 @@ public class CustomGUI {
         }
     }
 
+    /**
+     * Carica l'icona del sistema tramite il suo icon path.
+     *
+     * @param frame il frame dove viene visualizzata l'icona
+     */
     public static void caricaIcona(JFrame frame) {
             frame.setIconImage((caricaImmagine("img/tamagotchiIcon.png")).getImage());
     }
 
+    /**
+     * Carica l'immagine centrale  sopra a un label.
+     *
+     * @param label    il label
+     * @param percorso il path dell'immagine
+     */
     public static void caricaImmagineSopraTesto(JLabel label,String percorso) {
         label.setIcon(caricaImmagine(percorso));
         label.setHorizontalTextPosition(SwingConstants.CENTER);
         label.setVerticalTextPosition(SwingConstants.BOTTOM);
     }
 
+    /**
+     * Carica l'immagine dell'animale selezionato.
+     * Lo stesso metodo può essere usato per caricare l'icona della testa degli animali.
+     *
+     * @param label    il label dell'animale
+     * @param percorso il path dell'immagine
+     * @param isIcon   {@code true} se è un'icona, {@code false} se è un'immagine
+     */
     public static void caricaImmagineAnimale(JLabel label, String percorso, boolean isIcon) {
         ImageIcon icon = caricaImmagine(percorso);
         Image img;
@@ -45,6 +70,13 @@ public class CustomGUI {
         label.setIcon(new ImageIcon(img));
     }
 
+    /**
+     * Carica l'immagine di un item.
+     *
+     * @param label       il label dell'item
+     * @param percorso    il path dell'immagine
+     * @param isIndossato {@code true} se il vestito è indossato, {@code false} altrimenti
+     */
     public static void caricaImmagineItem(JLabel label, String percorso, boolean isIndossato) {
         ImageIcon icon = caricaImmagine(percorso);
         Image img;
@@ -58,6 +90,13 @@ public class CustomGUI {
         label.setIcon(new ImageIcon(img));
     }
 
+    /**
+     * Gestione grafica dei pulsanti dei minigame, a cui viene assegnata un'immagine
+     * in base all'opzione che restituiscono.
+     *
+     * @param button   il pulsante
+     * @param percorso il path delle immagini
+     */
     public static void gestionePulsantiMinigame(JRadioButton button, String percorso) {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
         button.setIcon(caricaImmagine(percorso));
@@ -72,6 +111,13 @@ public class CustomGUI {
         });
     }
 
+    /**
+     * Carica il custom font.
+     *
+     * @param label  il label a cui si vuole cambiare il font
+     * @param size   la grandezza desiderata
+     * @param isBold {@code true} se il testo deve essere in grassetto, {@code false} altrimenti
+     */
     public static void caricaFont(JLabel label, float size, boolean isBold) {
         try {
             if(isBold) {
@@ -91,6 +137,14 @@ public class CustomGUI {
         }
     }
 
+    /**
+     * Gestisce il tasto per tornare indietro alla finestra recedente.
+     *
+     * @param label        il label
+     * @param frameInizio  il frame attuale
+     * @param frameRitorno il frame di ritorno
+     * @param isDisposable {@code true} se il frame è disposable all'uscita, {@code false} altrimenti
+     */
     public static void tornaIndietro(JLabel label,JFrame frameInizio, JFrame frameRitorno, boolean isDisposable) {
         label.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
 
@@ -106,13 +160,22 @@ public class CustomGUI {
         });
     }
 
+    /**
+     * Gestisce il tasto per tornare indietro alla finestra precedente e aggiorna i dati dell'animale.
+     *
+     * @param label        il label
+     * @param frameInizio  il frame attuale
+     * @param frameRitorno il frame di ritorno
+     * @param isDisposable {@code true} se il frame è disposable all'uscita, {@code false} altrimenti
+     * @param tamagotchi   istanza di {@link Tamagotchi} per aggiornare i dati dell'animale a schermo
+     */
     public static void tornaIndietro(JLabel label,JFrame frameInizio, JFrame frameRitorno, boolean isDisposable, Tamagotchi tamagotchi) {
         label.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
 
         label.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e){
-                tamagotchi.aggiornaLabel();
+                tamagotchi.aggiornaLabel(); //aggiorna i dati dell'animale
                 frameRitorno.setVisible(true);
                 frameInizio.setVisible(false);
                 if(isDisposable) {
@@ -122,6 +185,13 @@ public class CustomGUI {
         });
     }
 
+    /**
+     * Salva i dati prima di uscire dal programma.
+     *
+     * @param frame      il frame attuale
+     * @param animale    l' {@link Animale}
+     * @param controller il controller principale che gestisce la logica di sistema.
+     */
     public static void salvaEdEsci(JFrame frame, Animale animale, Controller controller) {
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

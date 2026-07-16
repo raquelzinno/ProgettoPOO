@@ -25,13 +25,22 @@ public class Home {
     private JLabel titolo;
     private JFrame frameHome;
     private Controller controller;
+
     public static DefaultListModel<Animale> modelloListaAnimali;
     private ImageIcon backGroundImage;
 
+    /**
+     * Elimina un animale selezionato dall'utente dalla lista degli animali posseduti.
+     *
+     * @param animale l' {@link Animale} da eliminare
+     */
     public void rimuoviAnimale(Animale animale){
         modelloListaAnimali.removeElement(animale);
     }
 
+    /**
+     * Carica i dati aggiornati degli animali dal database nella lista.
+     */
     public void caricaDati() {
         try {
             controller.puliziaDati();
@@ -45,6 +54,9 @@ public class Home {
         }
     }
 
+    /**
+     * Popola la lista animali con gli animali appartenenti all'utente, recuperandoli dal database.
+     */
     public void popolaListaAnimali() {
         modelloListaAnimali = new DefaultListModel<>();
         for(Animale a : controller.getUtenteAttuale().getAnimaliPosseduti()){
@@ -53,6 +65,9 @@ public class Home {
         listaAnimali.setModel(modelloListaAnimali);
     }
 
+    /**
+     * Gestione grafica della lista degli animali.
+     */
     public void gestioneLista() {
         listaAnimali.setBorder(
                 BorderFactory.createLineBorder(Color.BLUE, 3)
@@ -75,6 +90,14 @@ public class Home {
         });
     }
 
+    /**
+     * Crea una nuova istanza della finestra Home.
+     * Inizializza l'interfaccia, configura i listener per i pulsanti
+     * e prepara la finestra per l'input dell'utente.
+     *
+     * @param loginFrame il frame della pagina del login
+     * @param controller il controller principale che gestisce la logica di sistema.
+     */
     public Home(JFrame loginFrame, Controller controller) {
         frameHome = new JFrame("Home");
         frameHome.setContentPane(mainPanel);
@@ -100,8 +123,7 @@ public class Home {
         listaAnimali.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                //prende animale selezionato dalla lista
-                Animale animaleSelezionato = (Animale) listaAnimali.getSelectedValue();
+                Animale animaleSelezionato = (Animale) listaAnimali.getSelectedValue(); //prende animale selezionato dalla lista
             }
         });
 

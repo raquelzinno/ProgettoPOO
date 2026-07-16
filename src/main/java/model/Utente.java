@@ -49,22 +49,18 @@ public class Utente {
     /**
      * Compra un item e lo inserisce nella lista degli item posseduti dall'utente,
      * poi ricalcola i punti dell'animale.
+     * Quando viene effettuato un acquisto viene creata una copia dell'oggetto del negozio
+     * e poi viene aggiunta alla lista degli item posseduti dall'utente
      *
      * @param item      l'item comprato
      * @param animale   l'animale a cui appartiene l'item comprato
      * @param idIstanza l'id dell'istanza dell'item comprato, necessario per la gestione nel database
-     * @throws RuntimeException se l'animale non ha abbastanza punti per comprare l'item
      */
-    public void compraItem(Item item, Animale animale, int idIstanza) throws RuntimeException {
-        if(animale.getPunti() < item.getCosto()) {  //posso comprare l'item solo se ho abbastanza punti
-            throw new ExceptionPuntiNonSufficienti("L'animale non ha abbastanza punti!");
-        }
-        else
-        {
-            animale.setPunti(animale.getPunti()- item.getCosto()); //ricalcolo dei punti dopo la spesa
-            Item copiaAcquistata = item.creaCopia(idIstanza);  //quando faccio un acquisto viene creata una copia dell'oggetto del negozio
-            itemPosseduti.add(copiaAcquistata);  //aggiungo la copia agli item posseduti
-        }
+    public void compraItem(Item item, Animale animale, int idIstanza) {
+        animale.setPunti(animale.getPunti()- item.getCosto());
+
+        Item copiaAcquistata = item.creaCopia(idIstanza);
+        itemPosseduti.add(copiaAcquistata);
     }
 
     /**

@@ -7,8 +7,6 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 public class NegozioPrincipale {
@@ -18,6 +16,7 @@ public class NegozioPrincipale {
     private JButton compraButton;
     private JList listaItem;
     private JLabel negozioLabel;
+
     public static DefaultListModel<Item> modelloListaItem;
     private ImageIcon backGroundImage;
     private Controller controller;
@@ -51,6 +50,16 @@ public class NegozioPrincipale {
         });
     }
 
+    /**
+     * Crea una nuova istanza della finestra del negozio.
+     * Inizializza l'interfaccia, configura i listener per gli eventi dei pulsanti che permettono
+     * di comprare gli items e prepara la finestra per l'input dell'utente.
+     *
+     * @param tamagotchiFrame il frame della finestra Tamagotchi
+     * @param controller      il controller principale che gestisce la logica di sistema
+     * @param animale         l' {@link Animale} selezionato
+     * @param tamagotchi      istanza di {@link Tamagotchi} per aggiornare i dati dell'animale a schermo
+     */
     public NegozioPrincipale(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi) {
         JFrame negozioFrame = new JFrame("Negozio");
         negozioFrame.setContentPane(negozioPanel);

@@ -7,8 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 public class Impostazioni {
@@ -27,6 +25,18 @@ public class Impostazioni {
     private ImageIcon backGroundImage;
     private Controller controller;
 
+    /**
+     * Crea una nuova istanza della finestra Impostazioni.
+     * Inizializza l'interfaccia, configura i listener per gli eventi dei pulsanti che permettono
+     * all'utente di modificare o eliminare dati e prepara la finestra per l'input dell'utente.
+     *
+     * @param tamagotchiFrame il frame della finestra Tamagotchi
+     * @param controller      il controller principale che gestisce la logica di sistema.
+     * @param animale         l' {@link Animale} selezionato
+     * @param tamagotchi      istanza di {@link Tamagotchi} per aggiornare i dati dell'animale a schermo
+     * @param frameHome       il frame della finestra home
+     * @param home            istanza di {@link Home} per aggiornare i dati dell'animale a schermo
+     */
     public Impostazioni(JFrame tamagotchiFrame, Controller controller, Animale animale,Tamagotchi tamagotchi, JFrame frameHome, Home home) {
         JFrame impostazioniFrame = new JFrame("Impostazioni");
         impostazioniFrame.setContentPane(impostazioniPanel);

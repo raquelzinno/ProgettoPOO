@@ -8,10 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class Minigames {
     private JPanel minigamesPanel;
@@ -41,6 +37,9 @@ public class Minigames {
     private ImageIcon backGroundImage;
     private Controller controller;
 
+    /**
+     * Carica le immagini per i minigames.
+     */
     public void caricaImmagini() {
         CustomGUI.gestionePulsantiMinigame(sassoRadioButton,"img/sasso.png");
         CustomGUI.gestionePulsantiMinigame(cartaRadioButton,"img/carta.png");
@@ -50,6 +49,9 @@ public class Minigames {
         CustomGUI.caricaImmagineSopraTesto(slotmachineLabel,"img/slotMachine.png");
     }
 
+    /**
+     * Carica i label con i valori aggiornati.
+     */
     public void caricaLabel() {
         minigame1 = (controller.getMinigamesDiDefault()).get(0);
         minigame2 = (controller.getMinigamesDiDefault()).get(1);
@@ -67,6 +69,16 @@ public class Minigames {
         labelPunti3.setText(String.valueOf(minigame3.getRicompensa()));
     }
 
+    /**
+     * Crea una nuova istanza della finestra per giocare ai minigames.
+     * Inizializza l'interfaccia, configura i listener per gli eventi dei pulsanti che permettono
+     * di giocare e prepara la finestra per l'input dell'utente.
+     *
+     * @param tamagotchiFrame il frame della finestra Tamagotchi
+     * @param controller      il controller principale che gestisce la logica di sistema.
+     * @param animale         l' {@link Animale} selezionato
+     * @param tamagotchi      istanza di {@link Tamagotchi} per aggiornare i dati dell'animale a schermo
+     */
     public Minigames(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi){
         JFrame minigamesFrame = new JFrame("Minigames");
         minigamesFrame.setContentPane(minigamesPanel);

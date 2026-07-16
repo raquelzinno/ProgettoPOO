@@ -1,14 +1,11 @@
 package gui;
 
 import controller.Controller;
-import model.Utente;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 public class CreaAnimale {
@@ -21,6 +18,14 @@ public class CreaAnimale {
     private ImageIcon backGroundImage;
     private Controller controller;
 
+    /**
+     * Crea una nuova istanza della finestra di creazione dell'animale.
+     * Inizializza l'interfaccia, configura i listener per il pulsante di conferma
+     * e prepara la finestra per l'input dell'utente.
+     *
+     * @param frameHome il frame della pagina Home
+     * @param controller il controller principale che gestisce la logica di sistema.
+     */
     public CreaAnimale(JFrame frameHome, Controller controller){
         JFrame creaAnimaleFrame = new JFrame("Crea un nuovo animale");
         creaAnimaleFrame.setContentPane(creaAnimalePanel);
