@@ -121,8 +121,9 @@ public class Controller {
         //Forza il controller a leggere gli animali dal db
         this.sincronizzaListaAnimali();
 
-        //Stampa di debug in console per vedere quanti animali rileva IntelliJ in questo momento
-        System.out.println("Animali rilevati nel DB per il controllo: " + utenteAttuale.getAnimaliPosseduti().size());
+        /*Stampa di debug in console per vedere quanti animali rileva IntelliJ in questo momento
+        System.out.println("Animali rilevati nel DB per il controllo: " + utenteAttuale.getAnimaliPosseduti().size());*/
+
         if((utenteAttuale.getAnimaliPosseduti()).size() >= 2) throw new ExceptionTroppiAnimali("Hai il massimo di animali consentiti!");
     }
 
@@ -160,7 +161,6 @@ public class Controller {
 
         animaleDAO.salvaAnimale(animale, idUtenteAttuale);
         aggiungiAnimale(animale);
-        System.out.println("Animale creato con successo!");
     }
 
     /**
@@ -289,7 +289,8 @@ public class Controller {
             //sostituisce la vecchia lista locale con quella reale del DB
             utenteAttuale.setItemPosseduti(inventarioCompleto);
 
-            System.out.println("Inventario sincronizzato! Elementi trovati: " + inventarioCompleto.size());
+            /* --- debug ---
+            System.out.println("Inventario sincronizzato! Elementi trovati: " + inventarioCompleto.size());*/
         }
     }
 
@@ -340,8 +341,10 @@ public class Controller {
         else if (item instanceof Vestito) {
                 idIstanza = vestitoDAO.aggiungiAInventarioVestito(idUtenteAttuale, item);
         }
-            utenteAttuale.compraItem(item, animale, idIstanza);
-            System.out.println("Acquisto completato con successo sul DB e in Java!");
+        utenteAttuale.compraItem(item, animale, idIstanza);
+
+        /* --- debug ---
+        System.out.println("Acquisto completato con successo sul DB e in Java!");*/
     }
 
     /**@return l' {@link Utente} attuale */

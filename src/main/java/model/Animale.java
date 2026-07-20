@@ -1,7 +1,5 @@
 package model;
 
-import exceptions.ExceptionAnimale;
-
 import java.util.ArrayList;
 
 public class Animale {

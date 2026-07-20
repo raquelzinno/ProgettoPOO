@@ -2,9 +2,7 @@ package implementazionePostgresDAO;
 
 import dao.MinigameDAO;
 import database.ConnessioneDatabase;
-import model.Cibo;
 import model.Minigame;
-import model.TipoCibo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
