@@ -55,11 +55,10 @@ public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
             }
             ps.setInt(9, idUtente);
 
-            /* --- debug ---
             int righeInserite = ps.executeUpdate();
             if (righeInserite > 0) {
                 System.out.println("Animale salvato nel Database con successo!");
-            }*/
+            }
         }
     }
 
@@ -115,11 +114,10 @@ public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
             ps.setString(1, nome); 
             ps.setInt(2, idAnimale);
 
-            /* --- debug ---
             int righeModificate = ps.executeUpdate();
             if (righeModificate > 0) { //verifichiamo se le righe sono state effettivamente inserite
                 System.out.println("Nome animale aggiornato nel Database con successo!");           
-            }*/
+            }
         }                                                                                                                                                                                      
     }
 
@@ -134,11 +132,10 @@ public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
         try(PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idAnimale);
 
-            /* --- debug ---
             int righeInserite = ps.executeUpdate();
             if (righeInserite > 0) {
                 System.out.println("Animale eliminato dal Database con successo!");
-            }*/
+            }
         }
     }
 
@@ -158,11 +155,10 @@ public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
             ps.setInt(6, animale.getEnergiaMax());
             ps.setInt(7, idAnimale);
 
-            /* --- debug ---
             int righeInserite = ps.executeUpdate();
             if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite
                 System.out.println("Animale aggiornato nel Database con successo!");
-            }*/
+            }
         }
     }
     public void resetStatoSonno(int idUtente) throws SQLException {  //il programma potrebbe avere un arresto anomalo nel momento di salvataggio dello stato di sonno
@@ -171,11 +167,10 @@ public class AnimaleImplementazionePostgresDAO implements AnimaleDAO {
         try (PreparedStatement ps = connection.prepareStatement(sqlReset)) {
             ps.setInt(1, idUtente);
 
-            /* --- debug ---
             int righeInserite = ps.executeUpdate();
             if (righeInserite > 0) { //verifichiamo se le righe sono state effettivamente inserite  
                 System.out.println("Animale aggiornato nel Database con successo!");
-            } */
+            }
         }
     }
 }

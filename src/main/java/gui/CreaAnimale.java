@@ -1,6 +1,7 @@
 package gui;
 
 import controller.Controller;
+import model.Animale;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +27,7 @@ public class CreaAnimale {
      * @param frameHome il frame della pagina Home
      * @param controller il controller principale che gestisce la logica di sistema.
      */
-    public CreaAnimale(JFrame frameHome, Controller controller){
+    public CreaAnimale(JFrame frameHome, Controller controller,DefaultListModel<Animale> modelloListaAnimali){
         JFrame creaAnimaleFrame = new JFrame("Crea un nuovo animale");
         creaAnimaleFrame.setContentPane(creaAnimalePanel);
         creaAnimaleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,7 +65,7 @@ public class CreaAnimale {
 
                     JOptionPane.showMessageDialog(null, "Animale creato con successo.");
 
-                    Home.modelloListaAnimali.addElement(controller.getUtenteAttuale().getAnimaliPosseduti().getLast());
+                    modelloListaAnimali.addElement(controller.getUtenteAttuale().getAnimaliPosseduti().getLast());
 
                     //torna alla home
                     frameHome.setVisible(true);

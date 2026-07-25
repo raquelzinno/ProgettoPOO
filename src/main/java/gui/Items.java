@@ -26,7 +26,7 @@ public class Items {
     private JLabel itemsLabel;
     private JPanel pulsantiPanel;
 
-    public static DefaultListModel<Item> modelloListaItems;
+    public DefaultListModel<Item> modelloListaItems;
     private ImageIcon backGroundImage;
     private Controller controller;
 
@@ -82,7 +82,7 @@ public class Items {
      * @param animale         l' {@link Animale} selezionato
      * @param tamagotchi      istanza di {@link Tamagotchi} per aggiornare i dati dell'animale a schermo
      */
-    public Items(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi){
+    public Items(JFrame tamagotchiFrame, Controller controller, Animale animale, Tamagotchi tamagotchi, DefaultListModel<Vestito> modelloListaVestiti){
         JFrame itemsFrame = new JFrame("I tuoi items");
         itemsFrame.setContentPane(itemsPanel);
         itemsFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -131,7 +131,7 @@ public class Items {
                         if((animale.getVestitiIndossati()).contains(itemCliccato)) { //se il vestito è attualmente indossato lo rimuove
                             try {
                                 controller.rimuoviVestito(vestito, animale);
-                                Tamagotchi.modelloListaVestiti.removeElement(vestito);
+                                modelloListaVestiti.removeElement(vestito);
                                 listaItem.clearSelection();
                                 JOptionPane.showMessageDialog(itemsFrame,
                                         "Hai rimosso: " + itemCliccato.getNome() + "!\nL'oggetto è stato rimosso",
@@ -188,7 +188,7 @@ public class Items {
                     }else
                         if(oggettoSelezionato instanceof Vestito){ //se vestito
                             listaItem.clearSelection();
-                            Tamagotchi.modelloListaVestiti.addElement((Vestito) oggettoSelezionato);
+                            modelloListaVestiti.addElement((Vestito) oggettoSelezionato);
                             JOptionPane.showMessageDialog(itemsFrame,
                                 "Hai usato: " + oggettoSelezionato.getNome() + "!\nL'oggetto è stato indossato.",
                                 "Oggetto utilizzato",

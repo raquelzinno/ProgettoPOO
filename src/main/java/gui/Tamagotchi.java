@@ -34,7 +34,7 @@ public class Tamagotchi {
     private Animale animale;
     private Timer gameTime;
 
-    public static DefaultListModel<Vestito> modelloListaVestiti;
+    public DefaultListModel<Vestito> modelloListaVestiti;
     private ImageIcon backGroundImage;
     private Controller controller;
 
@@ -168,7 +168,7 @@ public class Tamagotchi {
         itemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Items items = new Items(tamagotchiFrame, controller, animale, Tamagotchi.this);
+                Items items = new Items(tamagotchiFrame, controller, animale, Tamagotchi.this, modelloListaVestiti);
                 tamagotchiFrame.setVisible(false);
             }
         });
@@ -202,6 +202,7 @@ public class Tamagotchi {
                 tamagotchiFrame.setVisible(false);
             }
         });
+
 
         goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
 

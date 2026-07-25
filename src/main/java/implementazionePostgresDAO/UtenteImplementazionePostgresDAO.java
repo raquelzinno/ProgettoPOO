@@ -39,11 +39,10 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
             ps.setString(1, login);
             ps.setString(2, password);
 
-            /* --- debug ---
             int righeInserite = ps.executeUpdate();
             if (righeInserite > 0) {
                 System.out.println("Utente salvato nel Database con successo!");
-            }*/
+            }
 
         }
     }
@@ -59,8 +58,7 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    /* --- debug ---
-                    System.out.println("Login già esistente nel database");*/
+                    System.out.println("Login già esistente nel database");
                     return true;
                 }
             }
@@ -80,11 +78,10 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
             ps.setString(1, passwordNuova);
             ps.setInt(2, idUtente);
 
-            /* --- debug ---
             int righeModificate = ps.executeUpdate();
             if (righeModificate > 0) { //verifichiamo se le righe sono state effettivamente inserite
                 System.out.println("Utente aggiornato nel Database con successo!");
-            }*/
+            }
         }
     }
 
@@ -101,8 +98,7 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
 
             try( ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    /* --- debug ---
-                    System.out.println("Utente trovato nel Database con successo!");*/
+                    System.out.println("Utente trovato nel Database con successo!");
                     return true;
                 }
             }

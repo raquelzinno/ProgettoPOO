@@ -26,7 +26,7 @@ public class Home {
     private JFrame frameHome;
     private Controller controller;
 
-    public static DefaultListModel<Animale> modelloListaAnimali;
+    public DefaultListModel<Animale> modelloListaAnimali;
     private ImageIcon backGroundImage;
 
     /**
@@ -133,7 +133,7 @@ public class Home {
             public void actionPerformed(ActionEvent e) {
                 try{
                     controller.checkAnimali();
-                    CreaAnimale creaAnimale = new CreaAnimale(frameHome, controller);
+                    CreaAnimale creaAnimale = new CreaAnimale(frameHome, controller,modelloListaAnimali);
                     frameHome.setVisible(false);
                 }catch (SQLException ex){
                     JOptionPane.showMessageDialog(null, "Non è stato possibile risalire agli animali posseduti: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);

@@ -17,7 +17,7 @@ public class NegozioPrincipale {
     private JList listaItem;
     private JLabel negozioLabel;
 
-    public static DefaultListModel<Item> modelloListaItem;
+    public DefaultListModel<Item> modelloListaItem;
     private ImageIcon backGroundImage;
     private Controller controller;
 
