@@ -203,7 +203,7 @@ public class Tamagotchi {
             }
         });
 
-
+        //gestione pulsante torna indietro
         goBack.setCursor(new Cursor(Cursor.HAND_CURSOR)); //cambia il cursore quando ci passa sopra
 
         goBack.addMouseListener(new MouseAdapter(){
@@ -218,7 +218,7 @@ public class Tamagotchi {
                     controller.fermaTimer();
                     controller.deselezionaAnimale();
                     frameHome.setVisible(true);
-                    tamagotchiFrame.setVisible(false);
+                    tamagotchiFrame.dispose();
                 }
                 catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Errore nel tentativo di salvare i dati: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);

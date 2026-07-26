@@ -117,10 +117,13 @@ public class CiboImplementazionePostgresDAO implements CiboDAO {
         try(PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idIstanza);
 
+            ps.executeUpdate();
+
+            /* --- debug ---
             int righeInserite = ps.executeUpdate();
             if (righeInserite > 0) {
-                System.out.println("l'item è stato eliminato dal Database con successo!");
-            }
+                System.out.println("L'item è stato eliminato dal Database con successo!");
+            }*/
         }
     }
 }
