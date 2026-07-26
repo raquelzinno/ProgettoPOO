@@ -115,10 +115,13 @@ public class VestitoImplementazionePostgresDAO implements VestitoDAO {
         try(PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idIstanza);
 
+            ps.executeUpdate();
+
+            /* --- debug ---
             int righeInserite = ps.executeUpdate();
             if (righeInserite > 0) {
-                System.out.println("l'item è stato eliminato dal Database con successo!");
-            }
+                System.out.println("L'item è stato eliminato dal Database con successo!");
+            }*/
         }
     }
 
@@ -132,10 +135,13 @@ public class VestitoImplementazionePostgresDAO implements VestitoDAO {
             ps.setInt(1, idAnimale);
             ps.setInt(2, idIstanza);
 
+            ps.executeUpdate();
+
+            /* --- debug ---
             int righeInserite = ps.executeUpdate();
             if (righeInserite > 0) {
-                System.out.println("l'item è stato indossato con successo");
-            }
+                System.out.println("L'item è stato indossato con successo.");
+            }*/
         }
     }
 
@@ -148,10 +154,13 @@ public class VestitoImplementazionePostgresDAO implements VestitoDAO {
         try(PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idIstanza);
 
+            ps.executeUpdate();
+
+            /* --- debug ---
             int righeInserite = ps.executeUpdate();
             if (righeInserite > 0) {
-                System.out.println("l'item è stato rimosso con successo");
-            }
+                System.out.println("L'item è stato rimosso con successo.");
+            }*/
         }
     }
 }

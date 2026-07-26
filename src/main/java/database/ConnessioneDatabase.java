@@ -28,7 +28,8 @@ public class ConnessioneDatabase {
 	}
 
 	/**
-	 * Ottiene l'istanza univoca della classe ConnessioneDatabase, creandola se non esiste o se la connessione è stata chiusa.
+	 * Ottiene l'istanza univoca della classe ConnessioneDatabase, creandola se non esiste
+	 * o se la connessione è stata chiusa.
 	 *
 	 * @return l'istanza corrente di {@link ConnessioneDatabase}.
 	 * @throws SQLException se si verifica un errore durante la creazione della connessione al database.

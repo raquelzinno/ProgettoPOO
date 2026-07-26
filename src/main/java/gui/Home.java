@@ -182,7 +182,7 @@ public class Home {
                 finally {
                     controller.esciUtente();
                     loginFrame.setVisible(true);
-                    frameHome.setVisible(false);
+                    frameHome.dispose();
                 }
             }
         });
